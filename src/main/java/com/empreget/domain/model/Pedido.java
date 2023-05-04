@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.empreget.domain.exception.NegocioException;
@@ -36,14 +37,14 @@ public class Pedido {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	//@Valid
-	//@ConvertGroup(from = Default.class, to = ValidationGroups.ClienteId.class)	
+//	@ConvertGroup(from = Default.class, to = ValidationGroups.ClienteId.class)	
+//	@Valid
 	@ManyToOne
 	@JoinColumn(name="cliente_id", nullable=false)
 	private Cliente cliente;
 	
-	//@Valid
 	//@ConvertGroup(from = Default.class, to = ValidationGroups.PrestadorId.class)
+	@Valid
 	@ManyToOne
 	@JoinColumn(name="prestador_id", nullable=false)
 	private Prestador prestador;

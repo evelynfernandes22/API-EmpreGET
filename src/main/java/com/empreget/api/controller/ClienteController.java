@@ -57,6 +57,26 @@ public class ClienteController {
 			
 	}
 
+// 	ANTES DA REFATORAÇÃO	
+//	@PutMapping("/{clienteId}")
+//	public ResponseEntity<?> editar(@PathVariable Long clienteId, @Valid @RequestBody Cliente cliente) {
+//		Optional<Cliente> clienteAtual = clienteRepository.findById(clienteId);
+//
+//		try {
+//			if (clienteAtual.isPresent()) {
+//				BeanUtils.copyProperties(cliente, clienteAtual.get(), "id", "dataDoCadastro");
+//				catalogoClienteService.salvar(clienteAtual.get());
+//
+//				return ResponseEntity.ok(clienteAtual.get());
+//
+//			}
+//			return ResponseEntity.notFound().build();
+//			
+//		} catch (EntidadeNaoEncontradaException e) {
+//			return ResponseEntity.badRequest().body(e.getMessage());
+//		}
+//	}
+
 	@PutMapping("/{clienteId}")
 	public Cliente editar(@PathVariable Long clienteId, @Valid @RequestBody Cliente cliente) {
 		try {
@@ -72,7 +92,7 @@ public class ClienteController {
 	}
 	
 	@PatchMapping("/{clienteId}")
-	public Cliente editarParcial (@PathVariable Long clienteId, @RequestBody Map<String, Object> dados) {
+	public Cliente editarParcial (@PathVariable Long clienteId, @Valid @RequestBody Map<String, Object> dados) {
 		
 		Cliente clienteAtual = catalogoClienteService.buscarOuFalhar(clienteId);
 		
