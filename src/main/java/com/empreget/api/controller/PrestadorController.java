@@ -54,7 +54,7 @@ public class PrestadorController {
 	}
 	
 	@PutMapping("/{prestadorId}")
-	public Prestador editar(@PathVariable Long prestadorId, @RequestBody Prestador prestador) {
+	public Prestador editar(@PathVariable Long prestadorId, @RequestBody @Valid Prestador prestador) {
 		Prestador prestadorAtual = catalogoPrestadorService.buscarOuFalhar(prestadorId);
 		
 		BeanUtils.copyProperties(prestador, prestadorAtual, "id", "dataDoCadastro", "dataDaAtualizacao");
@@ -63,7 +63,7 @@ public class PrestadorController {
 	}
 	
 	@PatchMapping("/{prestadorId}")
-	public Prestador editarParcial(@PathVariable Long prestadorId, @RequestBody Map<String, Object> dados) {
+	public Prestador editarParcial(@PathVariable Long prestadorId, @Valid @RequestBody Map<String, Object> dados) {
 		
 		Prestador prestadorAtual = catalogoPrestadorService.buscarOuFalhar(prestadorId);
 		

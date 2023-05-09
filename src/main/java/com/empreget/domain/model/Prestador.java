@@ -19,6 +19,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.empreget.domain.ValidationGroups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -35,7 +36,7 @@ import lombok.Setter;
 @Entity
 public class Prestador {
 
-	//@NotNull(groups = ValidationGroups.PrestadorId.class)
+	@NotNull(groups = ValidationGroups.PrestadorId.class)
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

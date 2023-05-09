@@ -12,23 +12,20 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
+import com.empreget.domain.ValidationGroups;
 import com.empreget.domain.exception.NegocioException;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
-import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @Entity
 public class Pedido {
 	
@@ -37,19 +34,21 @@ public class Pedido {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-//	@ConvertGroup(from = Default.class, to = ValidationGroups.ClienteId.class)	
-//	@Valid
+	@Valid
+	@ConvertGroup(from = Default.class, to = ValidationGroups.ClienteId.class)	
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name="cliente_id", nullable=false)
 	private Cliente cliente;
 	
-	//@ConvertGroup(from = Default.class, to = ValidationGroups.PrestadorId.class)
 	@Valid
+	@ConvertGroup(from = Default.class, to = ValidationGroups.PrestadorId.class)
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name="prestador_id", nullable=false)
 	private Prestador prestador;
 	
-
+//IMPLEMENTAR
 //	private List<Agenda> agenda;
 	
 	

@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,11 +28,16 @@ import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	public static final String MSG_ERRO_GENERICA_USUARIO_FINAL = "Ocorreu um erro interno inesperado no sistema. Tente novamente e se "
 			+ "o problema persistir, entre em contato com o administrador do sistema.";
+	
+	MessageSource messageSource;
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleUnCaptured(Exception ex, WebRequest request) {
@@ -155,10 +162,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		List<Problem.Field> problemFields = bindingResult.getFieldErrors()
 				.stream()
-				.map(fieldError -> Problem.Field.builder()
+				.map(fieldError -> {
+					
+					String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+					
+					return Problem.Field.builder()
 						.name(fieldError.getField())
-						.UserMessage(fieldError.getDefaultMessage())
-						.build())
+						.UserMessage(message)
+						.build();
+				})
 				.collect(Collectors.toList());
 		
 		Problem problem = createProblemBuilder(status, problemType, detail)

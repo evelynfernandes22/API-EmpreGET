@@ -10,8 +10,8 @@
 	<groupId>com.empreget</groupId>
 	<artifactId>modulo-leads</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>modulo-leads</name>
-	<description>Módulo cadastro de clientes</description>
+	<name>empreget-api</name>
+	<description>Api de serviços domésticos</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -31,10 +31,16 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>mysql</groupId>-->
+<!--			<artifactId>mysql-connector-java</artifactId>-->
+<!--		</dependency>-->
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+			<scope>runtime</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
