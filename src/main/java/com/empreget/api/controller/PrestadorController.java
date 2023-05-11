@@ -53,8 +53,8 @@ public class PrestadorController {
 	}
 	
 	@GetMapping("/{prestadorId}")
-	public Prestador buscar(@PathVariable Long prestadorId){
-		return catalogoPrestadorService.buscarOuFalhar(prestadorId);
+	public PrestadorResponse buscar(@PathVariable Long prestadorId){
+		return assembler.toModel(catalogoPrestadorService.buscarOuFalhar(prestadorId));
 		
 	}
 	
@@ -78,9 +78,11 @@ public class PrestadorController {
 		
 		return assembler.toModel(catalogoPrestadorService.salvar(prestadorAtual));
 	}
-	
+
+
+//ATUALIZAÇÃO PARCIAL, VER COMO CONVERTER PARA DTO COM MODELMAPPER
 //	@PatchMapping("/{prestadorId}")
-//	public Prestador editarParcial(@PathVariable Long prestadorId, @Valid @RequestBody Map<String, Object> dados) {
+//	public PrestadorResponse editarParcial(@PathVariable Long prestadorId, @Valid @RequestBody Map<String, Object> dados) {
 //		
 //		Prestador prestadorAtual = catalogoPrestadorService.buscarOuFalhar(prestadorId);
 //		
@@ -89,19 +91,19 @@ public class PrestadorController {
 //		return editar(prestadorId, prestadorAtual);
 //	}
 //	
-	private void merge(Map<String, Object> dadosOrigem, Prestador prestadorDestino) {
-		ObjectMapper objectMapper = new ObjectMapper();
-		Prestador prestadorOrigem = objectMapper.convertValue(dadosOrigem, Prestador.class);
-		
-		dadosOrigem.forEach((nomePropriedade, valorPropriedade) -> {
-			Field field = ReflectionUtils.findField(Prestador.class, nomePropriedade);
-			field.setAccessible(true);
-			
-			Object novoValor = ReflectionUtils.getField(field, prestadorOrigem);
-			
-			ReflectionUtils.setField(field, prestadorDestino, novoValor);
-		});
-	}
+//	private void merge(Map<String, Object> dadosOrigem, Prestador prestadorDestino) {
+//		ObjectMapper objectMapper = new ObjectMapper();
+//		Prestador prestadorOrigem = objectMapper.convertValue(dadosOrigem, Prestador.class);
+//		
+//		dadosOrigem.forEach((nomePropriedade, valorPropriedade) -> {
+//			Field field = ReflectionUtils.findField(Prestador.class, nomePropriedade);
+//			field.setAccessible(true);
+//			
+//			Object novoValor = ReflectionUtils.getField(field, prestadorOrigem);
+//			
+//			ReflectionUtils.setField(field, prestadorDestino, novoValor);
+//		});
+//	}
 
 	@DeleteMapping("/{prestadorId}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)

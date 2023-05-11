@@ -7,7 +7,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import com.empreget.api.dto.PrestadorResponse;
-import com.empreget.api.dto.input.PrestadorInput;
 import com.empreget.domain.model.Prestador;
 
 import lombok.AllArgsConstructor;

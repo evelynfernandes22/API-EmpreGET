@@ -1,17 +1,14 @@
 package com.empreget.api.controller;
 
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,12 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.empreget.domain.exception.ClienteNaoEncontradoException;
-import com.empreget.domain.exception.NegocioException;
+import com.empreget.api.assembler.ClienteAssembler;
+import com.empreget.api.assembler.ClienteInputDisassembler;
+import com.empreget.api.dto.ClienteResponse;
+import com.empreget.api.dto.input.ClienteInput;
 import com.empreget.domain.model.Cliente;
 import com.empreget.domain.repository.ClienteRepository;
 import com.empreget.domain.service.CatalogoClienteService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.AllArgsConstructor;
 
@@ -35,104 +33,74 @@ import lombok.AllArgsConstructor;
 public class ClienteController {
 
 	private final ClienteRepository clienteRepository;
-
 	private final CatalogoClienteService catalogoClienteService;
+	private ClienteAssembler clienteAssembler;
+	private ClienteInputDisassembler clienteInputDisassembler;
 
 
 	@GetMapping
-	public List<Cliente> listar() {
-		return clienteRepository.findAll();
+	public List<ClienteResponse> listar() {
+		return clienteRepository.findAll()
+				.stream()
+				.map(cliente -> clienteAssembler.toModel(cliente))
+				.collect(Collectors.toList());
 
 	}
 	
 	@GetMapping("/{clienteId}")
-	public Cliente buscarPorId(@PathVariable Long clienteId) {
-		return catalogoClienteService.buscarOuFalhar(clienteId);
+	public ClienteResponse buscarPorId(@PathVariable Long clienteId) {
+		return clienteAssembler.toModel(catalogoClienteService.buscarOuFalhar(clienteId));
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Cliente adicionar(@Valid @RequestBody Cliente cliente) {
-		return catalogoClienteService.salvar(cliente);
+	public ClienteResponse adicionar(@Valid @RequestBody ClienteInput clienteInput) {
+		
+		Cliente cliente = clienteInputDisassembler.toDomainObject(clienteInput);
+		return clienteAssembler.toModel(catalogoClienteService.salvar(cliente));
 			
 	}
-
-// 	ANTES DA REFATORAÇÃO	
-//	@PutMapping("/{clienteId}")
-//	public ResponseEntity<?> editar(@PathVariable Long clienteId, @Valid @RequestBody Cliente cliente) {
-//		Optional<Cliente> clienteAtual = clienteRepository.findById(clienteId);
-//
-//		try {
-//			if (clienteAtual.isPresent()) {
-//				BeanUtils.copyProperties(cliente, clienteAtual.get(), "id", "dataDoCadastro");
-//				catalogoClienteService.salvar(clienteAtual.get());
-//
-//				return ResponseEntity.ok(clienteAtual.get());
-//
-//			}
-//			return ResponseEntity.notFound().build();
-//			
-//		} catch (EntidadeNaoEncontradaException e) {
-//			return ResponseEntity.badRequest().body(e.getMessage());
-//		}
-//	}
 
 	@PutMapping("/{clienteId}")
-	public Cliente editar(@PathVariable Long clienteId, @Valid @RequestBody Cliente cliente) {
-		try {
-			Cliente clienteAtual = catalogoClienteService.buscarOuFalhar(clienteId);
-			
-			BeanUtils.copyProperties(cliente, clienteAtual, "id", "dataDoCadastro", "dataDaAtualizacao");
-			
-			return catalogoClienteService.salvar(clienteAtual);
-			
-		} catch (ClienteNaoEncontradoException e) {
-			throw new NegocioException(e.getMessage(), e);
-		}
-	}
-	
-	@PatchMapping("/{clienteId}")
-	public Cliente editarParcial (@PathVariable Long clienteId, @Valid @RequestBody Map<String, Object> dados) {
+	public ClienteResponse editar(@PathVariable Long clienteId, @Valid @RequestBody ClienteInput clienteinput) {
+		
+		Cliente cliente = clienteInputDisassembler.toDomainObject(clienteinput);
 		
 		Cliente clienteAtual = catalogoClienteService.buscarOuFalhar(clienteId);
-		
-		merge(dados, clienteAtual);
-		
-		return editar(clienteId, clienteAtual);
-	}
-	
-	private void merge(Map<String, Object> dadosOrigem, Cliente clienteDestino) {
-		ObjectMapper objectMapper = new ObjectMapper();
-		Cliente clienteOrigem = objectMapper.convertValue(dadosOrigem, Cliente.class);
-		
-		dadosOrigem.forEach((nomePropriedade, valorPropriedade)-> {
-			Field field = ReflectionUtils.findField(Cliente.class, nomePropriedade);
-			field.setAccessible(true);
-				
-			Object novoValor = ReflectionUtils.getField(field, clienteOrigem);
 			
-			ReflectionUtils.setField(field, clienteDestino, novoValor);
+		BeanUtils.copyProperties(cliente, clienteAtual,
+				"id", "dataDoCadastro", "dataDaAtualizacao");
 			
-		});
+		return clienteAssembler.toModel(catalogoClienteService.salvar(clienteAtual));
+		
 	}
 
-// 	ANTES DA REFATORAÇÃO	
-//	@DeleteMapping("/{clienteId}")
-//	public ResponseEntity<Void> excluir(@PathVariable Long clienteId) {
-//
-//		try {
-//			if (clienteRepository.existsById(clienteId)) {
-//				catalogoClienteService.excluir(clienteId);
-//			}
-//			return ResponseEntity.noContent().build();
-//
-//		} catch (EntidadeNaoEncontradaException e) {
-//			return ResponseEntity.notFound().build();
-//
-//		} catch (EntidadeEmUsoException e) {
-//			return ResponseEntity.status(HttpStatus.CONFLICT).build();
-//		}
+//	ATUALIZAÇÃO PARCIAL, VER COMO CONVERTER PARA DTO COM MODELMAPPER
+//	@PatchMapping("/{clienteId}")
+//	public Cliente editarParcial (@PathVariable Long clienteId, @Valid @RequestBody Map<String, Object> dados) {
+//		
+//		Cliente clienteAtual = catalogoClienteService.buscarOuFalhar(clienteId);
+//		
+//		merge(dados, clienteAtual);
+//		
+//		return editar(clienteId, clienteAtual);
 //	}
+//	
+//	private void merge(Map<String, Object> dadosOrigem, Cliente clienteDestino) {
+//		ObjectMapper objectMapper = new ObjectMapper();
+//		Cliente clienteOrigem = objectMapper.convertValue(dadosOrigem, Cliente.class);
+//		
+//		dadosOrigem.forEach((nomePropriedade, valorPropriedade)-> {
+//			Field field = ReflectionUtils.findField(Cliente.class, nomePropriedade);
+//			field.setAccessible(true);
+//				
+//			Object novoValor = ReflectionUtils.getField(field, clienteOrigem);
+//			
+//			ReflectionUtils.setField(field, clienteDestino, novoValor);
+//			
+//		});
+//	}
+
 	
 	@DeleteMapping("/{clienteId}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
