@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.empreget.api.assembler.PedidoAssembler;
 import com.empreget.api.dto.EnderecoResponse;
 import com.empreget.api.dto.PedidoResponse;
 import com.empreget.api.dto.ServicoResponse;
-import com.empreget.api.mapper.PedidoAssembler;
 import com.empreget.domain.model.Pedido;
 import com.empreget.domain.repository.PedidoRepositoy;
 import com.empreget.domain.service.FinalizacaoPedidoService;

@@ -1,11 +1,11 @@
 package com.empreget.domain.model.enums;
 
-public enum RegiaoDisponivel {
+public enum Regiao {
 	
 	CENTRO,
 	NORTE,
 	SUL,
 	LESTE,
-	OESTE,
+	OESTE;
 
 }

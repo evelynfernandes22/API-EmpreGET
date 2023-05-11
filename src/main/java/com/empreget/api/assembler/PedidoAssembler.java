@@ -1,4 +1,4 @@
-package com.empreget.api.mapper;
+package com.empreget.api.assembler;
 
 import java.util.List;
 import java.util.stream.Collectors;

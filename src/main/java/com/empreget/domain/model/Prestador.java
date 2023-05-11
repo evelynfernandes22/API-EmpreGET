@@ -20,7 +20,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.empreget.domain.ValidationGroups;
-import com.empreget.domain.model.enums.RegiaoDisponivel;
+import com.empreget.domain.model.enums.Regiao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -83,7 +83,7 @@ public class Prestador {
 	
 	@NotNull
 	@Enumerated(EnumType.STRING)
-	private RegiaoDisponivel regiaoDisponivel;
+	private Regiao regiaoDisponivel;
 	
 	@JsonIgnore
 	@CreationTimestamp

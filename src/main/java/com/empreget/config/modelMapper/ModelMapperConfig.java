@@ -1,4 +1,4 @@
-package com.empreget.common;
+package com.empreget.config.modelMapper;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
