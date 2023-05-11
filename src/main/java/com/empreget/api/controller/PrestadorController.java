@@ -1,18 +1,14 @@
 package com.empreget.api.controller;
 
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,12 +21,9 @@ import com.empreget.api.assembler.PrestadorAssembler;
 import com.empreget.api.assembler.PrestadorInputDisassembler;
 import com.empreget.api.dto.PrestadorResponse;
 import com.empreget.api.dto.input.PrestadorInput;
-import com.empreget.domain.exception.NegocioException;
-import com.empreget.domain.exception.PrestadorNaoEncontradoException;
 import com.empreget.domain.model.Prestador;
 import com.empreget.domain.repository.PrestadorRepository;
 import com.empreget.domain.service.catalogoPrestadorService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.AllArgsConstructor;
 

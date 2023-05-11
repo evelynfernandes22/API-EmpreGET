@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.empreget.api.assembler.PedidoAssembler;
+import com.empreget.api.assembler.PedidoInputDisassembler;
 import com.empreget.api.dto.EnderecoResponse;
 import com.empreget.api.dto.PedidoResponse;
 import com.empreget.api.dto.ServicoResponse;
+import com.empreget.api.dto.input.PedidoInput;
 import com.empreget.domain.model.Pedido;
 import com.empreget.domain.repository.PedidoRepositoy;
 import com.empreget.domain.service.FinalizacaoPedidoService;
@@ -35,12 +37,15 @@ public class PedidoController {
 	private PedidoRepositoy pedidoRepository;
 	private SolicitacaoPedidoService solicitacaoPedidoService;
 	private PedidoAssembler pedidoAssembler;
+	private PedidoInputDisassembler pedidoInputDisassembler;
 	private FinalizacaoPedidoService finalizacaoPedidoService;
 
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public PedidoResponse solicitar(@Valid @RequestBody Pedido pedido) {
+	public PedidoResponse solicitar(@Valid @RequestBody PedidoInput pedidoInput) {
+		Pedido pedido = pedidoInputDisassembler.toDomainObject(pedidoInput);
+		
 		PedidoResponse pedidoResponse = pedidoAssembler.toModel(solicitacaoPedidoService.solicitar(pedido));
 		puxarEnderecoEServico(pedido, pedidoResponse);
 
