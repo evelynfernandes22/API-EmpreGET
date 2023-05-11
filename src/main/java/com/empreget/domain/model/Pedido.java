@@ -17,6 +17,8 @@ import javax.validation.groups.Default;
 
 import com.empreget.domain.ValidationGroups;
 import com.empreget.domain.exception.NegocioException;
+import com.empreget.domain.model.enums.StatusPedido;
+import com.empreget.domain.model.enums.TipoDiaria;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -62,7 +64,7 @@ public class Pedido {
 	
 	@JsonProperty(access = Access.READ_ONLY)
 	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
-	private OffsetDateTime dataDoPedido;
+	private OffsetDateTime dataDaSolicitacao;
 	
 	@JsonProperty(access = Access.READ_ONLY)
 	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
@@ -81,6 +83,7 @@ public class Pedido {
 			throw new NegocioException("Este pedido não pode ser recusado, por não estar no status [aguardando aceite].");
 		}
 		setStatus(StatusPedido.RECUSADO);
+		setDataDaFinalizacao(OffsetDateTime.now());
 	}
 	
 	public void finalizar() {

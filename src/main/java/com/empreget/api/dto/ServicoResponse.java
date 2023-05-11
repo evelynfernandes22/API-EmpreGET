@@ -1,4 +1,4 @@
-package com.empreget.api.model;
+package com.empreget.api.dto;
 
 import java.math.BigDecimal;
 

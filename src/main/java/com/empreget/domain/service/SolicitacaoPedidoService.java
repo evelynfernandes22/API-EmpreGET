@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.empreget.domain.model.Cliente;
 import com.empreget.domain.model.Pedido;
 import com.empreget.domain.model.Prestador;
-import com.empreget.domain.model.StatusPedido;
+import com.empreget.domain.model.enums.StatusPedido;
 import com.empreget.domain.repository.PedidoRepositoy;
 
 import lombok.AllArgsConstructor;
@@ -34,7 +34,7 @@ public class SolicitacaoPedidoService {
 		pedido.setCliente(cliente);
 		pedido.setPrestador(prestador);
 		pedido.setStatus(StatusPedido.AGUARDANDO_ACEITE);
-		pedido.setDataDoPedido(OffsetDateTime.now());
+		pedido.setDataDaSolicitacao(OffsetDateTime.now());
 		
 		return pedidoRepositoy.save(pedido);
 	}

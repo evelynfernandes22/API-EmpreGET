@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-import com.empreget.api.model.PedidoResponse;
+import com.empreget.api.dto.PedidoResponse;
 import com.empreget.domain.model.Pedido;
 
 import lombok.AllArgsConstructor;

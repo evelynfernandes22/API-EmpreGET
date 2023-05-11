@@ -6,6 +6,7 @@ create table cliente(
                         telefone varchar(20) not null,
                         email varchar(255) not null,
                         data_do_cadastro datetime not null,
+                        data_da_atualizacao datetime not null,
                         
                         end_logradouro varchar(255) not null,
                         end_numero varchar(30) not null,

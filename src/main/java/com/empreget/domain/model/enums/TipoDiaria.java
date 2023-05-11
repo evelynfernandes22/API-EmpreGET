@@ -1,4 +1,4 @@
-package com.empreget.domain.model;
+package com.empreget.domain.model.enums;
 
 public enum TipoDiaria {
 

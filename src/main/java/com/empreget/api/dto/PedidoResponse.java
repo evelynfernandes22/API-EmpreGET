@@ -1,9 +1,9 @@
-package com.empreget.api.model;
+package com.empreget.api.dto;
 
 import java.time.OffsetDateTime;
 
-import com.empreget.domain.model.StatusPedido;
-import com.empreget.domain.model.TipoDiaria;
+import com.empreget.domain.model.enums.StatusPedido;
+import com.empreget.domain.model.enums.TipoDiaria;
 
 import lombok.Data;
 
@@ -17,7 +17,7 @@ public class PedidoResponse {
 	private TipoDiaria tipoDeDiaria;
 	private StatusPedido status;
 	private ServicoResponse servico;
-	private OffsetDateTime dataDoPedido;
+	private OffsetDateTime dataDaSolicitacao;
 	private OffsetDateTime dataDaFinalizacao;
 	
 

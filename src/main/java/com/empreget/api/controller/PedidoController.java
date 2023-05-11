@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.empreget.api.dto.EnderecoResponse;
+import com.empreget.api.dto.PedidoResponse;
+import com.empreget.api.dto.ServicoResponse;
 import com.empreget.api.mapper.PedidoAssembler;
-import com.empreget.api.model.EnderecoResponse;
-import com.empreget.api.model.PedidoResponse;
-import com.empreget.api.model.ServicoResponse;
 import com.empreget.domain.model.Pedido;
 import com.empreget.domain.repository.PedidoRepositoy;
 import com.empreget.domain.service.FinalizacaoPedidoService;
@@ -47,19 +47,6 @@ public class PedidoController {
 		return pedidoResponse;
 	}
 
-//	MENOS VERBOSO, MAS NÃO ENCONTRA ENDEREÇOMODEL E SERVICOMODEL NO DTO
-//	@PostMapping
-//	@ResponseStatus(HttpStatus.CREATED)
-//	public PedidoResponse solicitar(@Valid @RequestBody Pedido pedido) {
-//		return pedidoAssembler.toModel(solicitacaoPedidoService.solicitar(pedido));
-//				
-//	}
-
-//	@GetMapping
-//	public List<PedidoResponse> listar(){
-//		return pedidoAssembler.toCollectionModel(pedidoRepository.findAll());
-//	
-//	}
 
 	@GetMapping
 	public List<PedidoResponse> listar() {

@@ -22,6 +22,7 @@ create table prestador(
                         detalhes_sobre_mim varchar(255) not null,
                         regiao_disponivel varchar(20) not null,                                          
                         data_do_cadastro datetime not null,
+                        data_da_atualizacao datetime not null,
                         
                         primary key (id)
                         

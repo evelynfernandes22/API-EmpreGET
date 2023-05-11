@@ -3,7 +3,7 @@ create table pedido(
        cliente_id bigint not null,
        prestador_id bigint not null,
        tipo_de_diaria varchar(20) not null,
-       data_do_pedido datetime not null,
+       data_da_solicitacao datetime not null,       
        data_da_finalizacao datetime,
        status varchar(20) not null,
                                                     
