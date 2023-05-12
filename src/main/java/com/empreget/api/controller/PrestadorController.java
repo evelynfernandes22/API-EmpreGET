@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.empreget.api.assembler.PrestadorAssembler;
 import com.empreget.api.assembler.PrestadorInputDisassembler;
+import com.empreget.api.dto.PrestadorMinResponse;
 import com.empreget.api.dto.PrestadorResponse;
 import com.empreget.api.dto.input.PrestadorInput;
 import com.empreget.domain.model.Prestador;
@@ -45,9 +46,23 @@ public class PrestadorController {
 				.collect(Collectors.toList());
 	}
 	
+	@GetMapping ("/perfis")
+	public List<PrestadorMinResponse> listarPerfilPrestador(){
+		return prestadorRepository.findAll()
+				.stream()
+				.map(prestador -> assembler.toModelMin(prestador))
+				.collect(Collectors.toList());
+				
+	}
+	
 	@GetMapping("/{prestadorId}")
-	public PrestadorResponse buscar(@PathVariable Long prestadorId){
+	public PrestadorResponse buscarPorId(@PathVariable Long prestadorId){
 		return assembler.toModel(catalogoPrestadorService.buscarOuFalhar(prestadorId));
+		
+	}
+	@GetMapping("/perfil/{prestadorId}")
+	public PrestadorMinResponse buscarPorIdPerfil(@PathVariable Long prestadorId){
+		return assembler.toModelMin(catalogoPrestadorService.buscarOuFalhar(prestadorId));
 		
 	}
 	
