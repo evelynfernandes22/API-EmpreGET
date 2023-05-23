@@ -10,8 +10,8 @@ create table prestador(
                         end_numero varchar(30) not null,
                         end_complemento varchar(60),
                         end_cep varchar(10) not null,                        
-                        end_cidade varchar(40) not null,
-                        end_bairro varchar(30) not null,
+                        end_cidade varchar(50) not null,
+                        end_bairro varchar(150) not null,
                         end_estado varchar(30) not null,
                         end_pais varchar(30) not null,
 						
@@ -19,11 +19,10 @@ create table prestador(
                         servico_valor decimal(10,2) not null,
                         
                         disponibilidade_na_semana varchar(255) not null,
-                        detalhes_sobre_mim varchar(255) not null,
-                        regiao_disponivel varchar(20) not null,                                          
+                        observacao varchar(255),
+                        regiao varchar(20) not null,                                          
                         data_do_cadastro datetime not null,
                         data_da_atualizacao datetime not null,
                         
-                        primary key (id)
-                        
-)engine=InnoDB default charset=utf8;
+                        primary key (id)                        
+)engine=InnoDB default charset=utf8mb4;

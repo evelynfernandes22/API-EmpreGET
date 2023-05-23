@@ -5,5 +5,7 @@ public interface ValidationGroups {
 	public interface ClienteId{}
 	
 	public interface PrestadorId{}
+	
+	public interface AgendamentoId{}
 
 }

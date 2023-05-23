@@ -13,14 +13,14 @@ public class PrestadorResponse {
 	private long id;
 	private String nome;
 	private EnderecoResponse endereco;
-	private Regiao regiaoDisponivel; 
+	private Regiao regiao; 
 	private String rg;
 	private String cpf;
 	private String telefone;
 	private String email;
 	private ServicoResponse servico;
 	private String disponibilidade;
-	private String detalhes;
+	private String observacao;
 	private OffsetDateTime dataDoCadastro;
-	private LocalDateTime dataDaAtualizacao;
+	private OffsetDateTime dataDaAtualizacao;
 }

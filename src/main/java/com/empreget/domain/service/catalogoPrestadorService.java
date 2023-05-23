@@ -1,10 +1,13 @@
 package com.empreget.domain.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.empreget.domain.exception.EntidadeEmUsoException;
+import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.exception.PrestadorNaoEncontradoException;
 import com.empreget.domain.model.Prestador;
 import com.empreget.domain.repository.PrestadorRepository;
@@ -13,16 +16,23 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @Service
-public class catalogoPrestadorService {
+public class CatalogoPrestadorService {
 	
 	private static final String MSG_PRESTADOR_EM_USO = "Prestador de código %d não pode ser removido, pois está em uso";
 	
 	private PrestadorRepository prestadorRepository;
 	
-	
+	@Transactional
 	public Prestador salvar(Prestador prestador) {
+		boolean emailEmUso = prestadorRepository.findByEmail(prestador.getEmail()).stream()
+				.anyMatch(prestadorExistente -> !prestadorExistente.equals(prestador));
+		
+		if (emailEmUso) {
+			throw new NegocioException("Já existe um prestador cadastrado com este e-mail.");
+		}
 		return prestadorRepository.save(prestador);
 	}
+	
 	
 	public void excluir (Long prestadorId) {
 		try {

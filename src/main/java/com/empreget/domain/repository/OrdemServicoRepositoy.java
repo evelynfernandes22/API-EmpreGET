@@ -3,10 +3,10 @@ package com.empreget.domain.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.empreget.domain.model.Pedido;
+import com.empreget.domain.model.OrdemServico;
 
 @Repository
-public interface PedidoRepositoy extends JpaRepository<Pedido, Long>{
+public interface OrdemServicoRepositoy extends JpaRepository<OrdemServico, Long>{
 	
 
 }

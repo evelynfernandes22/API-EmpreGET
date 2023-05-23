@@ -43,7 +43,7 @@ public class Cliente {
 	@NotBlank
 	@Size(max = 60)
 	private String nome;
-
+	
 	@Embedded
 	private Endereco endereco;
 

@@ -2,7 +2,10 @@ package com.empreget.domain.model;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -11,6 +14,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -75,15 +79,14 @@ public class Prestador {
 	@Column(name= "disponibilidade_na_semana")
 	private String disponibilidade;
 	
-	@NotBlank
+
 	@Size(max = 255)
-	@Column(name= "detalhes_sobre_mim")
-	private String detalhes;
+	private String observacao;
 	
 	
 	@NotNull
 	@Enumerated(EnumType.STRING)
-	private Regiao regiaoDisponivel;
+	private Regiao regiao;
 	
 	@JsonIgnore
 	@CreationTimestamp
@@ -95,4 +98,7 @@ public class Prestador {
 	@Column(nullable = false, columnDefinition = "datetime")
 	private LocalDateTime dataDaAtualizacao;
 	
+	
+	@OneToMany(mappedBy="prestador", cascade = CascadeType.ALL)
+	private List<OrdemServico> ordensServico = new ArrayList<>();
 }

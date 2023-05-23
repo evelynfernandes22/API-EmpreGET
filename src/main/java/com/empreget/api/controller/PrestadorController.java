@@ -24,7 +24,7 @@ import com.empreget.api.dto.PrestadorResponse;
 import com.empreget.api.dto.input.PrestadorInput;
 import com.empreget.domain.model.Prestador;
 import com.empreget.domain.repository.PrestadorRepository;
-import com.empreget.domain.service.catalogoPrestadorService;
+import com.empreget.domain.service.CatalogoPrestadorService;
 
 import lombok.AllArgsConstructor;
 
@@ -34,7 +34,7 @@ import lombok.AllArgsConstructor;
 public class PrestadorController {
 
 	private PrestadorRepository prestadorRepository;
-	private catalogoPrestadorService catalogoPrestadorService;
+	private CatalogoPrestadorService catalogoPrestadorService;
 	private PrestadorAssembler assembler;
 	private PrestadorInputDisassembler prestadorInputDisassembler;
 

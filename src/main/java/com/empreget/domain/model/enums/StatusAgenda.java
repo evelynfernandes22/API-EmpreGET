@@ -2,8 +2,9 @@ package com.empreget.domain.model.enums;
 
 public enum StatusAgenda {
 	
-	OCUPADO, 
-	LIVRE,
+	PRE_RESERVADO, 
+	RESERVADO,
+	DISPONÍVEL,
 	INDISPONIVEL;
 
 }

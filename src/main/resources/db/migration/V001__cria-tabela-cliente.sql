@@ -12,10 +12,10 @@ create table cliente(
                         end_numero varchar(30) not null,
                         end_complemento varchar(60),
                         end_cep varchar(10) not null,                        
-                        end_cidade varchar(40) not null,
-                        end_bairro varchar(30) not null,
+                        end_cidade varchar(50) not null,
+                        end_bairro varchar(150) not null,
                         end_estado varchar(30) not null,
                         end_pais varchar(30) not null,
 
                         primary key (id)
-)engine=InnoDB default charset=utf8;
+)engine=InnoDB default charset=utf8mb4;

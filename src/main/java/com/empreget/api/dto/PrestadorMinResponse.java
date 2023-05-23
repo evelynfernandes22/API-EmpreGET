@@ -12,8 +12,8 @@ public class PrestadorMinResponse {
 	private long id;
 	private String nome;
 	private String enderecoCidade;
-	private Regiao regiaoDisponivel; 
+	private Regiao regiao; 
 	private ServicoResponse servico;
 	private String disponibilidade;
-	private String detalhes;
+	private String observacao;
 }

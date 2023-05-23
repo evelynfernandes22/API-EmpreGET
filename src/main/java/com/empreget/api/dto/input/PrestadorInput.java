@@ -20,7 +20,7 @@ public class PrestadorInput {
 	private EnderecoInput endereco;
 
 	@NotNull
-	private Regiao regiaoDisponivel; 
+	private Regiao regiao; 
 	
 	@NotBlank
 	private String rg;
@@ -40,6 +40,6 @@ public class PrestadorInput {
 	@NotBlank
 	private String disponibilidade;
 	
-	@NotBlank
-	private String detalhes;
+	
+	private String observacao;
 }

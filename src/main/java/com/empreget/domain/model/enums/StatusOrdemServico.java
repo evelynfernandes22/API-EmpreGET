@@ -1,6 +1,6 @@
 package com.empreget.domain.model.enums;
 
-public enum StatusPedido {
+public enum StatusOrdemServico {
 	AGUARDANDO_ACEITE,
 	PENDENTE,
 	RECUSADO,

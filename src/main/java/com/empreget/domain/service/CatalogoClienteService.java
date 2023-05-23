@@ -2,10 +2,12 @@ package com.empreget.domain.service;
 
 import javax.transaction.Transactional;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.empreget.domain.exception.ClienteNaoEncontradoException;
+import com.empreget.domain.exception.EntidadeEmUsoException;
 import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.model.Cliente;
 import com.empreget.domain.repository.ClienteRepository;
@@ -16,6 +18,7 @@ import lombok.AllArgsConstructor;
 @Service
 public class CatalogoClienteService {
 	
+	private static final String MSG_CLIENTE_EM_USO = "Cliente de código %d não pode ser removido, pois está em uso";
 	private final ClienteRepository clienteRepository;
 
 	
@@ -37,13 +40,17 @@ public class CatalogoClienteService {
 		return clienteRepository.save(cliente);
 	}
 
-	@Transactional
+
 	public void excluir(Long clienteId) {
 		try {
 			clienteRepository.deleteById(clienteId);
 			
 		}catch (EmptyResultDataAccessException e) {
 			throw new ClienteNaoEncontradoException(clienteId);
+			
+		} catch (DataIntegrityViolationException e) {
+			throw new EntidadeEmUsoException(
+					String.format(MSG_CLIENTE_EM_USO, clienteId));
 		}
 	}
 

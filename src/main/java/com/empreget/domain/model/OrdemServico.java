@@ -1,5 +1,6 @@
 package com.empreget.domain.model;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 import javax.persistence.Entity;
@@ -17,7 +18,9 @@ import javax.validation.groups.Default;
 
 import com.empreget.domain.ValidationGroups;
 import com.empreget.domain.exception.NegocioException;
-import com.empreget.domain.model.enums.StatusPedido;
+import com.empreget.domain.model.enums.Periodo;
+import com.empreget.domain.model.enums.StatusAgenda;
+import com.empreget.domain.model.enums.StatusOrdemServico;
 import com.empreget.domain.model.enums.TipoDiaria;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -29,7 +32,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Data
 @Entity
-public class Pedido {
+public class OrdemServico {
 	
 	@EqualsAndHashCode.Include
 	@Id
@@ -50,17 +53,25 @@ public class Pedido {
 	@JoinColumn(name="prestador_id", nullable=false)
 	private Prestador prestador;
 	
-//IMPLEMENTAR
-//	private List<Agenda> agenda;
+	@NotNull
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	private LocalDateTime dataServico;
 	
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private Periodo periodo;
 	
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private StatusAgenda statusAgenda;
+
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private TipoDiaria tipoDeDiaria;
 	
 	@JsonProperty(access = Access.READ_ONLY)
 	@Enumerated(EnumType.STRING)
-	private StatusPedido status;
+	private StatusOrdemServico statusOrdemServico;
 	
 	@JsonProperty(access = Access.READ_ONLY)
 	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
@@ -69,20 +80,25 @@ public class Pedido {
 	@JsonProperty(access = Access.READ_ONLY)
 	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	private OffsetDateTime dataDaFinalizacao;
-	
-
+		
+		
+/*
+ * MÉTODOS
+ */
 	public void aceitar() {
 		if(!podeSerAceito()) {
 			throw new NegocioException("O pedido não pode ser aceito.");
 		}
-		setStatus(StatusPedido.PENDENTE);
+		setStatusOrdemServico(StatusOrdemServico.PENDENTE);
+		setStatusAgenda(StatusAgenda.RESERVADO);
 	}
 	
 	public void recusar() {
-		if(!getStatus().equals(StatusPedido.AGUARDANDO_ACEITE)) {
+		if(!getStatusOrdemServico().equals(StatusOrdemServico.AGUARDANDO_ACEITE)) {
 			throw new NegocioException("Este pedido não pode ser recusado, por não estar no status [aguardando aceite].");
 		}
-		setStatus(StatusPedido.RECUSADO);
+		setStatusOrdemServico(StatusOrdemServico.RECUSADO);
+		setStatusAgenda(StatusAgenda.DISPONÍVEL);
 		setDataDaFinalizacao(OffsetDateTime.now());
 	}
 	
@@ -91,23 +107,25 @@ public class Pedido {
 			throw new NegocioException("O pedido não pode ser finalizado");
 		}
 		
-		setStatus(StatusPedido.FINALIZADO);
+		setStatusOrdemServico(StatusOrdemServico.FINALIZADO);
+		setStatusAgenda(StatusAgenda.INDISPONIVEL);
 		setDataDaFinalizacao(OffsetDateTime.now());
-		
 	}
 	
-	
 	public boolean podeSerAceito() {
-		return StatusPedido.AGUARDANDO_ACEITE.equals(getStatus());
+		return StatusOrdemServico.AGUARDANDO_ACEITE.equals(getStatusOrdemServico());
 	}
 	
 	public boolean podeSerFinalizado() {
-		return StatusPedido.PENDENTE.equals(getStatus());
+		return StatusOrdemServico.PENDENTE.equals(getStatusOrdemServico());
 	}
-	
-	
-	
-	
-	
+			
+//	public boolean existeAgendamentoEmData(LocalDateTime data){
+//		   for(Agendamento agenda : agendamentos){
+//		      if(agenda.getData().equals(data))
+//		         return true;
+//		   }
+//		   return false;
+//		} 
 
 }
