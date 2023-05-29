@@ -33,10 +33,11 @@ public class CatalogoPrestadorService {
 		return prestadorRepository.save(prestador);
 	}
 	
-	
+	@Transactional
 	public void excluir (Long prestadorId) {
 		try {
 			prestadorRepository.deleteById(prestadorId);
+			prestadorRepository.flush();
 		
 		}catch (EmptyResultDataAccessException e) {
 			throw new PrestadorNaoEncontradoException(prestadorId);

@@ -96,7 +96,7 @@ public class Prestador {
 	@JsonIgnore
 	@UpdateTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
-	private LocalDateTime dataDaAtualizacao;
+	private OffsetDateTime dataDaAtualizacao;
 	
 	
 	@OneToMany(mappedBy="prestador", cascade = CascadeType.ALL)

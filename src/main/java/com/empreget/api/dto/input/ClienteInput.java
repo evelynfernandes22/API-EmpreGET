@@ -3,6 +3,7 @@ package com.empreget.api.dto.input;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+import com.empreget.domain.model.Cliente;
 import com.empreget.domain.model.Endereco;
 
 import lombok.Getter;
@@ -11,6 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ClienteInput {
+
 
 	@NotBlank
 	private String nome;
@@ -31,4 +33,6 @@ public class ClienteInput {
 	@NotBlank
 	private String email;
 
+	
+	
 }

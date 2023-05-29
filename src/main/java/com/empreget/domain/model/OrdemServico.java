@@ -1,6 +1,5 @@
 package com.empreget.domain.model;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 import javax.persistence.Entity;
@@ -55,7 +54,7 @@ public class OrdemServico {
 	
 	@NotNull
 	@JsonFormat(pattern = "dd/MM/yyyy")
-	private LocalDateTime dataServico;
+	private OffsetDateTime dataServico;
 	
 	@NotNull
 	@Enumerated(EnumType.STRING)

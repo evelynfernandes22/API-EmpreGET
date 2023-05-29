@@ -1,9 +1,6 @@
 package com.empreget.api.dto;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 
@@ -18,6 +15,6 @@ public class ClienteResponse {
 	private String telefone;
 	private String email;
 	private OffsetDateTime dataDoCadastro;
-	private LocalDateTime dataDaAtualizacao;
+	private OffsetDateTime dataDaAtualizacao;
 
 }

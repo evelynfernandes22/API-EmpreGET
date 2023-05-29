@@ -1,6 +1,7 @@
 package com.empreget.api.exceptionHandler;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -186,7 +187,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		ProblemType problemType = ProblemType.RECURSO_NAO_ENCONTRADO;
 		String detail = ex.getMessage();
 
-		Problem problem = createProblemBuilder(status, problemType, detail).userMessage(detail).build();
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(detail)
+				.build();
 
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
@@ -198,7 +201,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		ProblemType problemType = ProblemType.ENTIDADE_EM_USO;
 		String detail = ex.getMessage();
 
-		Problem problem = createProblemBuilder(status, problemType, detail).userMessage(detail).build();
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(detail)
+				.build();
 
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
@@ -210,7 +215,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		ProblemType problemType = ProblemType.ERRO_NEGOCIO;
 		String detail = ex.getMessage();
 
-		Problem problem = createProblemBuilder(status, problemType, detail).userMessage(detail).build();
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(detail)
+				.build();
 
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
@@ -220,10 +227,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			HttpStatus status, WebRequest request) {
 
 		if (body == null) {
-			body = Problem.builder().timestamp(LocalDateTime.now()).title(status.getReasonPhrase())
-					.status(status.value()).userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL).build();
+			body = Problem.builder()
+					.timestamp(OffsetDateTime.now())
+					.title(status.getReasonPhrase())
+					.status(status.value())
+					.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+					.build();
 		} else if (body instanceof String) {
-			body = Problem.builder().timestamp(LocalDateTime.now()).title((String) body).status(status.value())
+			body = Problem.builder().timestamp(OffsetDateTime.now()).title((String) body).status(status.value())
 					.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL).build();
 		}
 
@@ -232,11 +243,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
 
-		return Problem.builder().timestamp(LocalDateTime.now()).status(status.value()).type(problemType.getUri())
-				.title(problemType.getTitle()).detail(detail);
+		return Problem.builder()
+				.timestamp(OffsetDateTime.now())
+				.status(status.value())
+				.type(problemType.getUri())
+				.title(problemType.getTitle())
+				.detail(detail);
 	}
 
 	private String joinPath(List<Reference> references) {
-		return references.stream().map(ref -> ref.getFieldName()).collect(Collectors.joining("."));
+		return references.stream()
+				.map(ref -> ref.getFieldName())
+				.collect(Collectors.joining("."));
 	}
 }

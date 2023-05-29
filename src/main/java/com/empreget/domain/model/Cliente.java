@@ -72,6 +72,6 @@ public class Cliente {
 	@JsonIgnore
 	@UpdateTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
-	private LocalDateTime dataDaAtualizacao;
+	private OffsetDateTime dataDaAtualizacao;
 	
 }

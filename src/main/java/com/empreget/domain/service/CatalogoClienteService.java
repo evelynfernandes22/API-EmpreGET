@@ -40,10 +40,11 @@ public class CatalogoClienteService {
 		return clienteRepository.save(cliente);
 	}
 
-
+	@Transactional
 	public void excluir(Long clienteId) {
 		try {
 			clienteRepository.deleteById(clienteId);
+			clienteRepository.flush(); //forçar commit no BD para descarregar a pilha
 			
 		}catch (EmptyResultDataAccessException e) {
 			throw new ClienteNaoEncontradoException(clienteId);

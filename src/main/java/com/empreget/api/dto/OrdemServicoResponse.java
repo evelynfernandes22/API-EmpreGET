@@ -1,6 +1,5 @@
 package com.empreget.api.dto;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 import com.empreget.domain.model.enums.Periodo;
@@ -22,7 +21,7 @@ public class OrdemServicoResponse {
 	private String nomePrestador;
 	
 	@JsonFormat(pattern = "dd/MM/yyyy")
-	private LocalDateTime dataServico;
+	private OffsetDateTime dataServico;
 	private Periodo periodo;
 	private StatusAgenda statusAgenda;
 	
