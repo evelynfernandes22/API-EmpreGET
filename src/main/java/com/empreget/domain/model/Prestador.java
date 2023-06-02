@@ -101,4 +101,6 @@ public class Prestador {
 	
 	@OneToMany(mappedBy="prestador", cascade = CascadeType.ALL)
 	private List<OrdemServico> ordensServico = new ArrayList<>();
+	
+//	private String imgUrl;  IMPLANTAR
 }

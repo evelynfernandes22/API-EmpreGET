@@ -10,6 +10,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -30,6 +31,8 @@ import com.empreget.api.assembler.PrestadorInputDisassembler;
 import com.empreget.api.dto.PrestadorMinResponse;
 import com.empreget.api.dto.PrestadorResponse;
 import com.empreget.api.dto.input.PrestadorInput;
+import com.empreget.domain.exception.EntidadeNaoEncontradaException;
+import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.model.Prestador;
 import com.empreget.domain.repository.PrestadorRepository;
 import com.empreget.domain.service.CatalogoPrestadorService;
@@ -82,19 +85,18 @@ public class PrestadorController {
 		
 		Prestador prestador = prestadorInputDisassembler.toDomainObject(prestadorInput);
 		return prestadorAssembler.toModel(catalogoPrestadorService.salvar(prestador));
-
+		
 	}
 	
 	@PutMapping("/{prestadorId}")
 	public PrestadorResponse editar(@PathVariable Long prestadorId, @RequestBody @Valid PrestadorInput prestadorInput) {
-		Prestador prestador = prestadorInputDisassembler.toDomainObject(prestadorInput);
-		
-		Prestador prestadorAtual = catalogoPrestadorService.buscarOuFalhar(prestadorId);
-		
-		BeanUtils.copyProperties(prestador, prestadorAtual, 
-				"id", "dataDoCadastro", "dataDaAtualizacao");
-		
-		return prestadorAssembler.toModel(catalogoPrestadorService.salvar(prestadorAtual));
+	
+			Prestador prestadorAtual = catalogoPrestadorService.buscarOuFalhar(prestadorId);
+			
+			prestadorInputDisassembler.copyToDomainObjet(prestadorInput, prestadorAtual);
+			
+			return prestadorAssembler.toModel(catalogoPrestadorService.salvar(prestadorAtual));
+	
 	}
 
 

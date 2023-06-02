@@ -1,6 +1,5 @@
 package com.empreget.api.exceptionHandler;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -55,7 +55,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		**/
 		ex.printStackTrace();
 
-		Problem problem = createProblemBuilder(status, problemType, detail).userMessage(detail).build();
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(detail)
+				.build();
 
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
@@ -114,7 +116,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
 		String detail = "O corpo da requisição está inválido. Verifique erro de sintaxe.";
 
-		Problem problem = createProblemBuilder(status, problemType, detail).userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
 				.build();
 
 		return handleExceptionInternal(ex, problem, headers, status, request);
@@ -126,8 +129,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		String path = joinPath(ex.getPath());
 
 		ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
-		String detail = String.format(
-				"A propriedade '%s' não existe. " + "Corrija ou remova essa propriedade e tente novamente.", path);
+		String detail = String.format("A propriedade '%s' não existe. " 
+				+ "Corrija ou remova essa propriedade e tente novamente.", path);
 
 		Problem problem = createProblemBuilder(status, problemType, detail).userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
 				.build();
@@ -146,7 +149,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 						+ "que é de um tipo inválido. Corrija e informe um valor compatível com o tipo %s.",
 				path, ex.getValue(), ex.getTargetType().getSimpleName());
 
-		Problem problem = createProblemBuilder(status, problemType, detail).userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
 				.build();
 
 		return handleExceptionInternal(ex, problem, headers, status, request);
@@ -156,30 +160,43 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		
+		return handleValidationInternal(ex, ex.getBindingResult(), headers, status, request);
+	}
+
+	private ResponseEntity<Object> handleValidationInternal(Exception ex, BindingResult bindingResult,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		
 		ProblemType problemType = ProblemType.DADOS_INVALIDOS;
 		String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
 		
-		BindingResult bindingResult = ex.getBindingResult();
-		
-		List<Problem.Field> problemFields = bindingResult.getFieldErrors()
+		List<Problem.Object> problemObjects = bindingResult.getAllErrors()
 				.stream()
-				.map(fieldError -> {
-					String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
-					return Problem.Field.builder()
-						.name(fieldError.getField())
+				.map(objectError -> {
+					String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
+					String name = objectError.getObjectName();
+					
+					if(objectError instanceof FieldError) {
+						name = ((FieldError) objectError).getField();
+					}
+					
+					return Problem.Object.builder()
+						.name(name)
 						.UserMessage(message)
 						.build();
-				})
+				})	
 				.collect(Collectors.toList());
-		
+				
 		Problem problem = createProblemBuilder(status, problemType, detail)
 				.userMessage(detail)
-				.fields(problemFields)
+				.objects(problemObjects)
 				.build();
 		
 		return handleExceptionInternal(ex, problem, headers, status, request);
 	}
-	
+
+	/**
+	 * Exceptions personalizadas do projeto
+	 */
 	@ExceptionHandler(EntidadeNaoEncontradaException.class)
 	public ResponseEntity<?> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException ex, WebRequest request) {
 
@@ -222,6 +239,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
 
+	/**
+	 * Configura o retorno da maioria dos métodos internos.
+	 */
 	@Override
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
@@ -240,6 +260,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return super.handleExceptionInternal(ex, body, headers, status, request);
 	}
+	
 
 	private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
 

@@ -17,8 +17,8 @@ public class FinalizacaoOSService {
 	private BuscaOSService buscaOSService;
 	
 	@Transactional
-	public void finalizar (Long pedidoId) {
-		OrdemServico ordemServico = buscaOSService.buscarOuFalhar(pedidoId);
+	public void finalizar (Long ordemServicoId) {
+		OrdemServico ordemServico = buscaOSService.buscarOuFalhar(ordemServicoId);
 		
 		ordemServico.finalizar();
 		

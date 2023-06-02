@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import com.empreget.api.dto.ServicoResponse;
 import com.empreget.api.dto.input.OrdemServicoInput;
 import com.empreget.domain.model.OrdemServico;
 import com.empreget.domain.repository.OrdemServicoRepositoy;
+import com.empreget.domain.service.CancelamentoOSService;
 import com.empreget.domain.service.FinalizacaoOSService;
 import com.empreget.domain.service.SolicitacaoOSService;
 
@@ -39,6 +41,7 @@ public class OrdemServicoController {
 	private OrdemServicoAssembler ordemServicoAssembler;
 	private OrdemServicoInputDisassembler ordemServicoInputDisassembler;
 	private FinalizacaoOSService finalizacaoOSService;
+	private CancelamentoOSService cancelamentoOSService;
 
 
 	@PostMapping
@@ -75,6 +78,13 @@ public class OrdemServicoController {
 
 					return ResponseEntity.ok(ordemServicoResponse);
 				}).orElse(ResponseEntity.notFound().build());
+	}
+	
+	@PutMapping("/{ordemServicoId}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void cancelar (@PathVariable Long ordemServicoId){		
+		cancelamentoOSService.cancelar(ordemServicoId);
+		
 	}
 	
 	@PutMapping("/{id}/aceite")

@@ -1,5 +1,6 @@
 package com.empreget.api.dto.input;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -12,34 +13,26 @@ import lombok.Data;
 @Data
 public class PrestadorInput {
 
-	private long id;
-	
 	@NotBlank
 	private String nome;
-	
-	private EnderecoInput endereco;
 
+	@Valid
+	private EnderecoInput endereco;
 	@NotNull
 	private Regiao regiao; 
-	
 	@NotBlank
 	private String rg;
-	
 	@NotBlank
 	private String cpf;
-	
 	@NotBlank
 	private String telefone;
-	
 	@Email
 	@NotBlank
 	private String email;
-	
-	private ServicoResponse servico;
-	
+	@Valid
+	private ServicoInput servico;
 	@NotBlank
 	private String disponibilidade;
-	
 	
 	private String observacao;
 }

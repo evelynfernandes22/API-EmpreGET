@@ -1,13 +1,14 @@
 package com.empreget.api.dto;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 import com.empreget.domain.model.enums.Regiao;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class PrestadorResponse {
 	
 	private long id;

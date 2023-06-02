@@ -18,4 +18,7 @@ public class PrestadorInputDisassembler {
 		return modelMapper.map(prestadorInput, Prestador.class);
 	}
 
+	public void copyToDomainObjet(PrestadorInput prestadorInput, Prestador prestador) {
+		modelMapper.map(prestadorInput, prestador);
+	}
 }

@@ -74,4 +74,6 @@ public class Cliente {
 	@Column(nullable = false, columnDefinition = "datetime")
 	private OffsetDateTime dataDaAtualizacao;
 	
+//	private String imgUrl;  IMPLANTAR
+	
 }

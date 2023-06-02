@@ -111,12 +111,27 @@ public class OrdemServico {
 		setDataDaFinalizacao(OffsetDateTime.now());
 	}
 	
+	public void cancelar() {
+		if(!podeSerCancelado()) {
+			throw new NegocioException("A ordem de serviço não pode ser cancelada, pois está em fase de execução pelo prestador");
+		}else if(StatusOrdemServico.class.equals(getStatusOrdemServico())) {
+			throw new NegocioException("A ordem não pode ser cancelada, pois já está com o estado 'Cancelado'");
+		}
+		
+		setStatusOrdemServico(StatusOrdemServico.CANCELADO);
+		setStatusAgenda(StatusAgenda.DISPONÍVEL);
+		setDataDaFinalizacao(OffsetDateTime.now());
+	}
+	
 	public boolean podeSerAceito() {
 		return StatusOrdemServico.AGUARDANDO_ACEITE.equals(getStatusOrdemServico());
 	}
 	
 	public boolean podeSerFinalizado() {
 		return StatusOrdemServico.PENDENTE.equals(getStatusOrdemServico());
+	}
+	public boolean podeSerCancelado() {
+		return podeSerAceito() || podeSerFinalizado();
 	}
 			
 //	public boolean existeAgendamentoEmData(LocalDateTime data){

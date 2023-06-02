@@ -2,16 +2,18 @@ package com.empreget.api.dto;
 
 import java.time.OffsetDateTime;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class ClienteResponse {
 	
 	private Long id;
 	private String nome;
 	private String rg;
 	private String cpf;
-	EnderecoResponse endereco;
+	private EnderecoResponse endereco;
 	private String telefone;
 	private String email;
 	private OffsetDateTime dataDoCadastro;

@@ -75,12 +75,11 @@ public class ClienteController {
 	@PutMapping("/{clienteId}")
 	public ClienteResponse editar(@PathVariable Long clienteId, @Valid @RequestBody ClienteInput clienteinput) {
 		
-		Cliente cliente = clienteInputDisassembler.toDomainObject(clienteinput);
-		
 		Cliente clienteAtual = catalogoClienteService.buscarOuFalhar(clienteId);
-			
-		BeanUtils.copyProperties(cliente, clienteAtual,
-				"id", "dataDoCadastro", "dataDaAtualizacao");
+
+		clienteInputDisassembler.copyToDomainObject(clienteinput, clienteAtual);
+//		BeanUtils.copyProperties(cliente, clienteAtual,
+//				"id", "dataDoCadastro", "dataDaAtualizacao");
 			
 		return clienteAssembler.toModel(catalogoClienteService.salvar(clienteAtual));
 		
