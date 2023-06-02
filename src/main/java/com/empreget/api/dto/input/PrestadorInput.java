@@ -16,6 +16,8 @@ public class PrestadorInput {
 	@NotBlank
 	private String nome;
 
+	private String imgUrl;
+	
 	@Valid
 	private EnderecoInput endereco;
 	@NotNull
@@ -35,4 +37,5 @@ public class PrestadorInput {
 	private String disponibilidade;
 	
 	private String observacao;
+	
 }

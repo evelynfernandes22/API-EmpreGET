@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.empreget.api.assembler.OrdemServicoAssembler;
+import com.empreget.api.assembler.OrdemServicoDtoAssembler;
 import com.empreget.api.assembler.OrdemServicoInputDisassembler;
 import com.empreget.api.dto.EnderecoResponse;
 import com.empreget.api.dto.OrdemServicoResponse;
@@ -38,7 +38,7 @@ public class OrdemServicoController {
 
 	private OrdemServicoRepositoy ordemServicoRepository;
 	private SolicitacaoOSService solicitacaoOSService;
-	private OrdemServicoAssembler ordemServicoAssembler;
+	private OrdemServicoDtoAssembler ordemServicoAssembler;
 	private OrdemServicoInputDisassembler ordemServicoInputDisassembler;
 	private FinalizacaoOSService finalizacaoOSService;
 	private CancelamentoOSService cancelamentoOSService;

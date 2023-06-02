@@ -51,6 +51,9 @@ public class Prestador {
 	@Size(max = 60)
 	private String nome;
 
+	@Size(max = 255)
+	private String imgUrl; 	
+	
 	@Embedded
 	private Endereco endereco;
 

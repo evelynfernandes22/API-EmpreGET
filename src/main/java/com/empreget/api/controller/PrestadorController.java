@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.empreget.api.assembler.PrestadorAssembler;
+import com.empreget.api.assembler.PrestadorDtoAssembler;
 import com.empreget.api.assembler.PrestadorInputDisassembler;
 import com.empreget.api.dto.PrestadorMinResponse;
 import com.empreget.api.dto.PrestadorResponse;
@@ -48,7 +48,7 @@ public class PrestadorController {
 
 	private PrestadorRepository prestadorRepository;
 	private CatalogoPrestadorService catalogoPrestadorService;
-	private PrestadorAssembler prestadorAssembler;
+	private PrestadorDtoAssembler prestadorAssembler;
 	private PrestadorInputDisassembler prestadorInputDisassembler;
 
 	@GetMapping
@@ -99,41 +99,41 @@ public class PrestadorController {
 	
 	}
 
-
-	@PatchMapping("/{prestadorId}")
-	public PrestadorResponse editarParcial(@PathVariable Long prestadorId, @Valid @RequestBody Map<String, Object> dados,
-			HttpServletRequest request) {
-		
-		Prestador prestadorAtual = catalogoPrestadorService.buscarOuFalhar(prestadorId);
-		
-		merge(dados, prestadorAtual, request);
-		
-		return prestadorAssembler.toModel(catalogoPrestadorService.salvar(prestadorAtual));
-	}
-	
-	private void merge(Map<String, Object> dadosOrigem, Prestador prestadorDestino, HttpServletRequest request) {
-		ServletServerHttpRequest serverHttpRequest = new ServletServerHttpRequest(request);
-
-		try {
-			ObjectMapper objectMapper = new ObjectMapper();
-			objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
-			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
-
-			Prestador prestadorOrigem = objectMapper.convertValue(dadosOrigem, Prestador.class);
-
-			dadosOrigem.forEach((nomePropriedade, valorPropriedade) -> {
-				Field field = ReflectionUtils.findField(Prestador.class, nomePropriedade);
-				field.setAccessible(true);
-
-				Object novoValor = ReflectionUtils.getField(field, prestadorOrigem);
-
-				ReflectionUtils.setField(field, prestadorDestino, novoValor);
-			});
-		} catch (IllegalArgumentException e) {
-			Throwable rootCause = ExceptionUtils.getRootCause(e);
-			throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequest);
-		}
-	}
+//NÃO FAZ SENTIDO TER EDITAR PARCIAL COM DTO
+//	@PatchMapping("/{prestadorId}")
+//	public PrestadorResponse editarParcial(@PathVariable Long prestadorId, @Valid @RequestBody Map<String, Object> dados,
+//			HttpServletRequest request) {
+//		
+//		Prestador prestadorAtual = catalogoPrestadorService.buscarOuFalhar(prestadorId);
+//		
+//		merge(dados, prestadorAtual, request);
+//		
+//		return prestadorAssembler.toModel(catalogoPrestadorService.salvar(prestadorAtual));
+//	}
+//	
+//	private void merge(Map<String, Object> dadosOrigem, Prestador prestadorDestino, HttpServletRequest request) {
+//		ServletServerHttpRequest serverHttpRequest = new ServletServerHttpRequest(request);
+//
+//		try {
+//			ObjectMapper objectMapper = new ObjectMapper();
+//			objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
+//			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+//
+//			Prestador prestadorOrigem = objectMapper.convertValue(dadosOrigem, Prestador.class);
+//
+//			dadosOrigem.forEach((nomePropriedade, valorPropriedade) -> {
+//				Field field = ReflectionUtils.findField(Prestador.class, nomePropriedade);
+//				field.setAccessible(true);
+//
+//				Object novoValor = ReflectionUtils.getField(field, prestadorOrigem);
+//
+//				ReflectionUtils.setField(field, prestadorDestino, novoValor);
+//			});
+//		} catch (IllegalArgumentException e) {
+//			Throwable rootCause = ExceptionUtils.getRootCause(e);
+//			throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequest);
+//		}
+//	}
 	
 	
 	@DeleteMapping("/{prestadorId}")

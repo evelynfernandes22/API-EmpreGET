@@ -12,6 +12,7 @@ import lombok.Setter;
 public class PrestadorResponse {
 	
 	private long id;
+	private String imgUrl;
 	private String nome;
 	private EnderecoResponse endereco;
 	private Regiao regiao; 

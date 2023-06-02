@@ -44,6 +44,9 @@ public class Cliente {
 	@Size(max = 60)
 	private String nome;
 	
+	@Size(max = 255)
+	private String imgUrl;  
+	
 	@Embedded
 	private Endereco endereco;
 
@@ -64,6 +67,7 @@ public class Cliente {
 	@Size(max = 255)
 	private String email;
 
+	
 	@JsonIgnore
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
@@ -74,6 +78,6 @@ public class Cliente {
 	@Column(nullable = false, columnDefinition = "datetime")
 	private OffsetDateTime dataDaAtualizacao;
 	
-//	private String imgUrl;  IMPLANTAR
+
 	
 }

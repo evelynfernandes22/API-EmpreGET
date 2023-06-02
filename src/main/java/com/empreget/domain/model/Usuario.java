@@ -34,7 +34,6 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 	
-	@NotBlank
 	@Size(max = 60)
 	private String nome;
 	
@@ -51,4 +50,14 @@ public class Usuario {
 	@Column(nullable = false, columnDefinition = "datetime")
 	@CreationTimestamp
 	private OffsetDateTime dataDoCadastro;
+	
+	//MÉTODOS
+	public boolean senhaCoincideCom(String senha) {
+		return getSenha().equals(senha);
+	}
+	
+	public boolean senhaNaoCoincidemCom(String senha) {
+		return !senhaCoincideCom(senha);
+	}
+	
 }

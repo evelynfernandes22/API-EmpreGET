@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @Component
-public class OrdemServicoAssembler {
+public class OrdemServicoDtoAssembler {
 
 	private ModelMapper modelMapper;
 	

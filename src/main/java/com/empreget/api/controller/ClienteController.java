@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.empreget.api.assembler.ClienteAssembler;
+import com.empreget.api.assembler.ClienteDtoAssembler;
 import com.empreget.api.assembler.ClienteInputDisassembler;
 import com.empreget.api.dto.ClienteResponse;
 import com.empreget.api.dto.input.ClienteInput;
@@ -45,7 +45,7 @@ public class ClienteController {
 
 	private final ClienteRepository clienteRepository;
 	private final CatalogoClienteService catalogoClienteService;
-	private ClienteAssembler clienteAssembler;
+	private ClienteDtoAssembler clienteAssembler;
 	private ClienteInputDisassembler clienteInputDisassembler;
 
 
@@ -85,84 +85,45 @@ public class ClienteController {
 		
 	}
 
-	@PatchMapping("/{clienteId}")
-	public ClienteResponse editarParcial (@PathVariable Long clienteId, @Valid @RequestBody Map<String, Object> dados, 
-			HttpServletRequest request) {
-		
-		Cliente clienteAtual = catalogoClienteService.buscarOuFalhar(clienteId);
-		
-		merge(dados, clienteAtual, request);
-		
-		return clienteAssembler.toModel(catalogoClienteService.salvar(clienteAtual));
-	}
-	
-	
-	private void merge(Map<String, Object> dadosOrigem, Cliente clienteDestino,
-			HttpServletRequest request) {
-		ServletServerHttpRequest serverHttpRequest = new ServletServerHttpRequest(request);
-		
-		try {
-			ObjectMapper objectMapper = new ObjectMapper();
-			objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
-			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
-			
-			Cliente clienteOrigem = objectMapper.convertValue(dadosOrigem, Cliente.class);
-			
-			dadosOrigem.forEach((nomePropriedade, valorPropriedade) -> {
-				Field field = ReflectionUtils.findField(Cliente.class, nomePropriedade);
-				field.setAccessible(true);
-				
-				Object novoValor = ReflectionUtils.getField(field, clienteOrigem);
-				
-				ReflectionUtils.setField(field, clienteDestino, novoValor);
-			});
-		} catch (IllegalArgumentException e) {
-			Throwable rootCause = ExceptionUtils.getRootCause(e);
-			throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequest);
-		}
-	}
-	
-//	private void merge(Map<String, Object> dadosOrigem, Cliente clienteDestino) {
-//		ObjectMapper objectMapper = new ObjectMapper();
-//		Cliente clienteOrigem = objectMapper.convertValue(dadosOrigem, Cliente.class);
-//		
-//		dadosOrigem.forEach((nomePropriedade, valorPropriedade)-> {
-//			Field field = ReflectionUtils.findField(Cliente.class, nomePropriedade);
-//			field.setAccessible(true);
-//				
-//			Object novoValor = ReflectionUtils.getField(field, clienteOrigem);
-//			
-//			ReflectionUtils.setField(field, clienteDestino, novoValor);
-//			
-//		});
-//	}
-	
-//	ATUALIZAÇÃO PARCIAL, VER COMO CONVERTER PARA DTO COM MODELMAPPER
+//COM DTO NÃO FAZ SENTIDO TER EDITAR PARCIAL
 //	@PatchMapping("/{clienteId}")
-//	public Cliente editarParcial (@PathVariable Long clienteId, @Valid @RequestBody Map<String, Object> dados) {
+//	public ClienteResponse editarParcial (@PathVariable Long clienteId, @Valid @RequestBody Map<String, Object> dados, 
+//			HttpServletRequest request) {
 //		
 //		Cliente clienteAtual = catalogoClienteService.buscarOuFalhar(clienteId);
 //		
-//		merge(dados, clienteAtual);
+//		merge(dados, clienteAtual, request);
 //		
-//		return editar(clienteId, clienteAtual);
+//		return clienteAssembler.toModel(catalogoClienteService.salvar(clienteAtual));
 //	}
 //	
-//	private void merge(Map<String, Object> dadosOrigem, Cliente clienteDestino) {
-//		ObjectMapper objectMapper = new ObjectMapper();
-//		Cliente clienteOrigem = objectMapper.convertValue(dadosOrigem, Cliente.class);
+	
+//	private void merge(Map<String, Object> dadosOrigem, Cliente clienteDestino,
+//			HttpServletRequest request) {
+//		ServletServerHttpRequest serverHttpRequest = new ServletServerHttpRequest(request);
 //		
-//		dadosOrigem.forEach((nomePropriedade, valorPropriedade)-> {
-//			Field field = ReflectionUtils.findField(Cliente.class, nomePropriedade);
-//			field.setAccessible(true);
+//		try {
+//			ObjectMapper objectMapper = new ObjectMapper();
+//			objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
+//			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+//			
+//			Cliente clienteOrigem = objectMapper.convertValue(dadosOrigem, Cliente.class);
+//			
+//			dadosOrigem.forEach((nomePropriedade, valorPropriedade) -> {
+//				Field field = ReflectionUtils.findField(Cliente.class, nomePropriedade);
+//				field.setAccessible(true);
 //				
-//			Object novoValor = ReflectionUtils.getField(field, clienteOrigem);
-//			
-//			ReflectionUtils.setField(field, clienteDestino, novoValor);
-//			
-//		});
+//				Object novoValor = ReflectionUtils.getField(field, clienteOrigem);
+//				
+//				ReflectionUtils.setField(field, clienteDestino, novoValor);
+//			});
+//		} catch (IllegalArgumentException e) {
+//			Throwable rootCause = ExceptionUtils.getRootCause(e);
+//			throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequest);
+//		}
 //	}
 	
+
 	@DeleteMapping("/{clienteId}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void excluir(@PathVariable Long clienteId) {

@@ -14,7 +14,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @Component
-public class ClienteAssembler {
+public class ClienteDtoAssembler {
 
 	private ModelMapper modelMapper;
 	

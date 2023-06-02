@@ -17,4 +17,8 @@ public class OrdemServicoInputDisassembler {
 	public OrdemServico toDomainObject (OrdemServicoInput ordemServicoInput) {
 		return modelMapper.map(ordemServicoInput, OrdemServico.class);
 	}
+	
+	public void copyToDomainObject(OrdemServicoInput ordemServicoInput, OrdemServico ordemServico) {
+		modelMapper.map(ordemServicoInput, ordemServico);
+	}
 }

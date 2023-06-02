@@ -14,6 +14,8 @@ public class ClienteInput {
 
 	@NotBlank
 	private String nome;
+	
+	private String imgUrl;
 
 	@Valid
 	private EnderecoInput endereco;
@@ -31,7 +33,5 @@ public class ClienteInput {
 	@Email
 	@NotBlank
 	private String email;
-
-	
 	
 }

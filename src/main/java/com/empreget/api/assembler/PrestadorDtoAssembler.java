@@ -14,7 +14,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @Component
-public class PrestadorAssembler {
+public class PrestadorDtoAssembler {
 	
 	private ModelMapper modelMapper;
 	

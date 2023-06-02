@@ -3,12 +3,14 @@ set foreign_key_checks=0;
 delete from cliente;
 delete from prestador;
 delete from ordem_servico;
+delete from usuarios;
 
 set foreign_key_checks=1;
 
 alter table cliente auto_increment = 1;
 alter table prestador auto_increment = 1;
 alter table ordem_servico auto_increment = 1;
+alter table usuarios auto_increment = 1;
 
 insert into cliente (id, nome, rg, cpf, telefone, email, data_do_cadastro, data_da_atualizacao, end_logradouro, end_numero, end_complemento, end_cep, end_cidade, end_bairro, end_estado, end_pais) values 
 (1, 'Ana Pereira', '7777777-7', '555.444.555-20', '43 9999-9999', 'ana@email.com', utc_timestamp, utc_timestamp, 'Rua das Flores', '500', 'casa', '86000-000', 'Londrina', 'Jardim Primavera', 'Paraná', 'BRA');
@@ -26,3 +28,8 @@ insert into ordem_servico(id, cliente_id, prestador_id, data_servico, periodo, s
 (1, 1, 1, '2023-05-20T08:00:00', 'MATUTINO', 'PRE_RESERVADO','MEIA_DIARIA', utc_timestamp, null, 'AGUARDANDO_ACEITE');
 insert into ordem_servico(id, cliente_id, prestador_id, data_servico, periodo, status_agenda, tipo_de_diaria, data_da_solicitacao, data_da_finalizacao, status_ordem_servico) values
 (2, 3, 2, '2023-05-25T08:00:00', 'COMERCIAL', 'PRE_RESERVADO','DIARIA_CHEIA', utc_timestamp, null, 'AGUARDANDO_ACEITE');
+
+insert into usuarios (id, nome, login, senha, sou_cliente, data_do_cadastro) values
+(1, 'Roberto Carlos', 'roberto.carlos@email.com', '123', 1,  utc_timestamp),
+(2, 'Maria Joaquina', 'maria.j@email.com', '123', 0,  utc_timestamp),
+(3, 'Marcos Santana', 'cabelo@email.com', '123', 1,  utc_timestamp);

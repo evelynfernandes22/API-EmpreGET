@@ -6,6 +6,7 @@ import lombok.Data;
 public class ClienteMinResponse {
 	
 	private Long id;
+	private String imgUrl;
 	private String nome;
 	EnderecoResponse endereco;
 	private String telefone;

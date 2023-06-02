@@ -11,6 +11,7 @@ public class ClienteResponse {
 	
 	private Long id;
 	private String nome;
+	private String imgUrl;
 	private String rg;
 	private String cpf;
 	private EnderecoResponse endereco;
@@ -18,5 +19,6 @@ public class ClienteResponse {
 	private String email;
 	private OffsetDateTime dataDoCadastro;
 	private OffsetDateTime dataDaAtualizacao;
+	
 
 }
