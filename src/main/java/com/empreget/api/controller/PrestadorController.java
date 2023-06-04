@@ -1,23 +1,13 @@
 package com.empreget.api.controller;
 
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.http.server.ServletServerHttpRequest;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,16 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.empreget.api.assembler.PrestadorDtoAssembler;
 import com.empreget.api.assembler.PrestadorInputDisassembler;
+import com.empreget.api.dto.PrestadorFiltroRegiaoResponse;
 import com.empreget.api.dto.PrestadorMinResponse;
 import com.empreget.api.dto.PrestadorResponse;
 import com.empreget.api.dto.input.PrestadorInput;
-import com.empreget.domain.exception.EntidadeNaoEncontradaException;
-import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.model.Prestador;
+import com.empreget.domain.model.enums.Regiao;
 import com.empreget.domain.repository.PrestadorRepository;
 import com.empreget.domain.service.CatalogoPrestadorService;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.AllArgsConstructor;
 
@@ -59,6 +47,14 @@ public class PrestadorController {
 				.collect(Collectors.toList());
 	}
 	
+	@GetMapping("/regiao/{regiao}")
+	public List<PrestadorFiltroRegiaoResponse> listarPorRegiao(@PathVariable String regiao){
+		Regiao regiaoEnum = Regiao.valueOf(regiao.toUpperCase());
+				
+		return  prestadorAssembler.toCollectionMinFilterModel(catalogoPrestadorService.obterPrestadoresPorRegiao(regiaoEnum));
+	}
+
+		  
 	@GetMapping ("/perfis")
 	public List<PrestadorMinResponse> listarPerfilPrestador(){
 		return prestadorRepository.findAll()
@@ -142,6 +138,8 @@ public class PrestadorController {
 		catalogoPrestadorService.excluir(prestadorId);
 		
 	}
+	
+	
 	
 	
 }

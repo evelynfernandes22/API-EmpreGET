@@ -11,4 +11,6 @@ public class ServicoResponse {
 
 	private String descricao;
 	private BigDecimal valor;
+	
+	
 }

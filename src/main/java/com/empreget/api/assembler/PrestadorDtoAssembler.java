@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import com.empreget.api.dto.PrestadorFiltroRegiaoResponse;
 import com.empreget.api.dto.PrestadorMinResponse;
 import com.empreget.api.dto.PrestadorResponse;
 import com.empreget.domain.model.Prestador;
@@ -25,11 +26,23 @@ public class PrestadorDtoAssembler {
 	public PrestadorMinResponse toModelMin (Prestador prestador) {
 		return modelMapper.map(prestador, PrestadorMinResponse.class);
 	}
-	
-	
+		
 	public List<PrestadorResponse> toCollectionModel (List<Prestador> prestador){
 		return prestador.stream()
 				.map(this::toModel)
+				.collect(Collectors.toList());
+	}
+	
+	//FILTRO DE REGIAO
+	
+	public PrestadorFiltroRegiaoResponse toModelMinFilter (Prestador prestador) {
+		return modelMapper.map(prestador, PrestadorFiltroRegiaoResponse.class);
+	}
+	
+	
+	public List<PrestadorFiltroRegiaoResponse> toCollectionMinFilterModel (List<Prestador> prestador){
+		return prestador.stream()
+				.map(this::toModelMinFilter)
 				.collect(Collectors.toList());
 	}
 

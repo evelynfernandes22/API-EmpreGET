@@ -8,7 +8,7 @@ public class ClienteMinResponse {
 	private Long id;
 	private String imgUrl;
 	private String nome;
-	EnderecoResponse endereco;
+	private EnderecoResponse endereco;
 	private String telefone;
 
 }

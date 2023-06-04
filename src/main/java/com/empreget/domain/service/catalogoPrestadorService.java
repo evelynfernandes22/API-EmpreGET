@@ -1,5 +1,7 @@
 package com.empreget.domain.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -10,6 +12,7 @@ import com.empreget.domain.exception.EntidadeEmUsoException;
 import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.exception.PrestadorNaoEncontradoException;
 import com.empreget.domain.model.Prestador;
+import com.empreget.domain.model.enums.Regiao;
 import com.empreget.domain.repository.PrestadorRepository;
 
 import lombok.AllArgsConstructor;
@@ -53,5 +56,9 @@ public class CatalogoPrestadorService {
 		return prestadorRepository.findById(prestadorId)
 				.orElseThrow(() -> new PrestadorNaoEncontradoException(prestadorId));
 	}
+	
+	public List<Prestador> obterPrestadoresPorRegiao(Regiao regiao) {
+        return prestadorRepository.findAllByRegiao(regiao);
+    }
 
 }
