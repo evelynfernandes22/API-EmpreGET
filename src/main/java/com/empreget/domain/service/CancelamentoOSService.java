@@ -15,6 +15,10 @@ import lombok.AllArgsConstructor;
 @Service
 public class CancelamentoOSService {
 	
+	/*
+	 * solicitação de cancelamento feito pelo cliente, verificar se haverá?
+	 */
+	
 	private OrdemServicoRepositoy ordemServicoRepositoy;
 	private BuscaOSService buscaOSService;
 	

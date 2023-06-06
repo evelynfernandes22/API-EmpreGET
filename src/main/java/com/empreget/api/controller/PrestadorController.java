@@ -36,14 +36,14 @@ public class PrestadorController {
 
 	private PrestadorRepository prestadorRepository;
 	private CatalogoPrestadorService catalogoPrestadorService;
-	private PrestadorDtoAssembler prestadorAssembler;
+	private PrestadorDtoAssembler prestadorDtoAssembler;
 	private PrestadorInputDisassembler prestadorInputDisassembler;
 
 	@GetMapping
 	public List<PrestadorResponse> listar(){
 		return prestadorRepository.findAll()
 				.stream()
-				.map(prestador -> prestadorAssembler.toModel(prestador))
+				.map(prestador -> prestadorDtoAssembler.toModel(prestador))
 				.collect(Collectors.toList());
 	}
 	
@@ -51,7 +51,7 @@ public class PrestadorController {
 	public List<PrestadorFiltroRegiaoResponse> listarPorRegiao(@PathVariable String regiao){
 		Regiao regiaoEnum = Regiao.valueOf(regiao.toUpperCase());
 				
-		return  prestadorAssembler.toCollectionMinFilterModel(catalogoPrestadorService.obterPrestadoresPorRegiao(regiaoEnum));
+		return  prestadorDtoAssembler.toCollectionMinFilterModel(catalogoPrestadorService.obterPrestadoresPorRegiao(regiaoEnum));
 	}
 
 		  
@@ -59,28 +59,33 @@ public class PrestadorController {
 	public List<PrestadorMinResponse> listarPerfilPrestador(){
 		return prestadorRepository.findAll()
 				.stream()
-				.map(prestador -> prestadorAssembler.toModelMin(prestador))
+				.map(prestador -> prestadorDtoAssembler.toModelMin(prestador))
 				.collect(Collectors.toList());
 				
+	}
+
+	@GetMapping("/nome-contem/{nome}")
+	public List<PrestadorFiltroRegiaoResponse> buscarPorNomeContem(@PathVariable String nome) {
+		return prestadorDtoAssembler.toCollectionMinFilterModel(catalogoPrestadorService.buscarPorNomeContem(nome));
 	}
 	
 	@GetMapping("/{prestadorId}")
 	public PrestadorResponse buscarPorId(@PathVariable Long prestadorId){
-		return prestadorAssembler.toModel(catalogoPrestadorService.buscarOuFalhar(prestadorId));
+		return prestadorDtoAssembler.toModel(catalogoPrestadorService.buscarOuFalhar(prestadorId));
 		
 	}
 	@GetMapping("/perfil/{prestadorId}")
 	public PrestadorMinResponse buscarPorIdPerfil(@PathVariable Long prestadorId){
-		return prestadorAssembler.toModelMin(catalogoPrestadorService.buscarOuFalhar(prestadorId));
+		return prestadorDtoAssembler.toModelMin(catalogoPrestadorService.buscarOuFalhar(prestadorId));
 		
 	}
-	
+		
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public PrestadorResponse adicionar(@Valid @RequestBody PrestadorInput prestadorInput) {
 		
 		Prestador prestador = prestadorInputDisassembler.toDomainObject(prestadorInput);
-		return prestadorAssembler.toModel(catalogoPrestadorService.salvar(prestador));
+		return prestadorDtoAssembler.toModel(catalogoPrestadorService.salvar(prestador));
 		
 	}
 	
@@ -91,7 +96,7 @@ public class PrestadorController {
 			
 			prestadorInputDisassembler.copyToDomainObjet(prestadorInput, prestadorAtual);
 			
-			return prestadorAssembler.toModel(catalogoPrestadorService.salvar(prestadorAtual));
+			return prestadorDtoAssembler.toModel(catalogoPrestadorService.salvar(prestadorAtual));
 	
 	}
 

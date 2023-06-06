@@ -52,13 +52,19 @@ public class CatalogoPrestadorService {
 		}
 	}
 	
+	@Transactional
+	public List<Prestador> obterPrestadoresPorRegiao(Regiao regiao) {
+        return prestadorRepository.findAllByRegiao(regiao);
+    }
+	
+	@Transactional
+	public List<Prestador> buscarPorNomeContem(String nome){
+		return prestadorRepository.findByNomeContaining(nome);
+	}
+
 	public Prestador buscarOuFalhar(Long prestadorId) {
 		return prestadorRepository.findById(prestadorId)
 				.orElseThrow(() -> new PrestadorNaoEncontradoException(prestadorId));
 	}
 	
-	public List<Prestador> obterPrestadoresPorRegiao(Regiao regiao) {
-        return prestadorRepository.findAllByRegiao(regiao);
-    }
-
 }

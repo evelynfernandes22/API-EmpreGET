@@ -58,6 +58,15 @@ public class SolicitacaoOSService {
 		
 		ordemServicoRepositoy.save(ordemServico);
 	}
+	
+	@Transactional
+	public void finalizar (Long ordemServicoId) {
+		OrdemServico ordemServico = buscaOSService.buscarOuFalhar(ordemServicoId);
+		
+		ordemServico.finalizar();
+		
+		ordemServicoRepositoy.save(ordemServico);
+	}
 
 	
 }
