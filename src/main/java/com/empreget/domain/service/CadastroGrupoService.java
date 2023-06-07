@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.empreget.domain.exception.EntidadeEmUsoException;
 import com.empreget.domain.exception.GrupoNaoEncontradoException;
 import com.empreget.domain.model.Grupo;
+import com.empreget.domain.model.Permissao;
 import com.empreget.domain.repository.GrupoRepository;
 
 import lombok.AllArgsConstructor;
@@ -18,7 +19,9 @@ import lombok.AllArgsConstructor;
 public class CadastroGrupoService {
 
 	private static final String MSG_GRUPO_EM_USO = "Grupo de código %d não pode ser removido, pois está em uso"; 
+	
 	private GrupoRepository grupoRepository;
+	private CadastroPermissaoService cadastroPermissaoService;
 	
 	@Transactional
 	public Grupo salvar(Grupo grupo) {
@@ -41,6 +44,21 @@ public class CadastroGrupoService {
 		}
 		
 	}
+	
+	@Transactional
+	public void desassociarPermissao(Long grupoId, Long permissaoId) {
+		Grupo grupo = buscarOuFalhar(grupoId);
+		Permissao permissao = cadastroPermissaoService.buscarOuFalhar(permissaoId);
+		grupo.removerPermissao(permissao);
+	}
+	
+	@Transactional
+	public void associarPermissao(Long grupoId, Long permissaoId) {
+		Grupo grupo = buscarOuFalhar(grupoId);
+		Permissao permissao = cadastroPermissaoService.buscarOuFalhar(permissaoId);
+		grupo.adicionarPermissao(permissao);
+	}
+	
 	
 	public Grupo buscarOuFalhar(Long grupoId) {
 		return	grupoRepository.findById(grupoId).orElseThrow(
