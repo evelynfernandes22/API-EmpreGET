@@ -7,15 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.empreget.domain.model.Cliente;
+import com.empreget.domain.model.Prestador;
 
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
-	Optional<Cliente> findByNome(String nome);
-
-	List<Cliente> findByNomeContaining(String nome);
-
-	Optional<Cliente> findByEmail(String email);
-	
-	boolean existsByNome (String nome);
+	Optional<Prestador> findByEmail(String email);
 }

@@ -51,6 +51,7 @@ public class Usuario {
 	@CreationTimestamp
 	private OffsetDateTime dataDoCadastro;
 	
+	
 	//MÉTODOS
 	public boolean senhaCoincideCom(String senha) {
 		return getSenha().equals(senha);

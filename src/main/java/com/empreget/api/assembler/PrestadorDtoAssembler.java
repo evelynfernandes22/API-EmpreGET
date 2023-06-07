@@ -26,14 +26,16 @@ public class PrestadorDtoAssembler {
 	public PrestadorMinResponse toModelMin (Prestador prestador) {
 		return modelMapper.map(prestador, PrestadorMinResponse.class);
 	}
-		
+
 	public List<PrestadorResponse> toCollectionModel (List<Prestador> prestador){
 		return prestador.stream()
 				.map(this::toModel)
 				.collect(Collectors.toList());
 	}
 	
-	//FILTRO DE REGIAO
+	
+	
+	//FILTRO DE REGIAO ou FINDBYNAMECONTAIN
 	
 	public PrestadorFiltroRegiaoResponse toModelMinFilter (Prestador prestador) {
 		return modelMapper.map(prestador, PrestadorFiltroRegiaoResponse.class);
