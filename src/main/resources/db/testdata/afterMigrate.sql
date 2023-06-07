@@ -52,3 +52,4 @@ insert into permissao (id, nome, descricao) values (7, 'CANCELAR_OS', 'Permite c
 
 insert into grupo_permissao (grupo_id, permissao_id) values (1,1),(1,2),(1,3),(2,4),(2,5),(1,6),(1,7);
 
+insert into usuario_grupo (usuario_id, grupo_id) values (1,1), (2,2), (3,1);
