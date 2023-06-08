@@ -34,7 +34,8 @@ public class CatalogoClienteService {
 				.anyMatch(clienteExistente -> !clienteExistente.equals(cliente));
 
 		if (emailEmUso) {
-			throw new NegocioException(String.format("Já existe um cliente cadastrado com o e-mail %d.", cliente.getEmail()));
+			throw new NegocioException(String.format("Já existe um cliente cadastrado com o e-mail %d.",
+					cliente.getEmail()));
 		}
 
 		return clienteRepository.save(cliente);

@@ -22,8 +22,8 @@ public class ClienteDtoAssembler {
 		return modelMapper.map(cliente, ClienteResponse.class);
 	}
 	
-	public List<ClienteResponse> toCollectionModel (List<Cliente> cliente){
-		return cliente.stream()
+	public List<ClienteResponse> toCollectionModel (List<Cliente> clientes){
+		return clientes.stream()
 				.map(this::toModel)
 				.collect(Collectors.toList());
 	}

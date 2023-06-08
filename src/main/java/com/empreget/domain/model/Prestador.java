@@ -1,6 +1,5 @@
 package com.empreget.domain.model;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -105,5 +104,4 @@ public class Prestador {
 	@OneToMany(mappedBy="prestador", cascade = CascadeType.ALL)
 	private List<OrdemServico> ordensServico = new ArrayList<>();
 	
-//	private String imgUrl;  IMPLANTAR
 }

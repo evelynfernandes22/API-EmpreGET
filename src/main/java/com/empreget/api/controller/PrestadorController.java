@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -91,12 +92,15 @@ public class PrestadorController {
 	
 	@PutMapping("/{prestadorId}")
 	public PrestadorResponse editar(@PathVariable Long prestadorId, @RequestBody @Valid PrestadorInput prestadorInput) {
-	
-			Prestador prestadorAtual = catalogoPrestadorService.buscarOuFalhar(prestadorId);
 			
-			prestadorInputDisassembler.copyToDomainObjet(prestadorInput, prestadorAtual);
+		Prestador prestador = prestadorInputDisassembler.toDomainObject(prestadorInput);
+		Prestador prestadorAtual = catalogoPrestadorService.buscarOuFalhar(prestadorId);
+		
+		BeanUtils.copyProperties(prestador, prestadorAtual, 
+				"id", "dataDoCadastro", "dataDaAtualizacao");
+//		prestadorInputDisassembler.copyToDomainObjet(prestadorInput, prestadorAtual);
 			
-			return prestadorDtoAssembler.toModel(catalogoPrestadorService.salvar(prestadorAtual));
+		return prestadorDtoAssembler.toModel(catalogoPrestadorService.salvar(prestadorAtual));
 	
 	}
 

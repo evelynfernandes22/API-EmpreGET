@@ -1,6 +1,6 @@
 package com.empreget.api.dto.input;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -24,7 +24,7 @@ public class OrdemServicoInput {
 	private PrestadorIdInput prestador;
 	
 	@NotNull
-	private LocalDateTime dataServico;
+	private OffsetDateTime dataServico;
 	
 	@NotNull
 	private Periodo periodo;

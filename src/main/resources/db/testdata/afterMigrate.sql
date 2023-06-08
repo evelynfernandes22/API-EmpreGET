@@ -3,11 +3,8 @@ set foreign_key_checks=0;
 delete from cliente;
 delete from prestador;
 delete from ordem_servico;
-delete from grupo;
-delete from grupo_permissao;
-delete from permissao;
 delete from usuario;
-delete from usuario_grupo;
+
 
 set foreign_key_checks=1;
 
@@ -15,8 +12,6 @@ alter table cliente auto_increment = 1;
 alter table prestador auto_increment = 1;
 alter table ordem_servico auto_increment = 1;
 alter table usuario auto_increment = 1;
-alter table grupo auto_increment = 1;
-alter table permissao auto_increment = 1;
 
 insert into cliente (id, nome, rg, cpf, telefone, email, data_do_cadastro, data_da_atualizacao, end_logradouro, end_numero, end_complemento, end_cep, end_cidade, end_bairro, end_estado, end_pais) values 
 (1, 'Ana Pereira', '7777777-7', '555.444.555-20', '43 9999-9999', 'ana@email.com', utc_timestamp, utc_timestamp, 'Rua das Flores', '500', 'casa', '86000-000', 'Londrina', 'Jardim Primavera', 'Paraná', 'BRA');
@@ -40,16 +35,3 @@ insert into usuario (id, nome, login, senha, sou_cliente, data_do_cadastro) valu
 (2, 'Maria Joaquina', 'maria.j@email.com', '123', 0,  utc_timestamp),
 (3, 'Marcos Santana', 'cabelo@email.com', '123', 1,  utc_timestamp);
 
-insert into grupo (nome) values ('Cliente'), ('Prestador'); 
-
-insert into permissao (id, nome, descricao) values (1, 'CONSULTAR_PRESTADORES', 'Permite consultar prestadores');
-insert into permissao (id, nome, descricao) values (2, 'ADICIONAR_CLIENTE', 'Permite cadastrar cliente');
-insert into permissao (id, nome, descricao) values (3, 'EDITAR_CLIENTE', 'Permite editar cadastro de cliente');
-insert into permissao (id, nome, descricao) values (4, 'ADICIONAR_PRESTADOR', 'Permite cadastrar prestador');
-insert into permissao (id, nome, descricao) values (5, 'EDITAR_PRESTADOR', 'Permite editar prestador');
-insert into permissao (id, nome, descricao) values (6, 'SOLICITAR_OS', 'Permite solicitar Ordem de Serviço');
-insert into permissao (id, nome, descricao) values (7, 'CANCELAR_OS', 'Permite cancelar Ordem de Serviço');
-
-insert into grupo_permissao (grupo_id, permissao_id) values (1,1),(1,2),(1,3),(2,4),(2,5),(1,6),(1,7);
-
-insert into usuario_grupo (usuario_id, grupo_id) values (1,1), (2,2), (3,1);

@@ -1,23 +1,14 @@
 package com.empreget.api.controller;
 
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
-
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.http.server.ServletServerHttpRequest;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -33,8 +24,6 @@ import com.empreget.api.dto.input.ClienteInput;
 import com.empreget.domain.model.Cliente;
 import com.empreget.domain.repository.ClienteRepository;
 import com.empreget.domain.service.CatalogoClienteService;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.AllArgsConstructor;
 
@@ -74,15 +63,15 @@ public class ClienteController {
 
 	@PutMapping("/{clienteId}")
 	public ClienteResponse editar(@PathVariable Long clienteId, @Valid @RequestBody ClienteInput clienteinput) {
-		
+		Cliente cliente = clienteInputDisassembler.toDomainObject(clienteinput);
+
 		Cliente clienteAtual = catalogoClienteService.buscarOuFalhar(clienteId);
 
-		clienteInputDisassembler.copyToDomainObject(clienteinput, clienteAtual);
-//		BeanUtils.copyProperties(cliente, clienteAtual,
-//				"id", "dataDoCadastro", "dataDaAtualizacao");
-			
+		BeanUtils.copyProperties(cliente, clienteAtual, 
+				"id", "dataDoCadastro", "dataDaAtualizacao");
+
 		return clienteAssembler.toModel(catalogoClienteService.salvar(clienteAtual));
-		
+
 	}
 
 //COM DTO NÃO FAZ SENTIDO TER EDITAR PARCIAL

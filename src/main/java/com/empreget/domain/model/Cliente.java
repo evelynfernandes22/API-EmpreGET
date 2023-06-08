@@ -66,7 +66,6 @@ public class Cliente {
 	@NotBlank
 	@Size(max = 255)
 	private String email;
-
 	
 	@JsonIgnore
 	@CreationTimestamp
@@ -77,7 +76,5 @@ public class Cliente {
 	@UpdateTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
 	private OffsetDateTime dataDaAtualizacao;
-	
-
-	
+		
 }
