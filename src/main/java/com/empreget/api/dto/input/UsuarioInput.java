@@ -10,9 +10,7 @@ import lombok.Setter;
 @Setter
 public class UsuarioInput {
 
-	@NotBlank
-	private String nome;
-	
+		
 	@Email
 	@NotBlank
 	private String email;

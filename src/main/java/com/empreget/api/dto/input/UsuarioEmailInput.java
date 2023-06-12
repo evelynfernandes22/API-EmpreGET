@@ -8,18 +8,16 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UsuarioSemSouClienteInput  extends UsuarioInput{
+public class UsuarioEmailInput{
 
 	/*
-	 * Para atualizar email e senha, sem alterar o tipo 
-	 * do usuário "cliente ou não". 
+	 * Para atualizar email, sem alterar o tipo 
+	 * do usuário "cliente ou não. 
 	 */
 	
 	@Email
 	@NotBlank
 	private String email;
 
-	@NotBlank
-	private String senha;
 	
 }

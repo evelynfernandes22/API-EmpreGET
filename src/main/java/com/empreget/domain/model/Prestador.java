@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -45,6 +46,9 @@ public class Prestador {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	
+	@OneToOne
+	private Usuario usuario;
 
 	@NotBlank
 	@Size(max = 60)
@@ -67,11 +71,6 @@ public class Prestador {
 	@NotBlank
 	@Size(max = 20)
 	private String telefone;
-
-	@Email
-	@NotBlank
-	@Size(max = 255)
-	private String email;
 
 	@Embedded
 	private Servico servico;

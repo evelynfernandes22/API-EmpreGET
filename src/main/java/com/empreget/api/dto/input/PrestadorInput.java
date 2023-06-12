@@ -17,7 +17,8 @@ public class PrestadorInput {
 	private String nome;
 
 	private String imgUrl;
-	
+	@Valid
+	private UsuarioComSenhaInput usuario;
 	@Valid
 	private EnderecoInput endereco;
 	@NotNull
@@ -28,9 +29,6 @@ public class PrestadorInput {
 	private String cpf;
 	@NotBlank
 	private String telefone;
-	@Email
-	@NotBlank
-	private String email;
 	@Valid
 	private ServicoInput servico;
 	@NotBlank

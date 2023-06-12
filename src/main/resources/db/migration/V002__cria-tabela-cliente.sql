@@ -1,10 +1,10 @@
 create table cliente(
                         id bigint not null auto_increment,
+                        usuario_id bigint not null,
                         nome varchar(60) not null,
                         rg varchar(09) not null,
                         cpf varchar(15) not null,
-                        telefone varchar(20) not null,
-                        email varchar(255) not null,
+                        telefone varchar(20) not null,                                          
                         data_do_cadastro datetime not null,
                         data_da_atualizacao datetime not null,
                         
@@ -17,5 +17,7 @@ create table cliente(
                         end_estado varchar(30) not null,
                         end_pais varchar(30) not null,
 
-                        primary key (id)
+                        primary key (id),
+                        
+                        constraint fk_cliente_usuario foreign key (usuario_id) references usuario(id)
 )engine=InnoDB default charset=utf8mb4;

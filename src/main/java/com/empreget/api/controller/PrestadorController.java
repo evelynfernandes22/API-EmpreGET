@@ -24,8 +24,10 @@ import com.empreget.api.dto.PrestadorMinResponse;
 import com.empreget.api.dto.PrestadorResponse;
 import com.empreget.api.dto.input.PrestadorInput;
 import com.empreget.domain.model.Prestador;
+import com.empreget.domain.model.Usuario;
 import com.empreget.domain.model.enums.Regiao;
 import com.empreget.domain.repository.PrestadorRepository;
+import com.empreget.domain.service.CadastroUsuarioService;
 import com.empreget.domain.service.CatalogoPrestadorService;
 
 import lombok.AllArgsConstructor;
@@ -39,6 +41,7 @@ public class PrestadorController {
 	private CatalogoPrestadorService catalogoPrestadorService;
 	private PrestadorDtoAssembler prestadorDtoAssembler;
 	private PrestadorInputDisassembler prestadorInputDisassembler;
+	private CadastroUsuarioService cadastroUsuarioService;
 
 	@GetMapping
 	public List<PrestadorResponse> listar(){
@@ -86,6 +89,16 @@ public class PrestadorController {
 	public PrestadorResponse adicionar(@Valid @RequestBody PrestadorInput prestadorInput) {
 		
 		Prestador prestador = prestadorInputDisassembler.toDomainObject(prestadorInput);
+		
+		Usuario usuario = new Usuario();
+		usuario.setEmail(prestador.getUsuario().getEmail());
+		usuario.setSenha(prestador.getUsuario().getSenha());
+		usuario.setSouCliente(prestador.getUsuario().isSouCliente());
+		usuario.setNome(prestador.getNome());
+		
+		Usuario usuarioSalvo = cadastroUsuarioService.salvar(usuario);
+		prestador.setUsuario(usuarioSalvo);
+		
 		return prestadorDtoAssembler.toModel(catalogoPrestadorService.salvar(prestador));
 		
 	}
@@ -97,7 +110,7 @@ public class PrestadorController {
 		Prestador prestadorAtual = catalogoPrestadorService.buscarOuFalhar(prestadorId);
 		
 		BeanUtils.copyProperties(prestador, prestadorAtual, 
-				"id", "dataDoCadastro", "dataDaAtualizacao");
+				"id", "dataDoCadastro", "dataDaAtualizacao", "usuario");
 //		prestadorInputDisassembler.copyToDomainObjet(prestadorInput, prestadorAtual);
 			
 		return prestadorDtoAssembler.toModel(catalogoPrestadorService.salvar(prestadorAtual));

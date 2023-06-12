@@ -16,6 +16,8 @@ public class ClienteInput {
 	private String nome;
 	
 	private String imgUrl;
+	@Valid
+	private UsuarioComSenhaInput usuario;
 
 	@Valid
 	private EnderecoInput endereco;
@@ -30,8 +32,5 @@ public class ClienteInput {
 	@NotBlank
 	private String telefone;
 
-	@Email
-	@NotBlank
-	private String email;
 	
 }

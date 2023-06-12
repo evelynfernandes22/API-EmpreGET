@@ -1,5 +1,7 @@
 package com.empreget.domain.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
@@ -25,7 +27,7 @@ public class CadastroUsuarioService {
 		if (emailEmUso) {
 			throw new NegocioException(String.format("Já existe um usuário cadastrado com o e-mail %s.", usuario.getEmail()));
 		}
-		
+				
 		return usuarioRepository.save(usuario);
 	}
 
@@ -43,4 +45,28 @@ public class CadastroUsuarioService {
 		return usuarioRepository.findById(usuarioId)
 				.orElseThrow(() -> new UsuarioNaoEncontradoException(usuarioId));
 	}
+	
+	
+	@Transactional
+	public Usuario verificarCredenciais(String email, String senha) {
+		List<Usuario> usuarios = usuarioRepository.findAll();
+
+		for (Usuario usuario : usuarios) {
+			if (usuario.getEmail().equals(email) && usuario.getSenha().equals(senha)) {
+				return usuario;
+			}
+		}
+
+		throw new NegocioException("E-mail ou senha não cadastrados, ou inválidos. Tente novamente.");
+	}
+	
+	@Transactional
+	 public void entrarNoAmbiente(Usuario usuario, boolean souCliente) {
+
+	        if (souCliente) {
+	            System.out.println(String.format("Entrando no ambiente de prestador com o e-mail: %s ", usuario.getEmail()));
+	        } else {
+	            System.out.println(String.format("Entrando no ambiente de cliente com o e-mail: %s ", usuario.getEmail()));
+	        }
+	    }
 }

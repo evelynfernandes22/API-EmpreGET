@@ -20,7 +20,7 @@ public interface PrestadorRepository extends JpaRepository<Prestador, Long> {
 	
 	boolean existsByNome (String nome);
 	
-	Optional<Prestador> findByEmail(String email);
+	Optional<Prestador> findByUsuarioEmail(String email);
 	
 	@Query("from Prestador p where p.regiao = :regiao")
 	List<Prestador> findAllByRegiao(@Param("regiao") Regiao regiao);

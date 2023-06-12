@@ -3,6 +3,7 @@ package com.empreget.api.assembler;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import com.empreget.api.dto.input.UsuarioEmailInput;
 import com.empreget.api.dto.input.UsuarioInput;
 import com.empreget.domain.model.Usuario;
 
@@ -20,5 +21,9 @@ public class UsuarioInputDisassembler {
 	
 	public void copyToDomainObject(UsuarioInput usuarioInput, Usuario usuario) {
 		modelMapper.map(usuarioInput, usuario);
+	}
+	
+	public void copyToDomainObjectMail(UsuarioEmailInput usuarioEmailInput, Usuario usuario) {
+		modelMapper.map(usuarioEmailInput, usuario);
 	}
 }

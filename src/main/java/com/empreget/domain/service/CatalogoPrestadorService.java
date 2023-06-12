@@ -27,7 +27,7 @@ public class CatalogoPrestadorService {
 	
 	@Transactional
 	public Prestador salvar(Prestador prestador) {
-		boolean emailEmUso = prestadorRepository.findByEmail(prestador.getEmail())
+		boolean emailEmUso = prestadorRepository.findByUsuarioEmail(prestador.getUsuario().getEmail())
 				.stream()
 				.anyMatch(prestadorExistente -> !prestadorExistente.equals(prestador));
 		

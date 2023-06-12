@@ -22,7 +22,9 @@ import com.empreget.api.assembler.ClienteInputDisassembler;
 import com.empreget.api.dto.ClienteResponse;
 import com.empreget.api.dto.input.ClienteInput;
 import com.empreget.domain.model.Cliente;
+import com.empreget.domain.model.Usuario;
 import com.empreget.domain.repository.ClienteRepository;
+import com.empreget.domain.service.CadastroUsuarioService;
 import com.empreget.domain.service.CatalogoClienteService;
 
 import lombok.AllArgsConstructor;
@@ -32,10 +34,11 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/clientes")
 public class ClienteController {
 
-	private final ClienteRepository clienteRepository;
-	private final CatalogoClienteService catalogoClienteService;
+	private ClienteRepository clienteRepository;
+	private CatalogoClienteService catalogoClienteService;
 	private ClienteDtoAssembler clienteAssembler;
 	private ClienteInputDisassembler clienteInputDisassembler;
+	private CadastroUsuarioService cadastroUsuarioService;
 
 
 	@GetMapping
@@ -57,6 +60,20 @@ public class ClienteController {
 	public ClienteResponse adicionar(@Valid @RequestBody ClienteInput clienteInput) {
 		
 		Cliente cliente = clienteInputDisassembler.toDomainObject(clienteInput);
+		
+		//setar o usuario informado no clienteInput e salvar 
+		Usuario usuario = new Usuario();
+		usuario.setEmail(cliente.getUsuario().getEmail());
+		usuario.setSenha(cliente.getUsuario().getSenha());
+		usuario.setSouCliente(cliente.getUsuario().isSouCliente());
+		usuario.setNome(cliente.getNome());
+		
+		//salvar usuário no banco antes do cliente
+		Usuario usuarioSalvo = cadastroUsuarioService.salvar(usuario);
+		
+		// definir a referência para o usuário 
+        cliente.setUsuario(usuarioSalvo);
+		
 		return clienteAssembler.toModel(catalogoClienteService.salvar(cliente));
 			
 	}
@@ -68,7 +85,7 @@ public class ClienteController {
 		Cliente clienteAtual = catalogoClienteService.buscarOuFalhar(clienteId);
 
 		BeanUtils.copyProperties(cliente, clienteAtual, 
-				"id", "dataDoCadastro", "dataDaAtualizacao");
+				"id", "dataDoCadastro", "dataDaAtualizacao", "usuario");
 
 		return clienteAssembler.toModel(catalogoClienteService.salvar(clienteAtual));
 
