@@ -46,4 +46,11 @@ public class Usuario {
 		return !senhaCoincideCom(senha);
 	}
 	
+	public boolean credenciaisCorretas(String email, String senha) {
+		return getEmail().equals(email) && getSenha().equals(senha);
+	}
+	public boolean credenciaisIncorretas(String email, String senha) {
+		return !credenciaisCorretas(email, senha);
+	}
+	
 }

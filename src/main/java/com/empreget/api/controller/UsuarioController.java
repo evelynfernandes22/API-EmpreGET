@@ -20,7 +20,6 @@ import com.empreget.api.dto.UsuarioResponse;
 import com.empreget.api.dto.input.SenhaInput;
 import com.empreget.api.dto.input.UsuarioComSenhaInput;
 import com.empreget.api.dto.input.UsuarioEmailInput;
-import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.model.Usuario;
 import com.empreget.domain.repository.UsuarioRepository;
 import com.empreget.domain.service.CadastroUsuarioService;
@@ -74,35 +73,6 @@ public class UsuarioController {
     public void alterarSenha(@PathVariable Long usuarioId, @RequestBody @Valid SenhaInput senhaInput) {
     	cadastroUsuarioService.alterarSenha(usuarioId, senhaInput.getSenhaAtual(), senhaInput.getNovaSenha());
     }  
-    
-    
-    
-    //como fazer setando o sou cliente no cadastro?
-    public boolean fazerLogin(String email, String senha, boolean souCliente) {
-        try {
-            Usuario usuario = cadastroUsuarioService.verificarCredenciais(email, senha);
-
-            if (usuario == null) {
-            	throw new NegocioException(String.format("Usuário com e-mail: %s é inexistente. Efetue o cadastro.",
-            			usuario.getEmail()));
-            }
-
-            if (usuario.isSouCliente() == souCliente) {
-                cadastroUsuarioService.entrarNoAmbiente(usuario, souCliente);
-                return true;
-            } else {
-                throw new NegocioException("Acesso não permitido.");
-            }
-        } catch (Exception ex) {
-            // Trate a exceção NegocioException de acordo com sua necessidade
-            System.out.println("Erro de negócio: " + ex.getMessage());
-            return false;
-        }
-    }
-
-
-    
- 
     
 }
 

@@ -1,6 +1,6 @@
 package com.empreget.domain.service;
 
-import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -47,26 +47,50 @@ public class CadastroUsuarioService {
 	}
 	
 	
-	@Transactional
-	public Usuario verificarCredenciais(String email, String senha) {
-		List<Usuario> usuarios = usuarioRepository.findAll();
+//MÉTODOS DE AUTENTICAÇÃO POR SESSÃO
 
-		for (Usuario usuario : usuarios) {
-			if (usuario.getEmail().equals(email) && usuario.getSenha().equals(senha)) {
-				return usuario;
-			}
-		}
+	public Optional<Usuario> autenticarUsuario(String email, String senha) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
 
-		throw new NegocioException("E-mail ou senha não cadastrados, ou inválidos. Tente novamente.");
-	}
+        if (usuarioOptional.isPresent()) {
+            Usuario usuario = usuarioOptional.get();
+            if (usuario.getSenha().equals(senha)) {
+                return usuarioOptional;
+            }
+        }
+
+        return Optional.empty();
+    }
 	
-	@Transactional
-	 public void entrarNoAmbiente(Usuario usuario, boolean souCliente) {
-
-	        if (souCliente) {
-	            System.out.println(String.format("Entrando no ambiente de prestador com o e-mail: %s ", usuario.getEmail()));
-	        } else {
-	            System.out.println(String.format("Entrando no ambiente de cliente com o e-mail: %s ", usuario.getEmail()));
-	        }
-	    }
+	
+	
+	
+//	NÃO DEU CERTO	
+	
+//	@Transactional
+//	public Usuario verificarCredenciais(String email, String senha) {
+//		List<Usuario> usuarios = usuarioRepository.findAll();
+//		
+//		Usuario credenciaisValidas = null;
+//		for (Usuario usuario : usuarios) {
+//			if (usuario.credenciaisIncorretas(email, senha)) {
+//				throw new NegocioException("E-mail ou senha inválidos. Tente novamente.");
+//			}else if(usuario.credenciaisCorretas(email, senha)) {
+//				return credenciaisValidas = usuario;
+//			}
+//		}
+//		
+//		return credenciaisValidas;
+//	}
+//	
+//	@Transactional
+//	 public void entrarNoAmbiente(Usuario usuario) {
+//		
+//	        if (usuario.isSouCliente()) {
+//	            System.out.println(String.format("Entrando no ambiente de cliente com o e-mail: %s ", usuario.getEmail()));
+//	        } else {
+//	        	System.out.println(String.format("Entrando no ambiente de prestador com o e-mail: %s ", usuario.getEmail()));
+//	        }
+//	    }
+	
 }
