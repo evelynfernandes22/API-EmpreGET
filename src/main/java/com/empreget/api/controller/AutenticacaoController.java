@@ -1,16 +1,17 @@
 package com.empreget.api.controller;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
-import javax.servlet.http.HttpSession;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.empreget.domain.model.Usuario;
 import com.empreget.domain.service.CadastroUsuarioService;
@@ -35,29 +36,31 @@ public class AutenticacaoController {
 	}
 
 	
+	/*
+	 * No ionic é preciso fazer a lógica da rota para funcionar este POST
+	 */
 	@PostMapping("/login")
-	public String autenticarUsuario(@ModelAttribute("usuario") Usuario usuario, HttpSession session,
-			RedirectAttributes redirectAttributes) {
+	public ResponseEntity<Object> autenticarUsuario(@ModelAttribute("usuario") Usuario usuario) {
+	    Optional<Usuario> usuarioOptional = cadastroUsuarioService.autenticarUsuario(usuario.getEmail(),
+	            usuario.getSenha());
 
-		Optional<Usuario> usuarioOptional = cadastroUsuarioService.autenticarUsuario(usuario.getEmail(),
-				usuario.getSenha());
+	    if (usuarioOptional.isPresent()) {
+	    	
+	        String rotaRedirecionamento;
+	        if (usuarioOptional.get().isSouCliente()) {
+	            rotaRedirecionamento = "/cliente/home.page";
+	        } else {
+	            rotaRedirecionamento = "/tela-inicial-prestador.page";
+	        }
 
-		if (usuarioOptional.isPresent()) {
-			
-			//abre a sessão
-			session.setAttribute("usuarioLogado", usuarioOptional.get());
-			
-			//direcionamento de ambiente
-			if (usuarioOptional.get().isSouCliente()) {
-				return "redirect:/home.page"; //redirect: rota do ionic, estou em dúvida se precisa do page
-			} else {
-				return "redirect:/tela-inicial-prestador.page"; 
-			}
-		}
+	        Map<String, Object> response = new HashMap<>();
+	        response.put("rotaRedirecionamento", rotaRedirecionamento);
+	        response.put("mensagem", "Autenticação bem-sucedida");
 
-		redirectAttributes.addFlashAttribute("mensagemErro", "Credenciais inválidas");
-		return "redirect:/login";
+	        return ResponseEntity.ok(response);
+	    }
+
+	    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
 	}
-
 
 }
