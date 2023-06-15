@@ -1,11 +1,16 @@
 package com.empreget.domain.service;
 
 import java.time.OffsetDateTime;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.model.Cliente;
 import com.empreget.domain.model.OrdemServico;
 import com.empreget.domain.model.Prestador;
@@ -24,22 +29,36 @@ public class SolicitacaoOSService {
 	private CatalogoPrestadorService catalogoPrestadorService;
 	private BuscaOSService buscaOSService;
 	
+	 private Map<OffsetDateTime, ReentrantLock> locks = new ConcurrentHashMap<>();
+	
 	
 	@Transactional
-	public OrdemServico solicitar (OrdemServico ordemServico) {
-
-		Cliente cliente = catalogoClienteService.buscarOuFalhar(ordemServico.getCliente().getId());
-		Prestador prestador = catalogoPrestadorService.buscarOuFalhar(ordemServico.getPrestador().getId());
-				
-		ordemServico.setCliente(cliente);
-		ordemServico.setPrestador(prestador);
-		ordemServico.setStatusOrdemServico(StatusOrdemServico.AGUARDANDO_ACEITE);
-		ordemServico.setStatusAgenda(StatusAgenda.PRE_RESERVADO);
-		ordemServico.setDataDaSolicitacao(OffsetDateTime.now());
+	public OrdemServico solicitar(OrdemServico ordemServico) {
 		
-		return ordemServicoRepositoy.save(ordemServico);
+		OffsetDateTime dataServico = ordemServico.getDataServico();
+		ReentrantLock lock = locks.computeIfAbsent(dataServico, k -> new ReentrantLock());
+
+		lock.lock();
+
+		try {
+			
+			Cliente cliente = catalogoClienteService.buscarOuFalhar(ordemServico.getCliente().getId());
+			Prestador prestador = catalogoPrestadorService.buscarOuFalhar(ordemServico.getPrestador().getId());
+
+			if (ordemServicoRepositoy.existsByPrestadorAndDataServico(prestador, dataServico)) {
+				throw new NegocioException("Já existe uma ordem de serviço para o mesmo prestador na mesma data");
+			}
+			ordemServico.setCliente(cliente);
+			ordemServico.setPrestador(prestador);
+			ordemServico.setStatusOrdemServico(StatusOrdemServico.AGUARDANDO_ACEITE);
+			ordemServico.setStatusAgenda(StatusAgenda.PRE_RESERVADO);
+			ordemServico.setDataDaSolicitacao(OffsetDateTime.now());
+
+			return ordemServicoRepositoy.save(ordemServico);
+		 } finally {
+	            lock.unlock();
+	     }
 	}
-	
 		
 	@Transactional
 	public void aceitar(Long pedidoId) {
