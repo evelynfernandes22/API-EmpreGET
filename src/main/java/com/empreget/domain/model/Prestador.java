@@ -15,7 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -46,7 +45,7 @@ public class Prestador {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
+
 	@OneToOne
 	private Usuario usuario;
 
@@ -55,8 +54,8 @@ public class Prestador {
 	private String nome;
 
 	@Size(max = 255)
-	private String imgUrl; 	
-	
+	private String imgUrl;
+
 	@Embedded
 	private Endereco endereco;
 
@@ -65,7 +64,7 @@ public class Prestador {
 	private String rg;
 
 	@NotBlank(message = "CPF é obrigatório.")
-	//@CPF
+	// @CPF
 	private String cpf;
 
 	@NotBlank
@@ -79,28 +78,26 @@ public class Prestador {
 	@Size(max = 255)
 	@Column(name= "disponibilidade_na_semana")
 	private String disponibilidade;
-	
 
 	@Size(max = 255)
 	private String observacao;
-	
-	
+
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private Regiao regiao;
-	
+
 	@JsonIgnore
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
 	private OffsetDateTime dataDoCadastro;
-	
+
 	@JsonIgnore
 	@UpdateTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
 	private OffsetDateTime dataDaAtualizacao;
-	
-	
-	@OneToMany(mappedBy="prestador", cascade = CascadeType.ALL)
+
+	@OneToMany(mappedBy = "prestador", cascade = CascadeType.ALL)
 	private List<OrdemServico> ordensServico = new ArrayList<>();
 	
+
 }

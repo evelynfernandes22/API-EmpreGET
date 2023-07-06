@@ -1,7 +1,6 @@
 package com.empreget.api.dto.input;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 import lombok.Getter;

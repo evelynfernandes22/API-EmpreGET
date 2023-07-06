@@ -1,9 +1,9 @@
 package com.empreget.domain.service;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javax.transaction.Transactional;
@@ -29,16 +29,19 @@ public class SolicitacaoOSService {
 	private CatalogoPrestadorService catalogoPrestadorService;
 	private BuscaOSService buscaOSService;
 	
-	 private Map<OffsetDateTime, ReentrantLock> locks = new ConcurrentHashMap<>();
+	 private Map<LocalDate, ReentrantLock> locks = new ConcurrentHashMap<>();
 	
 	
 	@Transactional
 	public OrdemServico solicitar(OrdemServico ordemServico) {
 		
-		OffsetDateTime dataServico = ordemServico.getDataServico();
+		LocalDate dataServico = ordemServico.getDataServico();
+		/*
+		 * Gera um mapa e armazena instancias de dataServico
+		 */
 		ReentrantLock lock = locks.computeIfAbsent(dataServico, k -> new ReentrantLock());
 
-		lock.lock();
+		lock.lock(); //uma trava é adiquirida de ReentrantLock
 
 		try {
 			
@@ -56,7 +59,7 @@ public class SolicitacaoOSService {
 
 			return ordemServicoRepositoy.save(ordemServico);
 		 } finally {
-	            lock.unlock();
+	            lock.unlock(); //trava liberada para outra thread processar
 	     }
 	}
 		

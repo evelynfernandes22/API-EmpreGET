@@ -1,11 +1,9 @@
 package com.empreget.api.dto.input;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.empreget.api.dto.ServicoResponse;
 import com.empreget.domain.model.enums.Regiao;
 
 import lombok.Data;
@@ -32,7 +30,7 @@ public class PrestadorInput {
 	@Valid
 	private ServicoInput servico;
 	@NotBlank
-	private String disponibilidade;
+	private String disponibilidade;  
 	
 	private String observacao;
 	

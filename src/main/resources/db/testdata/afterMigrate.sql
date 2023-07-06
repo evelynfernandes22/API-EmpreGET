@@ -37,4 +37,3 @@ insert into ordem_servico(id, cliente_id, prestador_id, data_servico, periodo, s
 insert into ordem_servico(id, cliente_id, prestador_id, data_servico, periodo, status_agenda, tipo_de_diaria, data_da_solicitacao, data_da_finalizacao, status_ordem_servico) values
 (2, 3, 2, '2023-05-25T08:00:00', 'COMERCIAL', 'PRE_RESERVADO','DIARIA_CHEIA', utc_timestamp, null, 'AGUARDANDO_ACEITE');
 
-

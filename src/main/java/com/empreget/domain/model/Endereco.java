@@ -2,7 +2,6 @@ package com.empreget.domain.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.validation.constraints.NotBlank;
 
 import lombok.Data;
 

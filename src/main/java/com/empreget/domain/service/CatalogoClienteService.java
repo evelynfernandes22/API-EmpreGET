@@ -10,7 +10,6 @@ import com.empreget.domain.exception.ClienteNaoEncontradoException;
 import com.empreget.domain.exception.EntidadeEmUsoException;
 import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.model.Cliente;
-import com.empreget.domain.model.Usuario;
 import com.empreget.domain.repository.ClienteRepository;
 
 import lombok.AllArgsConstructor;

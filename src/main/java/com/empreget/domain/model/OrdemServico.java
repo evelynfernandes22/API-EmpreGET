@@ -1,5 +1,6 @@
 package com.empreget.domain.model;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 import javax.persistence.Entity;
@@ -54,7 +55,7 @@ public class OrdemServico {
 	
 	@NotNull
 	@JsonFormat(pattern = "dd/MM/yyyy")
-	private OffsetDateTime dataServico;
+	private LocalDate dataServico;
 	
 	@NotNull
 	@Enumerated(EnumType.STRING)
@@ -114,8 +115,9 @@ public class OrdemServico {
 	public void cancelar() {
 		if(!podeSerCancelado()) {
 			throw new NegocioException("A ordem de serviço não pode ser cancelada, pois está em fase de execução pelo prestador");
-		}else if(StatusOrdemServico.class.equals(getStatusOrdemServico())) {
-			throw new NegocioException("A ordem não pode ser cancelada, pois já está com o estado 'Cancelado'");
+		}else if(getStatusOrdemServico() == StatusOrdemServico.CANCELADO) {
+			throw new NegocioException("Não foi possível executar esta operação, pois a ordem de serviço "
+					+ "já está cancelada");
 		}
 		
 		setStatusOrdemServico(StatusOrdemServico.CANCELADO);

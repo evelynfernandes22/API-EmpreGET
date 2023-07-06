@@ -22,7 +22,7 @@ public class CadastroUsuarioService {
 	@Transactional
 	public Usuario salvar(Usuario usuario) {
 		boolean emailEmUso = usuarioRepository.findByEmail(usuario.getEmail()).stream()
-				.anyMatch(clienteExistente -> !clienteExistente.equals(usuario));
+				.anyMatch(usuarioExistente -> !usuarioExistente.equals(usuario));
 
 		if (emailEmUso) {
 			throw new NegocioException(String.format("Já existe um usuário cadastrado com o e-mail %s.", usuario.getEmail()));

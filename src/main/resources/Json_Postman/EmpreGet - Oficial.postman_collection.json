@@ -567,7 +567,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"cliente\": {\r\n        \"id\": 1\r\n    },\r\n    \"prestador\": {\r\n        \"id\": 1\r\n    },\r\n    \"dataServico\" : \"2023-06-08T00:22:06Z\",\r\n    \"periodo\": \"MATUTINO\",\r\n    \"tipoDeDiaria\": \"MEIA_DIARIA\"\r\n}",
+							"raw": "{\r\n    \"cliente\": {\r\n        \"id\": 1\r\n    },\r\n    \"prestador\": {\r\n        \"id\": 1\r\n    },\r\n    \"dataServico\" : \"2023-07-27T14:34:41Z\", \r\n    \"periodo\": \"MATUTINO\",\r\n    \"tipoDeDiaria\": \"MEIA_DIARIA\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -895,13 +895,19 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "ana.p@email.com",
+									"type": "text"
+								},
+								{
+									"key": "senha",
+									"value": "123",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": {
 							"raw": "localhost:8080/usuarios/login",

@@ -2,7 +2,7 @@ create table ordem_servico(
        id bigint not null auto_increment,
        cliente_id bigint not null,
        prestador_id bigint not null,
-       data_servico datetime not null,
+       data_servico date not null,
        periodo varchar(20) not null,
        status_agenda varchar(20) not null, 
       

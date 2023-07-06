@@ -1,6 +1,8 @@
 package com.empreget.domain.service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.empreget.domain.exception.EntidadeEmUsoException;
 import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.exception.PrestadorNaoEncontradoException;
+import com.empreget.domain.model.OrdemServico;
 import com.empreget.domain.model.Prestador;
 import com.empreget.domain.model.enums.Regiao;
 import com.empreget.domain.repository.PrestadorRepository;
@@ -60,6 +63,15 @@ public class CatalogoPrestadorService {
 	@Transactional
 	public List<Prestador> buscarPorNomeContem(String nome){
 		return prestadorRepository.findByNomeContaining(nome);
+	}
+	
+	@Transactional
+	public List<OrdemServico>buscarOrdensServicoPorDataServico(Long prestadorId, LocalDate dataServico){
+		Prestador prestador = buscarOuFalhar(prestadorId);
+		
+		return prestador.getOrdensServico().stream()
+				.filter(ordemServico -> ordemServico.getDataServico().equals(dataServico))
+				.collect(Collectors.toList());
 	}
 
 	public Prestador buscarOuFalhar(Long prestadorId) {

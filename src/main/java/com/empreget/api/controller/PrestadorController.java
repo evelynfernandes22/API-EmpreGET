@@ -1,11 +1,14 @@
 package com.empreget.api.controller;
 
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,11 +17,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.empreget.api.assembler.OrdemServicoDtoAssembler;
 import com.empreget.api.assembler.PrestadorDtoAssembler;
 import com.empreget.api.assembler.PrestadorInputDisassembler;
+import com.empreget.api.dto.OrdemServicoResponse;
 import com.empreget.api.dto.PrestadorFiltroRegiaoResponse;
 import com.empreget.api.dto.PrestadorMinResponse;
 import com.empreget.api.dto.PrestadorResponse;
@@ -42,6 +48,7 @@ public class PrestadorController {
 	private PrestadorDtoAssembler prestadorDtoAssembler;
 	private PrestadorInputDisassembler prestadorInputDisassembler;
 	private CadastroUsuarioService cadastroUsuarioService;
+	private OrdemServicoDtoAssembler ordemServicoDtoAssembler;
 
 	@GetMapping
 	public List<PrestadorResponse> listar(){
@@ -76,14 +83,21 @@ public class PrestadorController {
 	@GetMapping("/{prestadorId}")
 	public PrestadorResponse buscarPorId(@PathVariable Long prestadorId){
 		return prestadorDtoAssembler.toModel(catalogoPrestadorService.buscarOuFalhar(prestadorId));
-		
 	}
+
 	@GetMapping("/perfil/{prestadorId}")
 	public PrestadorMinResponse buscarPorIdPerfil(@PathVariable Long prestadorId){
 		return prestadorDtoAssembler.toModelMin(catalogoPrestadorService.buscarOuFalhar(prestadorId));
-		
 	}
-		
+
+	
+	@GetMapping("/{prestadorId}/ordens-servico")
+	public List<OrdemServicoResponse> buscarPorDataServico(@PathVariable Long prestadorId, 
+			@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataServico){
+		return ordemServicoDtoAssembler
+				.toCollectionModel(catalogoPrestadorService.buscarOrdensServicoPorDataServico(prestadorId, dataServico));
+	}
+	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public PrestadorResponse adicionar(@Valid @RequestBody PrestadorInput prestadorInput) {
@@ -116,6 +130,15 @@ public class PrestadorController {
 		return prestadorDtoAssembler.toModel(catalogoPrestadorService.salvar(prestadorAtual));
 	
 	}
+	
+	@DeleteMapping("/{prestadorId}")
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	public void excluir (@PathVariable Long prestadorId){		
+		catalogoPrestadorService.excluir(prestadorId);
+		
+	}
+	
+}
 
 //NÃO FAZ SENTIDO TER EDITAR PARCIAL COM DTO
 //	@PatchMapping("/{prestadorId}")
@@ -152,16 +175,4 @@ public class PrestadorController {
 //			throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequest);
 //		}
 //	}
-	
-	
-	@DeleteMapping("/{prestadorId}")
-	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void excluir (@PathVariable Long prestadorId){		
-		catalogoPrestadorService.excluir(prestadorId);
-		
-	}
-	
-	
-	
-	
-}
+
