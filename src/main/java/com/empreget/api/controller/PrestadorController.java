@@ -1,7 +1,6 @@
 package com.empreget.api.controller;
 
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.empreget.api.assembler.OrdemServicoDtoAssembler;
 import com.empreget.api.assembler.PrestadorDtoAssembler;
 import com.empreget.api.assembler.PrestadorInputDisassembler;
-import com.empreget.api.dto.OrdemServicoResponse;
+import com.empreget.api.dto.OrdemServicoDataResponse;
 import com.empreget.api.dto.PrestadorFiltroRegiaoResponse;
 import com.empreget.api.dto.PrestadorMinResponse;
 import com.empreget.api.dto.PrestadorResponse;
@@ -92,10 +91,10 @@ public class PrestadorController {
 
 	
 	@GetMapping("/{prestadorId}/ordens-servico")
-	public List<OrdemServicoResponse> buscarPorDataServico(@PathVariable Long prestadorId, 
+	public List<OrdemServicoDataResponse> buscarPorDataServico(@PathVariable Long prestadorId, 
 			@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataServico){
 		return ordemServicoDtoAssembler
-				.toCollectionModel(catalogoPrestadorService.buscarOrdensServicoPorDataServico(prestadorId, dataServico));
+				.toCollectionOSDataModel(catalogoPrestadorService.buscarOrdensServicoPorDataServico(prestadorId, dataServico));
 	}
 	
 	@PostMapping
