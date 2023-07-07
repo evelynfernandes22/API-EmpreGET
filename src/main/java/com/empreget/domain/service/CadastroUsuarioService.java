@@ -54,6 +54,7 @@ public class CadastroUsuarioService {
 
         if (usuarioOptional.isPresent()) {
             Usuario usuario = usuarioOptional.get();
+            usuario.isSouCliente();
             if (usuario.getSenha().equals(senha)) {
                 return usuarioOptional;
             }
