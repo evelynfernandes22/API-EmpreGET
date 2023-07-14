@@ -2,6 +2,8 @@ package com.empreget.api.dto.input;
 
 import javax.validation.constraints.NotBlank;
 
+import com.empreget.domain.model.enums.UserRole;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,5 +18,5 @@ public class UsuarioComSenhaInput  extends UsuarioInput{
 	@NotBlank
 	private String senha;
 	
-	private boolean souCliente;
+	private UserRole role;
 }

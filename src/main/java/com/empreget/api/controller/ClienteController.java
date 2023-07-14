@@ -23,6 +23,7 @@ import com.empreget.api.dto.ClienteResponse;
 import com.empreget.api.dto.input.ClienteInput;
 import com.empreget.domain.model.Cliente;
 import com.empreget.domain.model.Usuario;
+import com.empreget.domain.model.enums.UserRole;
 import com.empreget.domain.repository.ClienteRepository;
 import com.empreget.domain.service.CadastroUsuarioService;
 import com.empreget.domain.service.CatalogoClienteService;
@@ -61,19 +62,16 @@ public class ClienteController {
 		
 		Cliente cliente = clienteInputDisassembler.toDomainObject(clienteInput);
 		
-		//setar o usuario informado no clienteInput e salvar 
 		Usuario usuario = new Usuario();
 		usuario.setEmail(cliente.getUsuario().getEmail());
 		usuario.setSenha(cliente.getUsuario().getSenha());
-		usuario.setSouCliente(cliente.getUsuario().isSouCliente());
+		cliente.getUsuario().getRole();
+		usuario.setRole(UserRole.CLIENTE);
 		usuario.setNome(cliente.getNome());
 		
-		//salvar usuário no banco antes do cliente
-		Usuario usuarioSalvo = cadastroUsuarioService.salvar(usuario);
+		Usuario usuarioSalvo = cadastroUsuarioService.cadastrarUser(usuario);
 		
-		// definir a referência para o usuário 
         cliente.setUsuario(usuarioSalvo);
-		
 		return clienteAssembler.toModel(catalogoClienteService.salvar(cliente));
 			
 	}
@@ -90,45 +88,6 @@ public class ClienteController {
 		return clienteAssembler.toModel(catalogoClienteService.salvar(clienteAtual));
 
 	}
-
-//COM DTO NÃO FAZ SENTIDO TER EDITAR PARCIAL
-//	@PatchMapping("/{clienteId}")
-//	public ClienteResponse editarParcial (@PathVariable Long clienteId, @Valid @RequestBody Map<String, Object> dados, 
-//			HttpServletRequest request) {
-//		
-//		Cliente clienteAtual = catalogoClienteService.buscarOuFalhar(clienteId);
-//		
-//		merge(dados, clienteAtual, request);
-//		
-//		return clienteAssembler.toModel(catalogoClienteService.salvar(clienteAtual));
-//	}
-//	
-	
-//	private void merge(Map<String, Object> dadosOrigem, Cliente clienteDestino,
-//			HttpServletRequest request) {
-//		ServletServerHttpRequest serverHttpRequest = new ServletServerHttpRequest(request);
-//		
-//		try {
-//			ObjectMapper objectMapper = new ObjectMapper();
-//			objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
-//			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
-//			
-//			Cliente clienteOrigem = objectMapper.convertValue(dadosOrigem, Cliente.class);
-//			
-//			dadosOrigem.forEach((nomePropriedade, valorPropriedade) -> {
-//				Field field = ReflectionUtils.findField(Cliente.class, nomePropriedade);
-//				field.setAccessible(true);
-//				
-//				Object novoValor = ReflectionUtils.getField(field, clienteOrigem);
-//				
-//				ReflectionUtils.setField(field, clienteDestino, novoValor);
-//			});
-//		} catch (IllegalArgumentException e) {
-//			Throwable rootCause = ExceptionUtils.getRootCause(e);
-//			throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequest);
-//		}
-//	}
-	
 
 	@DeleteMapping("/{clienteId}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)

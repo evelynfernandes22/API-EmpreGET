@@ -31,6 +31,7 @@ import com.empreget.api.dto.input.PrestadorInput;
 import com.empreget.domain.model.Prestador;
 import com.empreget.domain.model.Usuario;
 import com.empreget.domain.model.enums.Regiao;
+import com.empreget.domain.model.enums.UserRole;
 import com.empreget.domain.repository.PrestadorRepository;
 import com.empreget.domain.service.CadastroUsuarioService;
 import com.empreget.domain.service.CatalogoPrestadorService;
@@ -106,10 +107,11 @@ public class PrestadorController {
 		Usuario usuario = new Usuario();
 		usuario.setEmail(prestador.getUsuario().getEmail());
 		usuario.setSenha(prestador.getUsuario().getSenha());
-		usuario.setSouCliente(prestador.getUsuario().isSouCliente());
+		prestador.getUsuario().getRole();
+		usuario.setRole(UserRole.PRESTADOR);
 		usuario.setNome(prestador.getNome());
 		
-		Usuario usuarioSalvo = cadastroUsuarioService.salvar(usuario);
+		Usuario usuarioSalvo = cadastroUsuarioService.cadastrarUser(usuario);
 		prestador.setUsuario(usuarioSalvo);
 		
 		return prestadorDtoAssembler.toModel(catalogoPrestadorService.salvar(prestador));

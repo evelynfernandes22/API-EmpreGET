@@ -13,12 +13,13 @@ alter table prestador auto_increment = 1;
 alter table ordem_servico auto_increment = 1;
 alter table usuario auto_increment = 1;
 
-insert into usuario (id, nome, email, senha, sou_cliente) values
-(1, 'Ana Pereira', 'ana.p@email.com', '123', 1),
-(2, 'Helena Martins', 'helena@email.com', '123', 1),
-(3, 'Marina Lisboa', 'marina@email.com', '123', 1),
-(4, 'Sueli Cavalcante', 'sueli@email.com', '123', 0),
-(5, 'Marinete da Silva', 'marinete@email.com', '123', 0);
+insert into usuario (id, nome, email, senha, role) values
+(1, 'Ana Pereira', 'ana.p@email.com', '123', 'CLIENTE'),
+(2, 'Helena Martins', 'helena@email.com', '$2a$10$OPYzL6acgYwyYtfiEGPQe.3mAlDNY5.m3zn5GPzmVV2w0nle0CfRC', 'CLIENTE'),
+(3, 'Marina Lisboa', 'marina@email.com', '$2a$10$OPYzL6acgYwyYtfiEGPQe.3mAlDNY5.m3zn5GPzmVV2w0nle0CfRC', 'CLIENTE'),
+(4, 'Sueli Cavalcante', 'sueli@email.com', '$2a$10$OPYzL6acgYwyYtfiEGPQe.3mAlDNY5.m3zn5GPzmVV2w0nle0CfRC', 'PRESTADOR'),
+(5, 'Marinete da Silva', 'marinete@email.com', '$2a$10$OPYzL6acgYwyYtfiEGPQe.3mAlDNY5.m3zn5GPzmVV2w0nle0CfRC', 'PRESTADOR');
+
 
 insert into cliente (id, usuario_id, nome, rg, cpf, telefone, data_do_cadastro, data_da_atualizacao, end_logradouro, end_numero, end_complemento, end_cep, end_cidade, end_bairro, end_estado, end_pais) values 
 (1,1, 'Ana Pereira', '7777777-7', '555.444.555-20', '43 9999-9999', utc_timestamp, utc_timestamp, 'Rua das Flores', '500', 'casa', '86000-000', 'Londrina', 'Jardim Primavera', 'Paraná', 'BRA');

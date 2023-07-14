@@ -13,6 +13,7 @@ public enum ProblemType {
 	ENTIDADE_EM_USO("/entidade-em-uso", "Entidade em uso"),
 	ERRO_NEGOCIO("/erro-negocio", "Violação de regra de negócio");
 	
+	
 	private String title;
 	private String uri;
 	

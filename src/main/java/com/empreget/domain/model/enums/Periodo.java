@@ -1,9 +1,7 @@
 package com.empreget.domain.model.enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
 public enum Periodo {
 
@@ -12,5 +10,10 @@ public enum Periodo {
 	COMERCIAL ("Das 08:00h às 12:00h e das 13:00h às 17:00h");
 	
 	private String descrição;
+
+	Periodo(String descrição) {
+		this.descrição = descrição;
+	}
+	
 	
 }

@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UsuarioSemSouClienteInput  extends UsuarioInput{
+public class UsuarioEmailSenhaInput  extends UsuarioInput{
 
 	/*
 	 * Para atualizar email e senha, sem alterar o tipo 
