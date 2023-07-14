@@ -126,7 +126,9 @@ public class PrestadorController {
 		
 		BeanUtils.copyProperties(prestador, prestadorAtual, 
 				"id", "dataDoCadastro", "dataDaAtualizacao", "usuario");
-//		prestadorInputDisassembler.copyToDomainObjet(prestadorInput, prestadorAtual);
+	
+		String nomeAtual = prestadorAtual.getNome();
+		prestadorAtual.getUsuario().setNome(nomeAtual);
 			
 		return prestadorDtoAssembler.toModel(catalogoPrestadorService.salvar(prestadorAtual));
 	

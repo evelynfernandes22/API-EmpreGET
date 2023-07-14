@@ -84,6 +84,10 @@ public class ClienteController {
 
 		BeanUtils.copyProperties(cliente, clienteAtual, 
 				"id", "dataDoCadastro", "dataDaAtualizacao", "usuario");
+		
+		//Atualizando o nome na tabela usuário, caso seja alterado no editar
+		String nomeAtual = clienteAtual.getNome();
+		clienteAtual.getUsuario().setNome(nomeAtual);
 
 		return clienteAssembler.toModel(catalogoClienteService.salvar(clienteAtual));
 
