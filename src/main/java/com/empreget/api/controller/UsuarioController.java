@@ -1,6 +1,7 @@
 package com.empreget.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,6 +50,18 @@ public class UsuarioController {
         Usuario usuario = cadastroUsuarioService.buscarOuFalhar(usuarioId);
         
         return usuarioDtoAssembler.toModel(usuario);
+    }
+    
+    //A pedido do Fernando
+    @GetMapping("/email")
+    public UsuarioResponse buscarUsuarioPorEmail(@RequestParam("email") String email) {
+    	Optional<Usuario> usuario = usuarioRepository.findUserByEmail(email);
+    	
+    	if(usuario.isPresent()) {
+    		return usuarioDtoAssembler.toModel(usuario.get());
+    	}else {
+    		throw new NegocioException(String.format("O e-mail '%s' não está cadastrado no sistema.", email));
+    	}
     }
     
     @PutMapping("/{usuarioId}")

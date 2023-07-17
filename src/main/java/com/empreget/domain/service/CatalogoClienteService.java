@@ -30,14 +30,14 @@ public class CatalogoClienteService {
 
 	@Transactional
 	public Cliente salvar(Cliente cliente) {
-//		boolean emailEmUso = clienteRepository.findByUsuarioEmail(cliente.getUsuario().getEmail()).stream()
-//				.anyMatch(clienteExistente -> !clienteExistente.equals(cliente));
-//
-//
-//		if (emailEmUso) {
-//			throw new NegocioException(String.format("Já existe um cliente cadastrado com o e-mail %d.",
-//					cliente.getUsuario().getEmail()));
-//		}
+		boolean emailEmUso = clienteRepository.findByUsuarioEmail(cliente.getUsuario().getEmail()).stream()
+				.anyMatch(clienteExistente -> !clienteExistente.equals(cliente));
+
+
+		if (emailEmUso) {
+			throw new NegocioException(String.format("Já existe um cliente cadastrado com o e-mail %d.",
+					cliente.getUsuario().getEmail()));
+		}
 
 		return clienteRepository.save(cliente);
 	}

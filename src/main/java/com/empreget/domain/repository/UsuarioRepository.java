@@ -10,5 +10,6 @@ import com.empreget.domain.model.Usuario;
 public interface UsuarioRepository extends JpaRepository <Usuario, Long>  {
 	 
 	Optional<UserDetails> findByEmail(String email); 
+	Optional<Usuario> findUserByEmail(String email); // a pedido do front-end
 	
 }
