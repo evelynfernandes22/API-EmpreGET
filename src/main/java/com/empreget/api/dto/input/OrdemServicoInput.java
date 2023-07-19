@@ -15,9 +15,10 @@ import lombok.Setter;
 @Setter
 public class OrdemServicoInput {
 
-	@Valid
-	@NotNull
-	private ClienteIdInput cliente;
+	//está sendo setado pelo cliente autenticado
+//	@Valid
+//	@NotNull
+//	private ClienteIdInput cliente;
 	
 	@Valid
 	@NotNull

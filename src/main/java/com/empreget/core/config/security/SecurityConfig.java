@@ -32,16 +32,6 @@ public class SecurityConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.cors()
 				.and()
-//				.authorizeHttpRequests(authorize -> authorize
-//						.antMatchers(HttpMethod.POST, "/auth/login/**", "/prestadores/**", "/clientes/**").permitAll()
-//						.antMatchers(HttpMethod.DELETE, "/prestadores/**", "/clientes/**","/os/**" ).hasRole("ADMIN")
-//						.antMatchers(HttpMethod.GET, "/prestadores/**").hasAnyRole("CLIENTE", "PRESTADOR")
-//						.antMatchers(HttpMethod.PUT, "/prestadores/**").hasRole("PRESTADOR")
-//						.antMatchers("/prestadores/**").hasRole("PRESTADOR")
-//						.antMatchers("/clientes/**").hasRole("CLIENTE")
-//				        .antMatchers(HttpMethod.PUT, "/clientes/**").hasRole("CLIENTE")
-//				        .anyRequest().authenticated()
-//						)
 				.addFilterBefore(securityFilter,UsernamePasswordAuthenticationFilter.class)
 				.build();
 	}
