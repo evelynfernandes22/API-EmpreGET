@@ -27,5 +27,6 @@ Para construir e executar o aplicativo, você precisa:
 - Hibernate
 - Spring Validation
 - Spring Security
+- JWT (Json Web Token)
 
 
