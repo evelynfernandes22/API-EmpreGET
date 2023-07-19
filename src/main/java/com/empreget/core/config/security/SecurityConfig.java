@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -17,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 	
 	@Autowired
@@ -28,19 +30,20 @@ public class SecurityConfig {
 		return httpSecurity
 				.csrf().disable()
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(authorize -> authorize
-						.antMatchers(HttpMethod.POST, "/auth/login/**", "/prestadores/**", "/clientes/**").permitAll()
-						.antMatchers(HttpMethod.DELETE, "/prestadores/**", "/clientes/**","/os/**" ).hasRole("ADMIN")
-						.antMatchers(HttpMethod.GET, "/prestadores/**").hasAnyRole("CLIENTE", "PRESTADOR")
-						.antMatchers(HttpMethod.PUT, "/prestadores/**").hasRole("PRESTADOR")
-						.antMatchers("/prestadores/**").hasRole("PRESTADOR")
-						.antMatchers("/clientes/**").hasRole("CLIENTE")
-				        .antMatchers(HttpMethod.PUT, "/clientes/**").hasRole("CLIENTE")
-				        .anyRequest().authenticated()
-						)
+				.cors()
+				.and()
+//				.authorizeHttpRequests(authorize -> authorize
+//						.antMatchers(HttpMethod.POST, "/auth/login/**", "/prestadores/**", "/clientes/**").permitAll()
+//						.antMatchers(HttpMethod.DELETE, "/prestadores/**", "/clientes/**","/os/**" ).hasRole("ADMIN")
+//						.antMatchers(HttpMethod.GET, "/prestadores/**").hasAnyRole("CLIENTE", "PRESTADOR")
+//						.antMatchers(HttpMethod.PUT, "/prestadores/**").hasRole("PRESTADOR")
+//						.antMatchers("/prestadores/**").hasRole("PRESTADOR")
+//						.antMatchers("/clientes/**").hasRole("CLIENTE")
+//				        .antMatchers(HttpMethod.PUT, "/clientes/**").hasRole("CLIENTE")
+//				        .anyRequest().authenticated()
+//						)
 				.addFilterBefore(securityFilter,UsernamePasswordAuthenticationFilter.class)
 				.build();
-
 	}
 	
 	@Bean

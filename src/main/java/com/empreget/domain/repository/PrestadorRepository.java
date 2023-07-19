@@ -25,4 +25,5 @@ public interface PrestadorRepository extends JpaRepository<Prestador, Long> {
 	@Query("from Prestador p where p.regiao = :regiao")
 	List<Prestador> findAllByRegiao(@Param("regiao") Regiao regiao);
 	
+	
 }

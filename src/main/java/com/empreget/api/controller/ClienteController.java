@@ -1,5 +1,6 @@
 package com.empreget.api.controller;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,6 +8,10 @@ import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +26,7 @@ import com.empreget.api.assembler.ClienteDtoAssembler;
 import com.empreget.api.assembler.ClienteInputDisassembler;
 import com.empreget.api.dto.ClienteResponse;
 import com.empreget.api.dto.input.ClienteInput;
+import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.model.Cliente;
 import com.empreget.domain.model.Usuario;
 import com.empreget.domain.model.enums.UserRole;
@@ -41,20 +47,38 @@ public class ClienteController {
 	private ClienteInputDisassembler clienteInputDisassembler;
 	private CadastroUsuarioService cadastroUsuarioService;
 
-
+	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
 	@GetMapping
 	public List<ClienteResponse> listar() {
-		return clienteRepository.findAll()
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		List<String> roles = authentication.getAuthorities()
 				.stream()
-				.map(cliente -> clienteAssembler.toModel(cliente))
+				.map(GrantedAuthority::getAuthority)
 				.collect(Collectors.toList());
+		
+		if(roles.contains("ROLE_ADMIN")) {
+			return clienteRepository.findAll()
+					.stream()
+					.map(cliente -> clienteAssembler.toModel(cliente))
+					.collect(Collectors.toList());
+		}else if (roles.contains("ROLE_CLIENTE")) {
+	        String emailUser = authentication.getName();
+	        Cliente cliente = clienteRepository.findByUsuarioEmail(emailUser)
+	                .orElseThrow(() -> new NegocioException("Cliente não encontrado."));
 
+	        return Collections.singletonList(clienteAssembler.toModel(cliente));
+	    }
+
+	    return Collections.emptyList();
 	}
 	
+	@PreAuthorize("#clienteId == principal.id or hasRole('ADMIN')")
 	@GetMapping("/{clienteId}")
 	public ClienteResponse buscarPorId(@PathVariable Long clienteId) {
 		return clienteAssembler.toModel(catalogoClienteService.buscarOuFalhar(clienteId));
 	}
+
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -73,9 +97,9 @@ public class ClienteController {
 		
         cliente.setUsuario(usuarioSalvo);
 		return clienteAssembler.toModel(catalogoClienteService.salvar(cliente));
-			
 	}
-
+	
+	@PreAuthorize("#clienteId == principal.id or hasRole('ADMIN')")
 	@PutMapping("/{clienteId}")
 	public ClienteResponse editar(@PathVariable Long clienteId, @Valid @RequestBody ClienteInput clienteinput) {
 		Cliente cliente = clienteInputDisassembler.toDomainObject(clienteinput);
@@ -93,6 +117,7 @@ public class ClienteController {
 
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{clienteId}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void excluir(@PathVariable Long clienteId) {

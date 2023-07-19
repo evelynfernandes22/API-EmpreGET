@@ -1,6 +1,7 @@
 package com.empreget.api.controller;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,6 +10,10 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +33,7 @@ import com.empreget.api.dto.PrestadorFiltroRegiaoResponse;
 import com.empreget.api.dto.PrestadorMinResponse;
 import com.empreget.api.dto.PrestadorResponse;
 import com.empreget.api.dto.input.PrestadorInput;
+import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.model.Prestador;
 import com.empreget.domain.model.Usuario;
 import com.empreget.domain.model.enums.Regiao;
@@ -50,22 +56,39 @@ public class PrestadorController {
 	private CadastroUsuarioService cadastroUsuarioService;
 	private OrdemServicoDtoAssembler ordemServicoDtoAssembler;
 
+	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
 	@GetMapping
 	public List<PrestadorResponse> listar(){
-		return prestadorRepository.findAll()
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		List<String> roles = authentication.getAuthorities()
 				.stream()
-				.map(prestador -> prestadorDtoAssembler.toModel(prestador))
+				.map(GrantedAuthority::getAuthority)
 				.collect(Collectors.toList());
+		
+		if(roles.contains("ROLE_ADMIN") || roles.contains("ROLE_CLIENTE")) {
+			return prestadorRepository.findAll()
+					.stream()
+					.map(prestador -> prestadorDtoAssembler.toModel(prestador))
+					.collect(Collectors.toList());
+		}else if(roles.contains("ROLE_PRESTADOR")) {
+			String emailUser = authentication.getName();
+			Prestador prestador = prestadorRepository.findByUsuarioEmail(emailUser)
+					.orElseThrow(() -> new NegocioException("Prestador não encontrado."));
+			return Collections.singletonList(prestadorDtoAssembler.toModel(prestador));
+		}
+		return Collections.emptyList();
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
 	@GetMapping("/regiao/{regiao}")
 	public List<PrestadorFiltroRegiaoResponse> listarPorRegiao(@PathVariable String regiao){
-		Regiao regiaoEnum = Regiao.valueOf(regiao.toUpperCase());
-				
-		return  prestadorDtoAssembler.toCollectionMinFilterModel(catalogoPrestadorService.obterPrestadoresPorRegiao(regiaoEnum));
+		
+			Regiao regiaoEnum = Regiao.valueOf(regiao.toUpperCase());
+			return  prestadorDtoAssembler.toCollectionMinFilterModel(catalogoPrestadorService.obterPrestadoresPorRegiao(regiaoEnum));
 	}
 
-		  
+	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")	  
 	@GetMapping ("/perfis")
 	public List<PrestadorMinResponse> listarPerfilPrestador(){
 		return prestadorRepository.findAll()
@@ -75,22 +98,25 @@ public class PrestadorController {
 				
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
 	@GetMapping("/nome-contem/{nome}")
 	public List<PrestadorFiltroRegiaoResponse> buscarPorNomeContem(@PathVariable String nome) {
 		return prestadorDtoAssembler.toCollectionMinFilterModel(catalogoPrestadorService.buscarPorNomeContem(nome));
 	}
 	
+	@PreAuthorize("#prestadorId == principal.id or hasAnyRole('ADMIN', 'CLIENTE')")
 	@GetMapping("/{prestadorId}")
 	public PrestadorResponse buscarPorId(@PathVariable Long prestadorId){
 		return prestadorDtoAssembler.toModel(catalogoPrestadorService.buscarOuFalhar(prestadorId));
 	}
 
+	@PreAuthorize("#prestadorId == principal.id or hasAnyRole('ADMIN', 'CLIENTE')")
 	@GetMapping("/perfil/{prestadorId}")
 	public PrestadorMinResponse buscarPorIdPerfil(@PathVariable Long prestadorId){
 		return prestadorDtoAssembler.toModelMin(catalogoPrestadorService.buscarOuFalhar(prestadorId));
 	}
 
-	
+	@PreAuthorize("hasAnyRole('ADMIN', 'PRESTADOR')")
 	@GetMapping("/{prestadorId}/ordens-servico")
 	public List<OrdemServicoDataResponse> buscarPorDataServico(@PathVariable Long prestadorId, 
 			@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataServico){
@@ -118,6 +144,7 @@ public class PrestadorController {
 		
 	}
 	
+	@PreAuthorize("#prestadorId == principal.id or hasRole('ADMIN')")
 	@PutMapping("/{prestadorId}")
 	public PrestadorResponse editar(@PathVariable Long prestadorId, @RequestBody @Valid PrestadorInput prestadorInput) {
 			
@@ -134,6 +161,7 @@ public class PrestadorController {
 	
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{prestadorId}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void excluir (@PathVariable Long prestadorId){		
@@ -142,40 +170,3 @@ public class PrestadorController {
 	}
 	
 }
-
-//NÃO FAZ SENTIDO TER EDITAR PARCIAL COM DTO
-//	@PatchMapping("/{prestadorId}")
-//	public PrestadorResponse editarParcial(@PathVariable Long prestadorId, @Valid @RequestBody Map<String, Object> dados,
-//			HttpServletRequest request) {
-//		
-//		Prestador prestadorAtual = catalogoPrestadorService.buscarOuFalhar(prestadorId);
-//		
-//		merge(dados, prestadorAtual, request);
-//		
-//		return prestadorAssembler.toModel(catalogoPrestadorService.salvar(prestadorAtual));
-//	}
-//	
-//	private void merge(Map<String, Object> dadosOrigem, Prestador prestadorDestino, HttpServletRequest request) {
-//		ServletServerHttpRequest serverHttpRequest = new ServletServerHttpRequest(request);
-//
-//		try {
-//			ObjectMapper objectMapper = new ObjectMapper();
-//			objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
-//			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
-//
-//			Prestador prestadorOrigem = objectMapper.convertValue(dadosOrigem, Prestador.class);
-//
-//			dadosOrigem.forEach((nomePropriedade, valorPropriedade) -> {
-//				Field field = ReflectionUtils.findField(Prestador.class, nomePropriedade);
-//				field.setAccessible(true);
-//
-//				Object novoValor = ReflectionUtils.getField(field, prestadorOrigem);
-//
-//				ReflectionUtils.setField(field, prestadorDestino, novoValor);
-//			});
-//		} catch (IllegalArgumentException e) {
-//			Throwable rootCause = ExceptionUtils.getRootCause(e);
-//			throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequest);
-//		}
-//	}
-

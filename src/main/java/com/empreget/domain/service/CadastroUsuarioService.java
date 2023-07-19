@@ -43,7 +43,7 @@ public class CadastroUsuarioService {
 	@Transactional
 	public void alterarSenha(Long usuarioId, String senhaInformada, String novaSenha) {
 		Usuario usuario = buscarOuFalhar(usuarioId);
-
+				
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		
 		if(!passwordEncoder.matches(senhaInformada, usuario.getSenha())) {
