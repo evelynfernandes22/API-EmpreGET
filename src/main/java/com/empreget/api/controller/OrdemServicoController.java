@@ -2,7 +2,6 @@ package com.empreget.api.controller;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -32,7 +31,6 @@ import com.empreget.domain.exception.ClienteNaoEncontradoException;
 import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.model.Cliente;
 import com.empreget.domain.model.OrdemServico;
-import com.empreget.domain.model.Prestador;
 import com.empreget.domain.repository.ClienteRepository;
 import com.empreget.domain.repository.OrdemServicoRepositoy;
 import com.empreget.domain.service.CancelamentoOSService;

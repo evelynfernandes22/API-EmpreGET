@@ -24,9 +24,10 @@ public class TokenService {
 		try {
 
 			Algorithm algorithm = Algorithm.HMAC256(secret);
+			String subject = usuario.getEmail() + ";" + usuario.getRole(); //payload com email e role
 			String token = JWT.create()
 					.withIssuer("empreget-api")
-					.withSubject(usuario.getEmail())
+					.withSubject(subject)
 					.withExpiresAt(genExpirationDate())
 					.sign(algorithm);
 			return token;
