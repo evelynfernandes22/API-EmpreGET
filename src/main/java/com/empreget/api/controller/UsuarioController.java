@@ -104,7 +104,7 @@ public class UsuarioController {
 				.anyMatch(usuarioExistente -> !usuarioExistente.equals(usuarioAtual));
 
 		if (emailEmUso) {
-			throw new NegocioException(String.format("O email %d está em uso por outro usuário. Tente com outro e-mail.",
+			throw new NegocioException(String.format("O email %d está em uso por outro usuário. Tente novamente com outro e-mail.",
 					usuarioAtual.getEmail()));
 		}
                

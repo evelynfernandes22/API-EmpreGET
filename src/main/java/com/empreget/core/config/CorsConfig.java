@@ -13,7 +13,7 @@ public class CorsConfig implements WebMvcConfigurer{
 		
 		
 		registry.addMapping("/**") //todas
-        .allowedOrigins("http://localhost:8100", "http://localhost:8080", "http://localhost:3000") // 8100 ionic / máquina / angular web
+        .allowedOrigins("http://localhost:8100", "http://localhost:8080", "http://localhost:3000", "http://localhost:4200") // 8100 ionic / máquina / angular web
         .allowedMethods("GET", "POST", "PUT", "DELETE") //("*")
         .allowedHeaders("*")
         .allowCredentials(true);
