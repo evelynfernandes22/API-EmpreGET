@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -27,7 +29,6 @@ import com.empreget.api.dto.UsuarioResponse;
 import com.empreget.api.dto.input.SenhaInput;
 import com.empreget.api.dto.input.UsuarioEmailInput;
 import com.empreget.domain.exception.NegocioException;
-import com.empreget.domain.exception.UsuarioNaoEncontradoException;
 import com.empreget.domain.model.Usuario;
 import com.empreget.domain.repository.UsuarioRepository;
 import com.empreget.domain.service.CadastroUsuarioService;
@@ -38,6 +39,8 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
+	
+	//private static final Logger log = LoggerFactory.getLogger(UsuarioController.class);
 	
 	private UsuarioRepository usuarioRepository;
 	private CadastroUsuarioService cadastroUsuarioService;
@@ -54,7 +57,7 @@ public class UsuarioController {
 				.stream()
 				.map(GrantedAuthority::getAuthority)
 				.collect(Collectors.toList());
-		
+				
 		if(roles.contains("ROLE_ADMIN")) {
 			List<Usuario> todosUsuarios = usuarioRepository.findAll();
 			return usuarioDtoAssembler.toCollectionModel(todosUsuarios);
@@ -65,7 +68,8 @@ public class UsuarioController {
 	                .orElseThrow(() -> new NegocioException("Usuário não encontrado."));
 	        return Collections.singletonList(usuarioDtoAssembler.toModel(usuario));
 	    } 
-		
+	
+		 
         return Collections.emptyList();
     }
 	
@@ -110,8 +114,6 @@ public class UsuarioController {
                
         return usuarioDtoAssembler.toModel(cadastroUsuarioService.salvarEdicao(usuarioAtual));
     }
-    
-    //ANALISAR SE AFETA A LÓGICA DE ESQUECI A SENHA O FATO DE PEDIR AUTENTICAÇÃO PARA ALTERAR A SENHA
     
     @PreAuthorize("#usuarioId == principal.id or hasRole('ADMIN')")
     @PutMapping("/{usuarioId}/senha")

@@ -33,7 +33,9 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @AllArgsConstructor
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -43,21 +45,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	MessageSource messageSource;
 
-	//não está capturando o código 500 de acesso negado!
-	@ExceptionHandler(AccessDeniedException.class)
-	public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
-
-	    HttpStatus status = HttpStatus.FORBIDDEN;
-	    ProblemType problemType = ProblemType.ACESSO_NEGADO;
-	    String detail = ex.getMessage();
-
-	    Problem problem = createProblemBuilder(status, problemType, detail)
-	            .userMessage(detail)
-	            .userMessage("Acesso negado. Você não possui permissão para executar essa operação.")
-	            .build();
-
-	    return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
-	}
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleUnCaptured(Exception ex, WebRequest request) {
@@ -73,6 +60,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		 *  durante, especialmente na fase de desenvolvimento. 
 		**/
 		ex.printStackTrace();
+		
 
 		Problem problem = createProblemBuilder(status, problemType, detail)
 				.userMessage(detail)
@@ -217,6 +205,23 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	/**
 	 * Exceptions personalizadas do projeto
 	 */
+	
+//não está capturando o código 500 de acesso negado!
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<?> handleEntidadeNaoEncontrada(AccessDeniedException ex, WebRequest request) {
+
+		HttpStatus status = HttpStatus.FORBIDDEN;
+		ProblemType problemType = ProblemType.ACESSO_NEGADO;
+		String detail = ex.getMessage();
+
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(detail)
+				.userMessage("Você não possui permissão para executar essa operação.")
+				.build();
+
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+	}
+	
 	@ExceptionHandler(EntidadeNaoEncontradaException.class)
 	public ResponseEntity<?> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException ex, WebRequest request) {
 

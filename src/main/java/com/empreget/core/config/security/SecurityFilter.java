@@ -32,7 +32,11 @@ public class SecurityFilter extends OncePerRequestFilter {
 
 		var token = this.recuperarToken(request);
 		if (token != null) {
-			var email = tokenService.validateToken(token);
+			var emailERole = tokenService.validarToken(token);
+			String[] parte = emailERole.split(";");
+			String email = parte[0];
+			System.out.println("email recuperado do token: " + email);
+			
 			Optional<UserDetails> user = usuarioRepository.findByEmail(email);
 
 			if(user.isPresent()) {

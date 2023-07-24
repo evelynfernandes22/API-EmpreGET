@@ -48,7 +48,7 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping("/prestadores")
 public class PrestadorController {
-
+	
 	private PrestadorRepository prestadorRepository;
 	private CatalogoPrestadorService catalogoPrestadorService;
 	private PrestadorDtoAssembler prestadorDtoAssembler;
@@ -91,11 +91,11 @@ public class PrestadorController {
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")	  
 	@GetMapping ("/perfis")
 	public List<PrestadorMinResponse> listarPerfilPrestador(){
+		
 		return prestadorRepository.findAll()
 				.stream()
 				.map(prestador -> prestadorDtoAssembler.toModelMin(prestador))
 				.collect(Collectors.toList());
-				
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
@@ -104,9 +104,22 @@ public class PrestadorController {
 		return prestadorDtoAssembler.toCollectionMinFilterModel(catalogoPrestadorService.buscarPorNomeContem(nome));
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN', 'PRESTADOR')")
+	@GetMapping("/{prestadorId}/ordens-servico")
+	public List<OrdemServicoDataResponse> buscarPorDataServico(@PathVariable Long prestadorId, 
+			@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataServico){
+		return ordemServicoDtoAssembler
+				.toCollectionOSDataModel(catalogoPrestadorService.buscarOrdensServicoPorDataServico(prestadorId, dataServico));
+	}
+	
 	@PreAuthorize("#prestadorId == principal.id or hasAnyRole('ADMIN', 'CLIENTE')")
 	@GetMapping("/{prestadorId}")
 	public PrestadorResponse buscarPorId(@PathVariable Long prestadorId){
+		
+		//TESTANDO...
+		System.out.println("ID do usuário acessado: " + prestadorId);
+	    System.out.println("ID do usuário autenticado: " + ((Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId());
+		
 		return prestadorDtoAssembler.toModel(catalogoPrestadorService.buscarOuFalhar(prestadorId));
 	}
 
@@ -114,14 +127,6 @@ public class PrestadorController {
 	@GetMapping("/perfil/{prestadorId}")
 	public PrestadorMinResponse buscarPorIdPerfil(@PathVariable Long prestadorId){
 		return prestadorDtoAssembler.toModelMin(catalogoPrestadorService.buscarOuFalhar(prestadorId));
-	}
-
-	@PreAuthorize("hasAnyRole('ADMIN', 'PRESTADOR')")
-	@GetMapping("/{prestadorId}/ordens-servico")
-	public List<OrdemServicoDataResponse> buscarPorDataServico(@PathVariable Long prestadorId, 
-			@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataServico){
-		return ordemServicoDtoAssembler
-				.toCollectionOSDataModel(catalogoPrestadorService.buscarOrdensServicoPorDataServico(prestadorId, dataServico));
 	}
 	
 	@PostMapping

@@ -35,9 +35,9 @@ public class AutenticacaoController {
 		try {
 			var emailESenha  = new UsernamePasswordAuthenticationToken(input.getEmail(), input.getSenha());
 			var auth = this.authenticationManager.authenticate(emailESenha);
-			
+						
 			  var token = tokenService.geradorDeToken((Usuario) auth.getPrincipal());
-			
+			 			
 			return ResponseEntity.ok(new LoginResponse(token));
 		}catch (BadCredentialsException e) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

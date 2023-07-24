@@ -76,7 +76,7 @@ public class ClienteController {
 	@PreAuthorize("#clienteId == principal.id or hasRole('ADMIN')")
 	@GetMapping("/{clienteId}")
 	public ClienteResponse buscarPorId(@PathVariable Long clienteId) {
-		return clienteAssembler.toModel(catalogoClienteService.buscarOuFalhar(clienteId));
+	    return clienteAssembler.toModel(catalogoClienteService.buscarOuFalhar(clienteId));
 	}
 
 

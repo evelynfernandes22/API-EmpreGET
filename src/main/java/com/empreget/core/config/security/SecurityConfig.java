@@ -3,7 +3,6 @@ package com.empreget.core.config.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -23,6 +22,7 @@ public class SecurityConfig {
 	
 	@Autowired
 	private SecurityFilter securityFilter;
+	
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -30,8 +30,7 @@ public class SecurityConfig {
 		return httpSecurity
 				.csrf().disable()
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.cors()
-				.and()
+				.cors().and()
 				.addFilterBefore(securityFilter,UsernamePasswordAuthenticationFilter.class)
 				.build();
 	}
@@ -47,4 +46,5 @@ public class SecurityConfig {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+
 }
