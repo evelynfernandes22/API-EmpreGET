@@ -112,18 +112,13 @@ public class PrestadorController {
 				.toCollectionOSDataModel(catalogoPrestadorService.buscarOrdensServicoPorDataServico(prestadorId, dataServico));
 	}
 	
-	@PreAuthorize("#prestadorId == principal.id or hasAnyRole('ADMIN', 'CLIENTE')")
+	@PreAuthorize("@acessoService.verificarAcessoProprioPrestador(#prestadorId) or hasAnyRole('ADMIN', 'CLIENTE')")
 	@GetMapping("/{prestadorId}")
 	public PrestadorResponse buscarPorId(@PathVariable Long prestadorId){
-		
-		//TESTANDO...
-		System.out.println("ID do usuário acessado: " + prestadorId);
-	    System.out.println("ID do usuário autenticado: " + ((Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId());
-		
 		return prestadorDtoAssembler.toModel(catalogoPrestadorService.buscarOuFalhar(prestadorId));
 	}
-
-	@PreAuthorize("#prestadorId == principal.id or hasAnyRole('ADMIN', 'CLIENTE')")
+	
+	@PreAuthorize("@acessoService.verificarAcessoProprioPrestador(#prestadorId) or hasAnyRole('ADMIN', 'CLIENTE')")
 	@GetMapping("/perfil/{prestadorId}")
 	public PrestadorMinResponse buscarPorIdPerfil(@PathVariable Long prestadorId){
 		return prestadorDtoAssembler.toModelMin(catalogoPrestadorService.buscarOuFalhar(prestadorId));
@@ -149,7 +144,7 @@ public class PrestadorController {
 		
 	}
 	
-	@PreAuthorize("#prestadorId == principal.id or hasRole('ADMIN')")
+	@PreAuthorize("@acessoService.verificarAcessoProprioPrestador(#prestadorId) or hasRole('ADMIN')")
 	@PutMapping("/{prestadorId}")
 	public PrestadorResponse editar(@PathVariable Long prestadorId, @RequestBody @Valid PrestadorInput prestadorInput) {
 			

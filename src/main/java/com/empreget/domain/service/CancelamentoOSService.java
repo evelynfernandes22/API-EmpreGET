@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.empreget.domain.exception.OrdemServicoNaoEncontradoException;
 import com.empreget.domain.model.OrdemServico;
-import com.empreget.domain.repository.OrdemServicoRepositoy;
+import com.empreget.domain.repository.OrdemServicoRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -19,7 +19,7 @@ public class CancelamentoOSService {
 	 * solicitação de cancelamento feito pelo cliente, verificar se haverá?
 	 */
 	
-	private OrdemServicoRepositoy ordemServicoRepositoy;
+	private OrdemServicoRepository ordemServicoRepositoy;
 	private BuscaOSService buscaOSService;
 	
 	@Transactional

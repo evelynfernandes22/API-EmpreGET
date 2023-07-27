@@ -68,13 +68,12 @@ public class UsuarioController {
 	                .orElseThrow(() -> new NegocioException("Usuário não encontrado."));
 	        return Collections.singletonList(usuarioDtoAssembler.toModel(usuario));
 	    } 
-	
 		 
         return Collections.emptyList();
     }
 	
 	
-	@PreAuthorize("#usuarioId == principal.id or hasRole('ADMIN')")
+	@PreAuthorize("@acessoService.verificarAcessoProprioUsuario(#usuarioId) or hasRole('ADMIN')")
     @GetMapping("/{usuarioId}")
     public UsuarioResponse buscar(@PathVariable Long usuarioId) {
         Usuario usuario = cadastroUsuarioService.buscarOuFalhar(usuarioId);
@@ -96,7 +95,7 @@ public class UsuarioController {
     	}
     }
     
-    @PreAuthorize("#usuarioId == principal.id and isAuthenticated()")
+    @PreAuthorize("@acessoService.verificarAcessoProprioUsuario(#usuarioId) and isAuthenticated()")
     @PutMapping("/{usuarioId}")
     public UsuarioResponse atualizarEmail(@PathVariable Long usuarioId,
             @RequestBody @Valid UsuarioEmailInput usuarioInput) {
@@ -115,7 +114,7 @@ public class UsuarioController {
         return usuarioDtoAssembler.toModel(cadastroUsuarioService.salvarEdicao(usuarioAtual));
     }
     
-    @PreAuthorize("#usuarioId == principal.id or hasRole('ADMIN')")
+    @PreAuthorize("@acessoService.verificarAcessoProprioUsuario(#usuarioId) or hasRole('ADMIN')")
     @PutMapping("/{usuarioId}/senha")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void alterarSenha(@PathVariable Long usuarioId, @RequestBody @Valid SenhaInput senhaInput) {

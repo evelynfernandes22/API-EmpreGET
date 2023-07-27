@@ -2,6 +2,7 @@ package com.empreget.api.controller;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -32,7 +33,7 @@ import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.model.Cliente;
 import com.empreget.domain.model.OrdemServico;
 import com.empreget.domain.repository.ClienteRepository;
-import com.empreget.domain.repository.OrdemServicoRepositoy;
+import com.empreget.domain.repository.OrdemServicoRepository;
 import com.empreget.domain.service.CancelamentoOSService;
 import com.empreget.domain.service.SolicitacaoOSService;
 
@@ -43,7 +44,7 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/os")
 public class OrdemServicoController {
 
-	private OrdemServicoRepositoy ordemServicoRepository;
+	private OrdemServicoRepository ordemServicoRepository;
 	private SolicitacaoOSService solicitacaoOSService;
 	private OrdemServicoDtoAssembler ordemServicoAssembler;
 	private OrdemServicoInputDisassembler ordemServicoInputDisassembler;
@@ -72,7 +73,7 @@ public class OrdemServicoController {
 	}
 
 
-	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
+//	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
 	@GetMapping
 	public List<OrdemServicoResponse> listar() {
 
@@ -116,18 +117,22 @@ public class OrdemServicoController {
 	    return Collections.emptyList();
 	}
 
-
+	@PreAuthorize("@acessoService.verificarAcessoProprioOrdemServico(#id)")
 	@GetMapping("/{id}")
 	public ResponseEntity<OrdemServicoResponse> buscar(@PathVariable Long id) {
-		return ordemServicoRepository.findById(id)
-				.map(ordemServico -> {
-					OrdemServicoResponse ordemServicoResponse = ordemServicoAssembler.toModel(ordemServico);
-					puxarEnderecoEServico(ordemServico, ordemServicoResponse);
-
-					return ResponseEntity.ok(ordemServicoResponse);
-				}).orElse(ResponseEntity.notFound().build());
-	}
-	
+		Optional<OrdemServico> ordemServicoOptional = ordemServicoRepository.findById(id);
+	    
+	    if (ordemServicoOptional.isPresent()) {
+	        OrdemServico ordemServico = ordemServicoOptional.get();
+	       
+	        OrdemServicoResponse ordemServicoResponse = ordemServicoAssembler.toModel(ordemServico);
+	        puxarEnderecoEServico(ordemServico, ordemServicoResponse);
+	        return ResponseEntity.ok(ordemServicoResponse);
+	   } else {
+	        return ResponseEntity.notFound().build();
+	    }
+	}	
+		
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
 	@PutMapping("/{ordemServicoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)

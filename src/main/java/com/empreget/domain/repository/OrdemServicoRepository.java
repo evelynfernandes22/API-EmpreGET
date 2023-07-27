@@ -13,7 +13,7 @@ import com.empreget.domain.model.OrdemServico;
 import com.empreget.domain.model.Prestador;
 
 @Repository
-public interface OrdemServicoRepositoy extends JpaRepository<OrdemServico, Long>{
+public interface OrdemServicoRepository extends JpaRepository<OrdemServico, Long>{
 
 	boolean existsByPrestadorAndDataServico(Prestador prestador, LocalDate dataServico);
 	

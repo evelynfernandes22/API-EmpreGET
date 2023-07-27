@@ -16,7 +16,7 @@ import com.empreget.domain.model.OrdemServico;
 import com.empreget.domain.model.Prestador;
 import com.empreget.domain.model.enums.StatusAgenda;
 import com.empreget.domain.model.enums.StatusOrdemServico;
-import com.empreget.domain.repository.OrdemServicoRepositoy;
+import com.empreget.domain.repository.OrdemServicoRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -24,7 +24,7 @@ import lombok.AllArgsConstructor;
 @Service
 public class SolicitacaoOSService {
 
-	private OrdemServicoRepositoy ordemServicoRepositoy;
+	private OrdemServicoRepository ordemServicoRepositoy;
 	private CatalogoClienteService catalogoClienteService;
 	private CatalogoPrestadorService catalogoPrestadorService;
 	private BuscaOSService buscaOSService;

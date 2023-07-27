@@ -27,7 +27,7 @@ public class TokenService {
 			String subject = usuario.getEmail() + ";" + usuario.getRole(); 
 			String token = JWT.create()
 					.withIssuer("empreget-api")
-					.withSubject(subject) //payload com email e role
+					.withSubject(subject) 
 					.withExpiresAt(genExpirationDate())
 					.sign(algorithm);
 			return token;

@@ -73,7 +73,7 @@ public class ClienteController {
 	    return Collections.emptyList();
 	}
 	
-	@PreAuthorize("#clienteId == principal.id or hasRole('ADMIN')")
+	@PreAuthorize("@acessoService.verificarAcessoProprioCliente(#clienteId) or hasRole('ADMIN')")
 	@GetMapping("/{clienteId}")
 	public ClienteResponse buscarPorId(@PathVariable Long clienteId) {
 	    return clienteAssembler.toModel(catalogoClienteService.buscarOuFalhar(clienteId));
@@ -99,11 +99,11 @@ public class ClienteController {
 		return clienteAssembler.toModel(catalogoClienteService.salvar(cliente));
 	}
 	
-	@PreAuthorize("#clienteId == principal.id or hasRole('ADMIN')")
+	@PreAuthorize("@acessoService.verificarAcessoProprioCliente(#clienteId) or hasRole('ADMIN')")
 	@PutMapping("/{clienteId}")
 	public ClienteResponse editar(@PathVariable Long clienteId, @Valid @RequestBody ClienteInput clienteinput) {
+		
 		Cliente cliente = clienteInputDisassembler.toDomainObject(clienteinput);
-
 		Cliente clienteAtual = catalogoClienteService.buscarOuFalhar(clienteId);
 
 		BeanUtils.copyProperties(cliente, clienteAtual, 
