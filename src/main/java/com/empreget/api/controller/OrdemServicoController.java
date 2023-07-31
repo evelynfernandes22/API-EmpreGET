@@ -133,22 +133,22 @@ public class OrdemServicoController {
 	    }
 	}	
 		
-	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
+	@PreAuthorize("@acessoService.verificarAcessoProprioOrdemServico(#ordemServicoId) and hasAnyRole('ADMIN', 'CLIENTE')")
 	@PutMapping("/{ordemServicoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void cancelar (@PathVariable Long ordemServicoId){		
+	public void cancelar (@PathVariable Long ordemServicoId){	
 		cancelamentoOSService.cancelar(ordemServicoId);
 		
 	}
 	
-	@PreAuthorize("hasRole('PRESTADOR')")
+	@PreAuthorize("@acessoService.verificarAcessoProprioOrdemServico(#id) and hasRole('PRESTADOR')")
 	@PutMapping("/{id}/aceite")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void aceitar (@PathVariable Long id) {
 		solicitacaoOSService.aceitar(id);
 	}
 	
-	@PreAuthorize("hasRole('PRESTADOR')")
+	@PreAuthorize("@acessoService.verificarAcessoProprioOrdemServico(#id) and hasRole('PRESTADOR')")
 	@PutMapping("/{id}/recusa")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void recusar (@PathVariable Long id) {

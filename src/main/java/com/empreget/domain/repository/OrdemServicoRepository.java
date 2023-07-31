@@ -36,7 +36,7 @@ public interface OrdemServicoRepository extends JpaRepository<OrdemServico, Long
 	           "WHERE os.cliente = :cliente " +
 	           "AND os.dataServico = :dataServico " +
 	           "AND os.statusOrdemServico NOT IN :status")
-	boolean clinteJaSolicitouOSNaData(@Param("cliente")Cliente cliente, 
+	boolean clienteJaSolicitouOSNaData(@Param("cliente")Cliente cliente, 
 										@Param("dataServico")LocalDate dataServico, 
 										@Param("status")List<StatusOrdemServico> status);
 }

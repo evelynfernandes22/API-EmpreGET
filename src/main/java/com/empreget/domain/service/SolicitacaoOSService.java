@@ -48,7 +48,7 @@ public class SolicitacaoOSService {
 			Cliente cliente = catalogoClienteService.buscarOuFalhar(ordemServico.getCliente().getId());
 			Prestador prestador = catalogoPrestadorService.buscarOuFalhar(ordemServico.getPrestador().getId());
 
-			boolean clienteJaSolicitouNaData = ordemServicoRepositoy.clinteJaSolicitouOSNaData(cliente, dataServico, Arrays.asList(StatusOrdemServico.FINALIZADO, StatusOrdemServico.CANCELADO));
+			boolean clienteJaSolicitouNaData = ordemServicoRepositoy.clienteJaSolicitouOSNaData(cliente, dataServico, Arrays.asList(StatusOrdemServico.FINALIZADO, StatusOrdemServico.CANCELADO));
 
 			if (ordemServicoRepositoy.existsByPrestadorAndDataServico(prestador, dataServico)) {
 				throw new NegocioException("Já existe uma ordem de serviço para o mesmo prestador na mesma data");
