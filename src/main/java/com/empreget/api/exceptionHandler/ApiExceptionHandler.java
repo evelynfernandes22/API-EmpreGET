@@ -1,6 +1,5 @@
 package com.empreget.api.exceptionHandler;
 
-import java.nio.file.AccessDeniedException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,12 +8,11 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -48,19 +46,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleUnCaptured(Exception ex, WebRequest request) {
+					
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 		ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
 		String detail = MSG_ERRO_GENERICA_USUARIO_FINAL;
 
-		/** 
-		 * REMOVER ANTES DO DEPLOY.
-		 *  É importante colocar o printStackTrace (pelo menos por enquanto, que não estamos
-		 *  fazendo logging) para mostrar a stacktrace no console
-		 *  Se não fizer isso, não vamos conseguir ver a stacktrace de exceptions que são importantes
-		 *  durante, especialmente na fase de desenvolvimento. 
-		**/
-		ex.printStackTrace();
-		
+		log.error(ex.getMessage(), ex);
 
 		Problem problem = createProblemBuilder(status, problemType, detail)
 				.userMessage(detail)
@@ -206,20 +197,20 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	 * Exceptions personalizadas do projeto
 	 */
 	
-//não está capturando o código 500 de acesso negado!
+	
 	@ExceptionHandler(AccessDeniedException.class)
-	public ResponseEntity<?> handleEntidadeNaoEncontrada(AccessDeniedException ex, WebRequest request) {
+	public ResponseEntity<?> handleAcessoNegado(AccessDeniedException ex, WebRequest request) {
 
-		HttpStatus status = HttpStatus.FORBIDDEN;
-		ProblemType problemType = ProblemType.ACESSO_NEGADO;
-		String detail = ex.getMessage();
+	    HttpStatus status = HttpStatus.FORBIDDEN;
+	    ProblemType problemType = ProblemType.ACESSO_NEGADO;
+	    String detail = ex.getMessage();
 
-		Problem problem = createProblemBuilder(status, problemType, detail)
-				.userMessage(detail)
-				.userMessage("Você não possui permissão para executar essa operação.")
-				.build();
+	    Problem problem = createProblemBuilder(status, problemType, detail)
+	            .userMessage(detail)
+	            .userMessage("Você não possui permissão para executar essa operação.")
+	            .build();
 
-		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+	    return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
 	
 	@ExceptionHandler(EntidadeNaoEncontradaException.class)
