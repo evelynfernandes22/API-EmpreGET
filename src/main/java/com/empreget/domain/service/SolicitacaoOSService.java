@@ -2,6 +2,7 @@ package com.empreget.domain.service;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
@@ -36,9 +37,8 @@ public class SolicitacaoOSService {
 	public OrdemServico solicitar(OrdemServico ordemServico) {
 		
 		LocalDate dataServico = ordemServico.getDataServico();
-		/*
-		 * Gera um mapa e armazena instancias de dataServico
-		 */
+				
+		
 		ReentrantLock lock = locks.computeIfAbsent(dataServico, k -> new ReentrantLock());
 
 		lock.lock(); //uma trava é adiquirida de ReentrantLock
@@ -48,9 +48,16 @@ public class SolicitacaoOSService {
 			Cliente cliente = catalogoClienteService.buscarOuFalhar(ordemServico.getCliente().getId());
 			Prestador prestador = catalogoPrestadorService.buscarOuFalhar(ordemServico.getPrestador().getId());
 
+			boolean clienteJaSolicitouNaData = ordemServicoRepositoy.clinteJaSolicitouOSNaData(cliente, dataServico, Arrays.asList(StatusOrdemServico.FINALIZADO, StatusOrdemServico.CANCELADO));
+
 			if (ordemServicoRepositoy.existsByPrestadorAndDataServico(prestador, dataServico)) {
 				throw new NegocioException("Já existe uma ordem de serviço para o mesmo prestador na mesma data");
 			}
+			
+			if(clienteJaSolicitouNaData) {
+				throw new NegocioException(String.format("O cliente %s já possui uma ordem de serviço ativa na data %s ", ordemServico.getCliente().getNome(), dataServico));
+			}
+			
 			ordemServico.setCliente(cliente);
 			ordemServico.setPrestador(prestador);
 			ordemServico.setStatusOrdemServico(StatusOrdemServico.AGUARDANDO_ACEITE);
