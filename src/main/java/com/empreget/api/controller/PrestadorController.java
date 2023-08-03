@@ -56,9 +56,52 @@ public class PrestadorController {
 	private CadastroUsuarioService cadastroUsuarioService;
 	private OrdemServicoDtoAssembler ordemServicoDtoAssembler;
 
+//Lista com dados completos
+		@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
+		@GetMapping
+		public List<PrestadorResponse> listar(){
+			
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			List<String> roles = authentication.getAuthorities()
+					.stream()
+					.map(GrantedAuthority::getAuthority)
+					.collect(Collectors.toList());
+			
+			if(roles.contains("ROLE_ADMIN") || roles.contains("ROLE_CLIENTE")) {
+				return prestadorRepository.findAll()
+						.stream()
+						.map(prestador -> prestadorDtoAssembler.toModel(prestador))
+						.collect(Collectors.toList());
+			}else if(roles.contains("ROLE_PRESTADOR")) {
+				String emailUser = authentication.getName();
+				Prestador prestador = prestadorRepository.findByUsuarioEmail(emailUser)
+						.orElseThrow(() -> new NegocioException("Prestador não encontrado."));
+				return Collections.singletonList(prestadorDtoAssembler.toModel(prestador));
+			}
+			return Collections.emptyList();
+		}	
+	
+//TELA HOME
+	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
+	@GetMapping("/regiao/{regiao}")
+	public List<PrestadorFiltroRegiaoResponse> listarPorRegiao(@PathVariable String regiao){
+		
+			Regiao regiaoEnum = Regiao.valueOf(regiao.toUpperCase());
+			return  prestadorDtoAssembler.toCollectionMinFilterModel(catalogoPrestadorService.obterPrestadoresPorRegiao(regiaoEnum));
+	}
+	
+//TELA HOME
+	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
+	@GetMapping("/nome-contem/{nome}")
+	public List<PrestadorFiltroRegiaoResponse> buscarPorNomeContem(@PathVariable String nome) {
+		return prestadorDtoAssembler.toCollectionMinFilterModel(catalogoPrestadorService.buscarPorNomeContem(nome));
+	}
+	
+	
+//TELA HOME - lista todos de forma mínima
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
-	@GetMapping
-	public List<PrestadorResponse> listar(){
+	@GetMapping("/filtro")
+	public List<PrestadorFiltroRegiaoResponse> listarTodosNoFiltro(){
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		List<String> roles = authentication.getAuthorities()
@@ -69,25 +112,18 @@ public class PrestadorController {
 		if(roles.contains("ROLE_ADMIN") || roles.contains("ROLE_CLIENTE")) {
 			return prestadorRepository.findAll()
 					.stream()
-					.map(prestador -> prestadorDtoAssembler.toModel(prestador))
+					.map(prestador -> prestadorDtoAssembler.toModelMinFilter(prestador))
 					.collect(Collectors.toList());
 		}else if(roles.contains("ROLE_PRESTADOR")) {
 			String emailUser = authentication.getName();
 			Prestador prestador = prestadorRepository.findByUsuarioEmail(emailUser)
 					.orElseThrow(() -> new NegocioException("Prestador não encontrado."));
-			return Collections.singletonList(prestadorDtoAssembler.toModel(prestador));
+			return Collections.singletonList(prestadorDtoAssembler.toModelMinFilter(prestador));
 		}
 		return Collections.emptyList();
-	}
+	}	
 	
-	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
-	@GetMapping("/regiao/{regiao}")
-	public List<PrestadorFiltroRegiaoResponse> listarPorRegiao(@PathVariable String regiao){
-		
-			Regiao regiaoEnum = Regiao.valueOf(regiao.toUpperCase());
-			return  prestadorDtoAssembler.toCollectionMinFilterModel(catalogoPrestadorService.obterPrestadoresPorRegiao(regiaoEnum));
-	}
-
+//TELA DETALHES DO PERFIL
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")	  
 	@GetMapping ("/perfis")
 	public List<PrestadorMinResponse> listarPerfilPrestador(){
@@ -98,12 +134,8 @@ public class PrestadorController {
 				.collect(Collectors.toList());
 	}
 
-	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
-	@GetMapping("/nome-contem/{nome}")
-	public List<PrestadorFiltroRegiaoResponse> buscarPorNomeContem(@PathVariable String nome) {
-		return prestadorDtoAssembler.toCollectionMinFilterModel(catalogoPrestadorService.buscarPorNomeContem(nome));
-	}
 	
+// TELA PRESTADOR
 	@PreAuthorize("hasAnyRole('ADMIN', 'PRESTADOR')")
 	@GetMapping("/{prestadorId}/ordens-servico")
 	public List<OrdemServicoDataResponse> buscarPorDataServico(@PathVariable Long prestadorId, 
@@ -111,6 +143,7 @@ public class PrestadorController {
 		return ordemServicoDtoAssembler
 				.toCollectionOSDataModel(catalogoPrestadorService.buscarOrdensServicoPorDataServico(prestadorId, dataServico));
 	}
+	
 	
 	@PreAuthorize("@acessoService.verificarAcessoProprioPrestador(#prestadorId) or hasAnyRole('ADMIN', 'CLIENTE')")
 	@GetMapping("/{prestadorId}")
@@ -124,6 +157,7 @@ public class PrestadorController {
 		return prestadorDtoAssembler.toModelMin(catalogoPrestadorService.buscarOuFalhar(prestadorId));
 	}
 	
+//TELA CADASTRO
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public PrestadorResponse adicionar(@Valid @RequestBody PrestadorInput prestadorInput) {
@@ -143,7 +177,7 @@ public class PrestadorController {
 		return prestadorDtoAssembler.toModel(catalogoPrestadorService.salvar(prestador));
 		
 	}
-	
+//TELA EDITAR	
 	@PreAuthorize("@acessoService.verificarAcessoProprioPrestador(#prestadorId) or hasRole('ADMIN')")
 	@PutMapping("/{prestadorId}")
 	public PrestadorResponse editar(@PathVariable Long prestadorId, @RequestBody @Valid PrestadorInput prestadorInput) {
@@ -168,5 +202,7 @@ public class PrestadorController {
 		catalogoPrestadorService.excluir(prestadorId);
 		
 	}
+
+
 	
 }
