@@ -117,7 +117,7 @@ public class OrdemServicoController {
 	    return Collections.emptyList();
 	}
 
-	@PreAuthorize("@acessoService.verificarAcessoProprioOrdemServico(#id)")
+	@PreAuthorize("@acessoService.verificarAcessoProprioOrdemServico(#id) or hasAnyRole('ADMIN')")
 	@GetMapping("/{id}")
 	public ResponseEntity<OrdemServicoResponse> buscar(@PathVariable Long id) {
 		Optional<OrdemServico> ordemServicoOptional = ordemServicoRepository.findById(id);

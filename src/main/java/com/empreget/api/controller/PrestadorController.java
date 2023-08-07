@@ -98,7 +98,7 @@ public class PrestadorController {
 	}
 	
 	
-//TELA HOME - lista todos de forma mínima
+//TELA HOME - lista todos de forma mínima para ser utilizado no catálogo
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
 	@GetMapping("/filtro")
 	public List<PrestadorFiltroRegiaoResponse> listarTodosNoFiltro(){
