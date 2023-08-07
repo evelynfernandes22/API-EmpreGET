@@ -1,0 +1,1339 @@
+{
+	"info": {
+		"_postman_id": "4a85b139-3973-41a7-b7da-129c6176976a",
+		"name": "EmpreGet - Oficial",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21803914"
+	},
+	"item": [
+		{
+			"name": "Cliente",
+			"item": [
+				{
+					"name": "Cliente - Cadastrar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb20iLCJleHAiOjE2ODk2MzYxODd9.ki4-fTQIX9lxWQnDABjZeKdm20kwGYq6ZmIOduqls5I",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"nome\": \"Camila Moura\",\r\n    \"imgUrl\": null,\r\n     \"endereco\": {\r\n        \"logradouro\": \"Rua tals\",\r\n        \"numero\": 1,\r\n        \"complemento\": \"casa\",\r\n        \"cep\": \"86000-000\",\r\n        \"bairro\": \"Novo Horizonte\",\r\n        \"cidade\": \"Londrina\",\r\n        \"estado\": \"PR\",\r\n        \"pais\": \"BRA\"\r\n    },\r\n    \"rg\": \"7777777-7\",\r\n    \"cpf\": \"555.444.555-20\",\r\n    \"telefone\": \"43 9999-9999\",\r\n    \"usuario\": {\r\n        \"email\" : \"cami@email.com\",\r\n        \"senha\" : \"123\",\r\n        \"role\" : \"CLIENTE\" \r\n    } \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/clientes",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"clientes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cliente - Listar",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MDI0NTk5OX0.7vgCnlMwDHmUPyyKXbECUe23V8sD4qxrFE11B7X2_gk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/clientes",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"clientes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cliente - BuscarPorId",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MDQ4NTUzOH0.ItA4VWiMSbS99EusNLoLizR2ARZZmtO24v-_ymxNsUs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/clientes/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"clientes",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cliente - Excluir",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhZG1pbkBlbWFpbC5jb207QURNSU4iLCJleHAiOjE2OTAyNDcyNzF9.Qdol-ZqgML5_gZjmUY4H-VteqXxXo_SaCefx4LBD-lM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/clientes/4",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"clientes",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cliente - Editar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MDI0NzE0N30.rvhIWfgisKkmi-mqtKqrH5Jx_NHiny_58zhaprGWWzw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\r\n    \"nome\": \"Ana\",\r\n    \"imgUrl\": null,\r\n\r\n    \"endereco\": {\r\n        \"logradouro\": \"Rua das Amoreiras\",\r\n        \"numero\": 1,\r\n        \"complemento\": \"Bloco A\",\r\n        \"cep\": \"86000-000\",\r\n        \"bairro\": \"Canção\",\r\n        \"cidade\": \"Londrina\",\r\n        \"estado\": \"PR\",\r\n        \"pais\": \"BRA\"\r\n    },\r\n    \"rg\": \"7777777-7\",\r\n    \"cpf\": \"555.444.555-20\",\r\n    \"telefone\": \"43 9999-9999\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/clientes/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"clientes",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Prestador",
+			"item": [
+				{
+					"name": "Prestador - Adicionar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb20iLCJleHAiOjE2ODk2MjY5NTV9.leupOOiGf7-0mU0LSBQVgNBhheagnR8m4Q8-C4EHoLo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"nome\" : \"Cristina Maria \",\r\n    \"imgUrl\": null,\r\n    \"endereco\": {\r\n        \"logradouro\": \"Rua Pernambuco\",\r\n        \"numero\": 505,\r\n        \"complemento\": \"Casa\",\r\n        \"cep\": \"86000-000\",\r\n        \"bairro\": \"Centro\",\r\n        \"cidade\": \"Londrina\",\r\n        \"estado\": \"PR\",\r\n        \"pais\": \"BRA\"\r\n    },\r\n    \"regiao\": \"CENTRO\",\r\n    \"rg\": \"2222222-0\",\r\n    \"cpf\": \"333.333.333-33\",\r\n    \"telefone\": \"43 9999-9994\",\r\n    \"usuario\": {\r\n        \"email\" : \"cris@email.com\",\r\n        \"senha\" : \"123\",\r\n         \"role\" : \"PRESTADOR\"\r\n    },\r\n     \"servico\": {\r\n        \"descricao\": \"faxina, lavar e passar\",\r\n        \"valor\": 150\r\n    },\r\n    \"observacao\":  \"Perfeccionista, deixo tinindo\",\r\n    \"disponibilidade\": \"De Seguda à sexta-feira, horário comercial\"        \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/prestadores",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prestadores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Prestador - Listar",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MTA5OTEzOH0.EQXEJz7S78yCDcuPuEc6ae6DkiBUhMjUrOsQt6Zli_o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/prestadores",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prestadores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Prestador - Listar todos (Filtro)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MTEwNzUwM30.vogIFjqfJfkogYyBiHMMfuKxd-3GjjbfBlwoSDb6Wuk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/prestadores/filtro",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prestadores",
+								"filtro"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Prestador - Listar por Regiao",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb20iLCJleHAiOjE2ODk4MDM2MzN9.WuX7TpvXdQm6mIo1ff-aMTgJ-bJcnXn9kHRuJSDrPZw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/prestadores/regiao/CENTRO",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prestadores",
+								"regiao",
+								"CENTRO"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Prestador - Listar perfis resumidos",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MTEwNzUwM30.vogIFjqfJfkogYyBiHMMfuKxd-3GjjbfBlwoSDb6Wuk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/prestadores/perfis",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prestadores",
+								"perfis"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Prestador - BuscarPorIdPerfil",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MTEwNzUwM30.vogIFjqfJfkogYyBiHMMfuKxd-3GjjbfBlwoSDb6Wuk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/prestadores/perfis/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prestadores",
+								"perfis",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Prestador - Buscar por nome contém",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MTEwNzUwM30.vogIFjqfJfkogYyBiHMMfuKxd-3GjjbfBlwoSDb6Wuk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/prestadores/nome-contem/Mari",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prestadores",
+								"nome-contem",
+								"Mari"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Prestador - Buscar DataServico",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkwMjQ3NDA4fQ.CwtsQ9lv0g7mZBYIJqFkqbxrp5KyXtN7zETlNW6FKII",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/prestadores/1/ordens-servico?data=2023-05-20",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prestadores",
+								"1",
+								"ordens-servico"
+							],
+							"query": [
+								{
+									"key": "data",
+									"value": "2023-05-20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Prestador - BuscaPorId",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkwNDkxNDEyfQ.6kPI05wNBU2c2dDuhNPJofVFAMddk5tc_QW3MFI_LqY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/prestadores/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prestadores",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Prestador - BuscarPorIdPerfil",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkwNDkxNDEyfQ.6kPI05wNBU2c2dDuhNPJofVFAMddk5tc_QW3MFI_LqY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/prestadores/perfil/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prestadores",
+								"perfil",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Prestadores - Editar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkwMjQ5ODgxfQ.e4f_GmNUnvn-spLQcWBREijQEFurhEsHu4mnH0DrxnA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"nome\": \"Sueli\",\r\n    \"endereco\": {\r\n        \"logradouro\": \"Rua Venezuela\",\r\n        \"numero\": 2002,\r\n        \"complemento\": \"Casa\",\r\n        \"cep\": \"86000-000\",\r\n        \"bairro\": \"tals\",\r\n        \"cidade\": \"Londrina\",\r\n        \"estado\": \"PR\",\r\n        \"pais\": \"BRA\"\r\n    },\r\n    \"regiao\": \"LESTE\",\r\n    \"rg\": \"2222222-0\",\r\n    \"cpf\": \"333.333.333-33\",\r\n    \"telefone\": \"43 9999-9994\",\r\n     \"servico\": {\r\n        \"descricao\": \"faxina, lavar e passar\",\r\n        \"valor\": 150\r\n    },\r\n    \"observacao\":  \"Perfeccionista, deixo tinindo\",\r\n    \"disponibilidade\": \"De Seguda à sexta-feira, horário comercial\"        \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/prestadores/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prestadores",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Prestadores - Excluir",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhZG1pbkBlbWFpbC5jb207QURNSU4iLCJleHAiOjE2OTAyNDcyNzF9.Qdol-ZqgML5_gZjmUY4H-VteqXxXo_SaCefx4LBD-lM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/prestadores/3",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prestadores",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ordem de Serviço",
+			"item": [
+				{
+					"name": "OS - Listar",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MTQzMDA1NX0.CE5PXKRTts0Ym7XkxXAZESty7y6FPur6Jb0d0oDaoMY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/os",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"os"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OS - Solicitar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MTQzMDA1NX0.CE5PXKRTts0Ym7XkxXAZESty7y6FPur6Jb0d0oDaoMY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"prestador\": {\r\n        \"id\": 2\r\n    },\r\n    \"dataServico\": \"2023-08-08\", \r\n    \"periodo\": \"MATUTINO\",\r\n    \"tipoDeDiaria\": \"MEIA_DIARIA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/os",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"os"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OS - BuscarPorId",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MTQzMDA1NX0.CE5PXKRTts0Ym7XkxXAZESty7y6FPur6Jb0d0oDaoMY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/os/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"os",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OS - Finalizar",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/os/1/finalizacao",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"os",
+								"1",
+								"finalizacao"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OS - Cancelar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MDg0NDM3Mn0.KtX6slLX46Ry_WkzBVCtLMqYpog16s-VKIS9jyxtO7o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/os/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"os",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OS - Aceitar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MDg0NDg4NH0.h73WWyxPZhql3TmlyFD0okZdF1rMEIojvRog8HsEoY0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/os/1/aceite",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"os",
+								"1",
+								"aceite"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OS - Resusar",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/os/2/recusa",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"os",
+								"2",
+								"recusa"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Usuários",
+			"item": [
+				{
+					"name": "Usuarios - Listar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MDI0NTk5OX0.7vgCnlMwDHmUPyyKXbECUe23V8sD4qxrFE11B7X2_gk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/usuarios",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Usuarios - Buscar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MDI0OTEyNX0.Bwr4ytN-dKEI5qC6cdaDcf-hJHVwhohzQBdDvne5Snk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/usuarios/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Usuarios - Buscar por Email",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhZG1pbkBlbWFpbC5jb20iLCJleHAiOjE2ODk2Mjg4MDZ9.LJqhmin1Yz8sK6OO1TesSNFU4XniqWihCjkxQKZh_F4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/usuarios/email?email=ana.p@email.com",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios",
+								"email"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "ana.p@email.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Usuarios - Atualizar Email",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJjYW1pQGVtYWlsLmNvbTtDTElFTlRFIiwiZXhwIjoxNjkwMjQ5NDY3fQ.YS6KwmdfeLDjYqpTqXmBZ0f8CtwsKIcvGgobUqZFyMQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"ca@email.com\"\r\n   \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/usuarios/6",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Usuarios - Alterar senha",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MDI0OTY3NX0.oDG-LiSTJsrP_X6mExJQoN5NU3QNPi0FsdyxpMHtJ2A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"senhaAtual\" : \"123\",\r\n    \"novaSenha\" : \"aaa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/usuarios/3/senha",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios",
+								"3",
+								"senha"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Autenticação",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"ana.p@email.com\",\r\n    \"senha\" : \"123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/auth/login",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
