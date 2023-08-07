@@ -124,10 +124,16 @@ public class PrestadorController {
 	}	
 	
 //TELA DETALHES DO PERFIL
+	@PreAuthorize("@acessoService.verificarAcessoProprioPrestador(#prestadorId) or hasAnyRole('ADMIN', 'CLIENTE')")
+	@GetMapping("/perfis/{prestadorId}")
+	public PrestadorMinResponse buscarPerfilPorId(@PathVariable Long prestadorId){
+		return prestadorDtoAssembler.toModelMin(catalogoPrestadorService.buscarOuFalhar(prestadorId));
+	}
+	
+	//Remover caso não seja necessário...
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")	  
 	@GetMapping ("/perfis")
 	public List<PrestadorMinResponse> listarPerfilPrestador(){
-		
 		return prestadorRepository.findAll()
 				.stream()
 				.map(prestador -> prestadorDtoAssembler.toModelMin(prestador))
@@ -194,6 +200,8 @@ public class PrestadorController {
 		return prestadorDtoAssembler.toModel(catalogoPrestadorService.salvar(prestadorAtual));
 	
 	}
+	
+//Exclusivo para a tela do admin
 	
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{prestadorId}")

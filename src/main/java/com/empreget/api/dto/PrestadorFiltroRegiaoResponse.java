@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 public class PrestadorFiltroRegiaoResponse {
 	
+	private Long id;
 	private String imgUrl;
 	private String nome;
 	private Regiao regiao; 
