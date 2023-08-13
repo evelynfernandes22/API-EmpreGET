@@ -135,13 +135,5 @@ public class OrdemServico {
 	public boolean podeSerCancelado() {
 		return podeSerAceito() || podeSerFinalizado();
 	}
-			
-//	public boolean existeAgendamentoEmData(LocalDateTime data){
-//		   for(Agendamento agenda : agendamentos){
-//		      if(agenda.getData().equals(data))
-//		         return true;
-//		   }
-//		   return false;
-//		} 
 
 }

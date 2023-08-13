@@ -8,6 +8,11 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -59,7 +64,7 @@ public class PrestadorController {
 //Lista com dados completos
 		@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
 		@GetMapping
-		public List<PrestadorResponse> listar(){
+		public Page<PrestadorResponse> listar(@PageableDefault(size = 5) @SortDefault(sort = "nome") Pageable pageable){
 			
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			List<String> roles = authentication.getAuthorities()
@@ -68,40 +73,42 @@ public class PrestadorController {
 					.collect(Collectors.toList());
 			
 			if(roles.contains("ROLE_ADMIN") || roles.contains("ROLE_CLIENTE")) {
-				return prestadorRepository.findAll()
-						.stream()
-						.map(prestador -> prestadorDtoAssembler.toModel(prestador))
-						.collect(Collectors.toList());
+				Page<Prestador> prestadorPage = prestadorRepository.findAll(pageable);
+				return prestadorPage.map(prestador -> prestadorDtoAssembler.toModel(prestador));
+				
 			}else if(roles.contains("ROLE_PRESTADOR")) {
 				String emailUser = authentication.getName();
 				Prestador prestador = prestadorRepository.findByUsuarioEmail(emailUser)
 						.orElseThrow(() -> new NegocioException("Prestador não encontrado."));
-				return Collections.singletonList(prestadorDtoAssembler.toModel(prestador));
+				return new PageImpl<>(Collections.singletonList(prestadorDtoAssembler.toModel(prestador)));
 			}
-			return Collections.emptyList();
+			return new PageImpl<>(Collections.emptyList());
 		}	
+	
 	
 //TELA HOME
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
 	@GetMapping("/regiao/{regiao}")
-	public List<PrestadorFiltroRegiaoResponse> listarPorRegiao(@PathVariable String regiao){
+	public Page<PrestadorFiltroRegiaoResponse> listarPorRegiao(@PathVariable String regiao, @PageableDefault(size = 5) @SortDefault(sort = "nome") Pageable pageable){
 		
-			Regiao regiaoEnum = Regiao.valueOf(regiao.toUpperCase());
-			return  prestadorDtoAssembler.toCollectionMinFilterModel(catalogoPrestadorService.obterPrestadoresPorRegiao(regiaoEnum));
+		Regiao regiaoEnum = Regiao.valueOf(regiao.toUpperCase());
+		Page<Prestador> prestadorPage = catalogoPrestadorService.obterPrestadoresPorRegiao(regiaoEnum, pageable);
+		return prestadorPage.map(prestador -> prestadorDtoAssembler.toModelMinFilter(prestador));
 	}
 	
 //TELA HOME
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
 	@GetMapping("/nome-contem/{nome}")
-	public List<PrestadorFiltroRegiaoResponse> buscarPorNomeContem(@PathVariable String nome) {
-		return prestadorDtoAssembler.toCollectionMinFilterModel(catalogoPrestadorService.buscarPorNomeContem(nome));
+	public Page<PrestadorFiltroRegiaoResponse> ListarPorNomeContem(@PathVariable String nome, @PageableDefault(size = 5) @SortDefault(sort = "nome") Pageable pageable) {
+		Page<Prestador> prestadorPage = catalogoPrestadorService.buscarPorNomeContem(nome, pageable);
+		return prestadorPage.map(prestador -> prestadorDtoAssembler.toModelMinFilter(prestador));
 	}
 	
 	
 //TELA HOME - lista todos de forma mínima para ser utilizado no catálogo
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
 	@GetMapping("/filtro")
-	public List<PrestadorFiltroRegiaoResponse> listarTodosNoFiltro(){
+	public Page<PrestadorFiltroRegiaoResponse> listarTodosNoFiltro(@PageableDefault(size = 5) @SortDefault(sort = "nome") Pageable pageable){
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		List<String> roles = authentication.getAuthorities()
@@ -110,17 +117,16 @@ public class PrestadorController {
 				.collect(Collectors.toList());
 		
 		if(roles.contains("ROLE_ADMIN") || roles.contains("ROLE_CLIENTE")) {
-			return prestadorRepository.findAll()
-					.stream()
-					.map(prestador -> prestadorDtoAssembler.toModelMinFilter(prestador))
-					.collect(Collectors.toList());
+			Page<Prestador> prestadorPage = prestadorRepository.findAll(pageable);
+			return prestadorPage.map(prestador -> prestadorDtoAssembler.toModelMinFilter(prestador));
+			
 		}else if(roles.contains("ROLE_PRESTADOR")) {
 			String emailUser = authentication.getName();
 			Prestador prestador = prestadorRepository.findByUsuarioEmail(emailUser)
 					.orElseThrow(() -> new NegocioException("Prestador não encontrado."));
-			return Collections.singletonList(prestadorDtoAssembler.toModelMinFilter(prestador));
+			return new PageImpl<>(Collections.singletonList(prestadorDtoAssembler.toModelMinFilter(prestador)));
 		}
-		return Collections.emptyList();
+		return new PageImpl<>(Collections.emptyList());
 	}	
 	
 //TELA DETALHES DO PERFIL
@@ -130,15 +136,15 @@ public class PrestadorController {
 		return prestadorDtoAssembler.toModelMin(catalogoPrestadorService.buscarOuFalhar(prestadorId));
 	}
 	
-	//Remover caso não seja necessário...
-	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")	  
-	@GetMapping ("/perfis")
-	public List<PrestadorMinResponse> listarPerfilPrestador(){
-		return prestadorRepository.findAll()
-				.stream()
-				.map(prestador -> prestadorDtoAssembler.toModelMin(prestador))
-				.collect(Collectors.toList());
-	}
+//	//Remover caso não seja necessário... NÃO PAGINEI
+//	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")	  
+//	@GetMapping ("/perfis")
+//	public List<PrestadorMinResponse> listarPerfilPrestador(){
+//		return prestadorRepository.findAll()
+//				.stream()
+//				.map(prestador -> prestadorDtoAssembler.toModelMin(prestador))
+//				.collect(Collectors.toList());
+//	}
 
 	
 // TELA PRESTADOR

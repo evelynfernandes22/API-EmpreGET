@@ -1,8 +1,9 @@
 package com.empreget.domain.repository;
 
-import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,14 +17,14 @@ public interface PrestadorRepository extends JpaRepository<Prestador, Long> {
 	
 	Optional<Prestador> findByNome(String nome);
 
-	List<Prestador> findByNomeContaining(String nome);
+	Page<Prestador> findByNomeContaining(String nome, Pageable pageable);
 	
 	boolean existsByNome (String nome);
 	
 	Optional<Prestador> findByUsuarioEmail(String email);
 	
 	@Query("from Prestador p where p.regiao = :regiao")
-	List<Prestador> findAllByRegiao(@Param("regiao") Regiao regiao);
+	Page<Prestador> findAllByRegiao(@Param("regiao") Regiao regiao, Pageable pageable);
 	
 	
 }

@@ -8,6 +8,8 @@ import javax.transaction.Transactional;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.empreget.domain.exception.EntidadeEmUsoException;
@@ -56,13 +58,13 @@ public class CatalogoPrestadorService {
 	}
 	
 	@Transactional
-	public List<Prestador> obterPrestadoresPorRegiao(Regiao regiao) {
-        return prestadorRepository.findAllByRegiao(regiao);
+	public Page<Prestador> obterPrestadoresPorRegiao(Regiao regiao, Pageable pageable) {
+        return prestadorRepository.findAllByRegiao(regiao, pageable);
     }
 	
 	@Transactional
-	public List<Prestador> buscarPorNomeContem(String nome){
-		return prestadorRepository.findByNomeContaining(nome);
+	public Page<Prestador> buscarPorNomeContem(String nome, Pageable pageable){
+		return prestadorRepository.findByNomeContaining(nome, pageable);
 	}
 	
 	@Transactional
