@@ -7,6 +7,11 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -75,7 +80,7 @@ public class OrdemServicoController {
 
 //	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
 	@GetMapping
-	public List<OrdemServicoResponse> listar() {
+	public Page<OrdemServicoResponse> listar(@PageableDefault(size = 10) @SortDefault(sort = "id") Pageable pageable) {
 
 	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    List<String> roles = authentication.getAuthorities()
@@ -86,35 +91,30 @@ public class OrdemServicoController {
 	    String emailUser = authentication.getName();
 
 	    if (roles.contains("ROLE_ADMIN")) {
-	        return ordemServicoRepository.findAll()
-	                .stream()
-	                .map(ordemServico -> {
-	                    OrdemServicoResponse ordemServicoResponse = ordemServicoAssembler.toModel(ordemServico);
-	                    puxarEnderecoEServico(ordemServico, ordemServicoResponse);
-	                    return ordemServicoResponse;
-	                })
-	                .collect(Collectors.toList());
+	    	Page<OrdemServico> OSPage = ordemServicoRepository.findAll(pageable);
+	    	return OSPage.map(ordemServico -> {
+                OrdemServicoResponse ordemServicoResponse = ordemServicoAssembler.toModel(ordemServico);
+                puxarEnderecoEServico(ordemServico, ordemServicoResponse);
+                return ordemServicoResponse;
+            });
+	                
 	    } else if (roles.contains("ROLE_CLIENTE")) {
-	        List<OrdemServico> ordemServicoList = ordemServicoRepository.findByClienteUsuarioEmail(emailUser);
-	        if (!ordemServicoList.isEmpty()) {
-	            return ordemServicoList.stream()
-	                    .map(ordemServicoAssembler::toModel)
-	                    .collect(Collectors.toList());
+	        Page<OrdemServico> ordemServicoListPage = ordemServicoRepository.findByClienteUsuarioEmail(emailUser, pageable);
+	        if (!ordemServicoListPage.isEmpty()) {
+	            return ordemServicoListPage.map(ordemServicoAssembler::toModel);
 	        } else {
 	            throw new NegocioException("Nenhuma Ordem de Serviço encontrada vinculada a este cliente.");
 	        }
 	    } else if (roles.contains("ROLE_PRESTADOR")) {
-	        List<OrdemServico> ordemServicoList = ordemServicoRepository.findByPrestadorUsuarioEmail(emailUser);
-	        if (!ordemServicoList.isEmpty()) {
-	            return ordemServicoList.stream()
-	                    .map(ordemServicoAssembler::toModel)
-	                    .collect(Collectors.toList());
+	        Page<OrdemServico> ordemServicoListPage = ordemServicoRepository.findByPrestadorUsuarioEmail(emailUser, pageable);
+	        if (!ordemServicoListPage.isEmpty()) {
+	            return ordemServicoListPage.map(ordemServicoAssembler::toModel);
 	        } else {
 	            throw new NegocioException("Nenhuma Ordem de Serviço encontrada vinculada a este prestador.");
 	        }
 	    }
 
-	    return Collections.emptyList();
+	    return new PageImpl<>(Collections.emptyList());
 	}
 
 	@PreAuthorize("@acessoService.verificarAcessoProprioOrdemServico(#id) or hasAnyRole('ADMIN')")

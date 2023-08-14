@@ -37,7 +37,6 @@ public class SolicitacaoOSService {
 	public OrdemServico solicitar(OrdemServico ordemServico) {
 		
 		LocalDate dataServico = ordemServico.getDataServico();
-				
 		
 		ReentrantLock lock = locks.computeIfAbsent(dataServico, k -> new ReentrantLock());
 

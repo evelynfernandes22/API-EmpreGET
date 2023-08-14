@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,11 +21,11 @@ public interface OrdemServicoRepository extends JpaRepository<OrdemServico, Long
 
 	boolean existsByPrestadorAndDataServico(Prestador prestador, LocalDate dataServico);
 			
-	//buscar uma lista de OS relacionadas ao email do prestador
-	List<OrdemServico> findByPrestadorUsuarioEmail(String email);
+	//listar OS relacionadas ao email do prestador
+	Page<OrdemServico> findByPrestadorUsuarioEmail(String email, Pageable pageable);
 	
-	//buscar uma lista de OS relacionadas ao email do cliente 
-	List<OrdemServico> findByClienteUsuarioEmail(String email);
+	//listar OS relacionadas ao email do cliente 
+	Page<OrdemServico> findByClienteUsuarioEmail(String email, Pageable pageable);
 	
 	@Query("SELECT os.cliente.usuario.email FROM OrdemServico os WHERE os.cliente.usuario.email = :email")
 	Optional<String> findClienteEmailByOS(@Param("email") String email);
