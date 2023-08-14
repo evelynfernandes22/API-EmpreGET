@@ -9,6 +9,11 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -50,7 +55,7 @@ public class UsuarioController {
 	
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
 	@GetMapping
-    public List<UsuarioResponse> listar() {
+    public Page<UsuarioResponse> listar(@PageableDefault(size = 10) @SortDefault(sort = "id" ) Pageable pageable) {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		List<String> roles = authentication.getAuthorities()
@@ -59,17 +64,17 @@ public class UsuarioController {
 				.collect(Collectors.toList());
 				
 		if(roles.contains("ROLE_ADMIN")) {
-			List<Usuario> todosUsuarios = usuarioRepository.findAll();
-			return usuarioDtoAssembler.toCollectionModel(todosUsuarios);
+			Page<Usuario> todosUsuariosPage = usuarioRepository.findAll(pageable);
+			return todosUsuariosPage.map(usuario -> usuarioDtoAssembler.toModel(usuario));
 			
 		}else if (roles.contains("ROLE_CLIENTE") || roles.contains("ROLE_PRESTADOR")) {
 	        String username = authentication.getName();
 	        Usuario usuario = usuarioRepository.findUserByEmail(username)
 	                .orElseThrow(() -> new NegocioException("Usuário não encontrado."));
-	        return Collections.singletonList(usuarioDtoAssembler.toModel(usuario));
+	        return new PageImpl<>(Collections.singletonList(usuarioDtoAssembler.toModel(usuario)));
 	    } 
 		 
-        return Collections.emptyList();
+        return new PageImpl<>(Collections.emptyList());
     }
 	
 	
