@@ -11,4 +11,6 @@ import com.empreget.domain.model.Avaliacao;
 public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
 
 	List<Avaliacao> findByPrestadorId(Long prestadorId);
+	
+	Long countByPrestadorId(Long PrestadorId);
 }

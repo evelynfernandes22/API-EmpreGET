@@ -51,7 +51,14 @@ public class AvaliacaoService {
 		for (Avaliacao avaliacao : avaliacoes) {
 			somaAvaliacoes += avaliacao.getEstrelas();
 		}
-
 		return somaAvaliacoes / avaliacoes.size();
+	}
+	
+	public Long calcularQuantidadeAvaliacoes(Long prestadorId) {
+		
+		Prestador prestador = catalogoPrestadorService.buscarOuFalhar(prestadorId);
+		long quantidadeAvaliacoes = avaliacaoRepository.countByPrestadorId(prestadorId);
+		
+		return quantidadeAvaliacoes;
 	}
 }

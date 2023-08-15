@@ -62,5 +62,11 @@ public class AvaliacaoController {
 		return ResponseEntity.ok(mediaAvaliacoes); 
 	}
 		
-	
+	@GetMapping("/quantidade/{prestadorId}")
+	public ResponseEntity<Long> calcularQuantidadeAvaliacoesPrestador(@PathVariable Long prestadorId) {
+		
+		long quantidadeAvaliacoes = avaliacaoService.calcularQuantidadeAvaliacoes(prestadorId);
+		return ResponseEntity.ok(quantidadeAvaliacoes);
+	}
+
 }

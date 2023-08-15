@@ -1360,7 +1360,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhZG1pbkBlbWFpbC5jb207QURNSU4iLCJleHAiOjE2OTIxNDgwMDl9.cDle7OzvsrtYgAKc9CfNycLXzYj_OQ2wu2_zvpk-aoo",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MjE0OTkyNX0.125ZegcF2W43cKK3bsxY0oCt1Dlnyb-z8hWMmNmC4LQ",
 									"type": "string"
 								}
 							]
@@ -1438,6 +1438,54 @@
 								"avaliacoes",
 								"media",
 								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Avaliação - Qtd avaliações",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MjE1NTQ3Nn0.9DBiGr9TEOmazIj95qv7mti0fQsUvToq0oaVqZbEpNo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/avaliacoes/quantidade/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"avaliacoes",
+								"quantidade",
+								"2"
 							]
 						}
 					},
