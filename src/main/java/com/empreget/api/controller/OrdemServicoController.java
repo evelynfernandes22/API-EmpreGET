@@ -78,7 +78,7 @@ public class OrdemServicoController {
 	}
 
 
-//	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
+	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
 	@GetMapping
 	public Page<OrdemServicoResponse> listar(@PageableDefault(size = 10) @SortDefault(sort = "id") Pageable pageable) {
 

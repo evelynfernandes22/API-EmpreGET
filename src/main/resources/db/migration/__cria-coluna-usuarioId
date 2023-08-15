@@ -1,7 +1,0 @@
-alter table cliente add usuario_id bigint not null;
-alter table prestador add usuario_id bigint not null;
-
-alter table cliente add CONSTRAINT fk_cliente_usuario FOREIGN KEY (usuario_id) REFERENCES usuario (id);
-alter table prestador add CONSTRAINT fk_prestador_usuario FOREIGN KEY (usuario_id) REFERENCES usuario (id);
-
-

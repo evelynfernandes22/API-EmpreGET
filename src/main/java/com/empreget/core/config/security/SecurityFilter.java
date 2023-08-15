@@ -35,7 +35,6 @@ public class SecurityFilter extends OncePerRequestFilter {
 			var emailERole = tokenService.validarToken(token);
 			String[] parte = emailERole.split(";");
 			String email = parte[0];
-			System.out.println("email do token: " + email); //só para teste
 			
 			Optional<UserDetails> user = usuarioRepository.findByEmail(email);
 

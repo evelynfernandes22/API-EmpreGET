@@ -37,7 +37,7 @@ public class Cliente {
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	
 	@OneToOne
 	private Usuario usuario;

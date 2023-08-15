@@ -261,7 +261,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": " {\r\n    \"nome\" : \"Cristina Maria \",\r\n    \"imgUrl\": null,\r\n    \"endereco\": {\r\n        \"logradouro\": \"Rua Pernambuco\",\r\n        \"numero\": 505,\r\n        \"complemento\": \"Casa\",\r\n        \"cep\": \"86000-000\",\r\n        \"bairro\": \"Centro\",\r\n        \"cidade\": \"Londrina\",\r\n        \"estado\": \"PR\",\r\n        \"pais\": \"BRA\"\r\n    },\r\n    \"regiao\": \"CENTRO\",\r\n    \"rg\": \"2222222-0\",\r\n    \"cpf\": \"333.333.333-33\",\r\n    \"telefone\": \"43 9999-9994\",\r\n    \"usuario\": {\r\n        \"email\" : \"cris@email.com\",\r\n        \"senha\" : \"123\",\r\n         \"role\" : \"PRESTADOR\"\r\n    },\r\n     \"servico\": {\r\n        \"descricao\": \"faxina, lavar e passar\",\r\n        \"valor\": 150\r\n    },\r\n    \"observacao\":  \"Perfeccionista, deixo tinindo\",\r\n    \"disponibilidade\": \"De Seguda à sexta-feira, horário comercial\"        \r\n}",
+							"raw": " {\r\n    \"nome\" : \"Maria Clara \",\r\n    \"imgUrl\": null,\r\n    \"endereco\": {\r\n        \"logradouro\": \"Rua Pernambuco\",\r\n        \"numero\": 505,\r\n        \"complemento\": \"Casa\",\r\n        \"cep\": \"86000-000\",\r\n        \"bairro\": \"Centro\",\r\n        \"cidade\": \"Londrina\",\r\n        \"estado\": \"PR\",\r\n        \"pais\": \"BRA\"\r\n    },\r\n    \"regiao\": \"CENTRO\",\r\n    \"rg\": \"2222222-0\",\r\n    \"cpf\": \"333.333.333-33\",\r\n    \"telefone\": \"43 9999-9994\",\r\n    \"usuario\": {\r\n        \"email\" : \"clara@email.com\",\r\n        \"senha\" : \"123\",\r\n         \"role\" : \"PRESTADOR\"\r\n    },\r\n     \"servico\": {\r\n        \"descricao\": \"faxina, lavar e passar\",\r\n        \"valor\": 150\r\n    },\r\n    \"observacao\":  \"caprichosa\",\r\n    \"disponibilidade\": \"De Seguda à sexta-feira, horário comercial\"        \r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -292,7 +292,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MTA5OTEzOH0.EQXEJz7S78yCDcuPuEc6ae6DkiBUhMjUrOsQt6Zli_o",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhZG1pbkBlbWFpbC5jb207QURNSU4iLCJleHAiOjE2OTE5MDMyOTh9.6elixjVxNj00p9nW6WGfHyXuTw0fOO5khFsk6TLKNQc",
 									"type": "string"
 								}
 							]
@@ -322,6 +322,13 @@
 							"port": "8080",
 							"path": [
 								"prestadores"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "1",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -338,7 +345,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MTEwNzUwM30.vogIFjqfJfkogYyBiHMMfuKxd-3GjjbfBlwoSDb6Wuk",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhZG1pbkBlbWFpbC5jb207QURNSU4iLCJleHAiOjE2OTE5MDUzMzd9.LodqxkgNduhcZY436-jbCyMl9ci9NRZB9fFTcD_mxGw",
 									"type": "string"
 								}
 							]
@@ -385,7 +392,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb20iLCJleHAiOjE2ODk4MDM2MzN9.WuX7TpvXdQm6mIo1ff-aMTgJ-bJcnXn9kHRuJSDrPZw",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhZG1pbkBlbWFpbC5jb207QURNSU4iLCJleHAiOjE2OTE5MDUzMzd9.LodqxkgNduhcZY436-jbCyMl9ci9NRZB9fFTcD_mxGw",
 									"type": "string"
 								}
 							]
@@ -417,6 +424,13 @@
 								"prestadores",
 								"regiao",
 								"CENTRO"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "1",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -528,7 +542,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MTEwNzUwM30.vogIFjqfJfkogYyBiHMMfuKxd-3GjjbfBlwoSDb6Wuk",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhZG1pbkBlbWFpbC5jb207QURNSU4iLCJleHAiOjE2OTE5MDUzMzd9.LodqxkgNduhcZY436-jbCyMl9ci9NRZB9fFTcD_mxGw",
 									"type": "string"
 								}
 							]
@@ -818,7 +832,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MTQzMDA1NX0.CE5PXKRTts0Ym7XkxXAZESty7y6FPur6Jb0d0oDaoMY",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhZG1pbkBlbWFpbC5jb207QURNSU4iLCJleHAiOjE2OTIwMzg3NTh9.E5dc31qe3QECWa-20JQ-HAYgnOSE-sBufZ2x2bHrvTg",
 									"type": "string"
 								}
 							]
@@ -1115,7 +1129,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MDI0NTk5OX0.7vgCnlMwDHmUPyyKXbECUe23V8sD4qxrFE11B7X2_gk",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkyMDQwODk4fQ.QkIGN9mSIQmqDqBdw0fMU5ZTQqtA3on23UAQvWtWaxw",
 									"type": "string"
 								}
 							]
@@ -1328,6 +1342,102 @@
 							"path": [
 								"auth",
 								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Avaliações",
+			"item": [
+				{
+					"name": "Cliente - Avaliar Prestador",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhZG1pbkBlbWFpbC5jb207QURNSU4iLCJleHAiOjE2OTIxNDgwMDl9.cDle7OzvsrtYgAKc9CfNycLXzYj_OQ2wu2_zvpk-aoo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"prestador\": {\r\n        \"id\": 2\r\n    },\r\n    \"estrelas\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/avaliacoes",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"avaliacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Avaliação - Média",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MjE1Mjc2Nn0.maTaaC9sNS_YuXiJsoMVIpsSPfuLYWyV5VTgv48M_So",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/avaliacoes/media/3",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"avaliacoes",
+								"media",
+								"3"
 							]
 						}
 					},

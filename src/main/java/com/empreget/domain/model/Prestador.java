@@ -44,7 +44,7 @@ public class Prestador {
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 
 	@OneToOne
 	private Usuario usuario;

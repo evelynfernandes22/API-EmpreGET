@@ -36,9 +36,6 @@ public class AcessoService {
 			return false;
 		}
 
-//	        System.out.println("usuário autenticado: " + usuarioAutenticado.getEmail());
-//	        System.out.println("prestador chamado: " + prestador.getUsuario().getEmail());
-
 		return prestador.getUsuario().getEmail().equals(usuarioAutenticado.getEmail());
 	}
 
