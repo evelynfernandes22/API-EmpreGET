@@ -18,7 +18,7 @@ import com.empreget.domain.model.enums.StatusOrdemServico;
 
 @Repository
 public interface OrdemServicoRepository extends JpaRepository<OrdemServico, Long>{
-
+	
 	boolean existsByPrestadorAndDataServico(Prestador prestador, LocalDate dataServico);
 			
 	//listar OS relacionadas ao email do prestador

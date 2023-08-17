@@ -105,7 +105,7 @@ public class PrestadorController {
 	}
 	
 	
-//TELA HOME - lista todos de forma mínima para ser utilizado no catálogo
+//TELA HOME - listar perfis resumidos no filtro ao catalogar todos
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
 	@GetMapping("/filtro")
 	public Page<PrestadorFiltroRegiaoResponse> listarTodosNoFiltro(@PageableDefault(size = 5) @SortDefault(sort = "nome") Pageable pageable){

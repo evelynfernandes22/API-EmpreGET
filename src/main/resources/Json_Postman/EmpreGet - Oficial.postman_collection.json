@@ -437,53 +437,6 @@
 					"response": []
 				},
 				{
-					"name": "Prestador - Listar perfis resumidos",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MTEwNzUwM30.vogIFjqfJfkogYyBiHMMfuKxd-3GjjbfBlwoSDb6Wuk",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8080/prestadores/perfis",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"prestadores",
-								"perfis"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Prestador - BuscarPorIdPerfil",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true

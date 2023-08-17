@@ -1,12 +1,10 @@
 package com.empreget.domain.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.empreget.domain.exception.AvaliacaoNaoEncontradoException;
-import com.empreget.domain.exception.EntidadeNaoEncontradaException;
 import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.model.Avaliacao;
 import com.empreget.domain.model.Cliente;
@@ -56,7 +54,7 @@ public class AvaliacaoService {
 	
 	public Long calcularQuantidadeAvaliacoes(Long prestadorId) {
 		
-		Prestador prestador = catalogoPrestadorService.buscarOuFalhar(prestadorId);
+		catalogoPrestadorService.buscarOuFalhar(prestadorId);
 		long quantidadeAvaliacoes = avaliacaoRepository.countByPrestadorId(prestadorId);
 		
 		return quantidadeAvaliacoes;
