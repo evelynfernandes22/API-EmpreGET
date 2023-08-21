@@ -3,32 +3,62 @@ package com.empreget.api.controller;
 import java.nio.file.Path;
 import java.util.UUID;
 
+import javax.validation.Valid;
+
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
+import com.empreget.api.assembler.FotoPrestadorDtoAssembler;
+import com.empreget.api.dto.FotoPrestadorResponse;
+import com.empreget.api.dto.input.FotoPrestadorInput;
+import com.empreget.domain.model.FotoPrestador;
+import com.empreget.domain.model.Prestador;
+import com.empreget.domain.service.CatalogoPrestadorFotoService;
+import com.empreget.domain.service.CatalogoPrestadorService;
+
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 @RestController
 @RequestMapping("/prestadores/{prestadorId}/foto")
 public class PrestadorFotoController {
 
+	private CatalogoPrestadorService catalogoPrestadorService;
+	private CatalogoPrestadorFotoService catalogoPrestadorFotoService;
+	private FotoPrestadorDtoAssembler fotoPrestadorDtoAssembler;
+	
+	@PreAuthorize("@acessoService.verificarAcessoProprioPrestador(#prestadorId)")
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public void atualizarFoto(@PathVariable Long prestadorId, @RequestParam MultipartFile arquivo) {
+	public FotoPrestadorResponse atualizarFoto(@PathVariable Long prestadorId,
+			@Valid FotoPrestadorInput fotoPrestadorInput) {
+
+		var nomeArquivo = fotoPrestadorInput.getArquivo().getOriginalFilename();
+		var pathFoto = Path.of("\\Users\\evely\\OneDrive\\Imagens\\foto_prestador", nomeArquivo);
 		
-		var nomeArquivo = UUID.randomUUID().toString() + "_" + arquivo.getOriginalFilename();
-		var arquivoFoto = Path.of("\\Users\\evely\\OneDrive\\Imagens\\foto_prestador", nomeArquivo);
+		System.out.println(pathFoto);
+		System.out.println(fotoPrestadorInput.getArquivo().getContentType());
 		
-		System.out.println(arquivoFoto);
-		System.out.println(arquivo.getContentType());
-		
+		Prestador prestador = catalogoPrestadorService.buscarOuFalhar(prestadorId);
+
 		try {
-			arquivo.transferTo(arquivoFoto);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+			fotoPrestadorInput.getArquivo().transferTo(pathFoto);
+			FotoPrestador fotoPrestador = new FotoPrestador();
+			fotoPrestador.setNomeArquivo(fotoPrestadorInput.getArquivo().getOriginalFilename());
+			fotoPrestador.setContentType(fotoPrestadorInput.getArquivo().getContentType());
+			fotoPrestador.setTamanho(fotoPrestadorInput.getArquivo().getSize());
+			fotoPrestador.setPrestador(prestador);
+	
+			prestador.setImgUrl(pathFoto.toString());
+	
+			FotoPrestador fotoSalva = catalogoPrestadorFotoService.salvar(fotoPrestador);
+	
+			return fotoPrestadorDtoAssembler.toModel(fotoSalva);
+		}catch(Exception ex) {
+			throw new RuntimeException(ex);
 		}
 	}
-	
 }

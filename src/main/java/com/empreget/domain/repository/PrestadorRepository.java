@@ -9,11 +9,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.empreget.domain.model.FotoPrestador;
 import com.empreget.domain.model.Prestador;
 import com.empreget.domain.model.enums.Regiao;
 
 @Repository
-public interface PrestadorRepository extends JpaRepository<Prestador, Long> {
+public interface PrestadorRepository extends JpaRepository<Prestador, Long>, PrestadorRepositoryQueries {
 	
 	Optional<Prestador> findByNome(String nome);
 
@@ -26,5 +27,6 @@ public interface PrestadorRepository extends JpaRepository<Prestador, Long> {
 	@Query("from Prestador p where p.regiao = :regiao")
 	Page<Prestador> findAllByRegiao(@Param("regiao") Regiao regiao, Pageable pageable);
 	
-	
+	@Query("from FotoPrestador f where f.prestador.id= :prestadorId")
+	Optional<FotoPrestador> findFotoById(Long prestadorId);
 }

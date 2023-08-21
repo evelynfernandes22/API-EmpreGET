@@ -12,7 +12,8 @@ public enum ProblemType {
 	RECURSO_NAO_ENCONTRADO("/recurso-nao-encontrado", "Recurso não encontrado"),
 	ENTIDADE_EM_USO("/entidade-em-uso", "Entidade em uso"),
 	ACESSO_NEGADO("/acesso-negado", "Acesso negado"),
-	ERRO_NEGOCIO("/erro-negocio", "Violação de regra de negócio");
+	ERRO_NEGOCIO("/erro-negocio", "Violação de regra de negócio"),
+	TAMANHO_EXCEDIDO("/'tamanho-excedido", "Tamanho excedido");
 	
 	
 	

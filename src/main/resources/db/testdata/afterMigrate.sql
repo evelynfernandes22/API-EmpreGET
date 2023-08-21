@@ -5,6 +5,7 @@ delete from prestador;
 delete from ordem_servico;
 delete from usuario;
 delete from avaliacao;
+delete from foto_prestador;
 
 
 set foreign_key_checks=1;
