@@ -1,5 +1,6 @@
 package com.empreget.infraestructure.service;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -29,6 +30,17 @@ public class LocalFotoStorageService implements FotoStorageService {
 
 	private Path getArquivoPath(String nomeArquivo) {
 		return diretorioFotos.resolve(Path.of(nomeArquivo));
+	}
+
+	@Override
+	public void remover(String nomeArquivo) {
+		Path arquivoPath = getArquivoPath(nomeArquivo);
+		
+		try {
+			Files.deleteIfExists(arquivoPath);
+		} catch (Exception e) {
+			throw new StorageException("Não foi possível excluir o arquivo.",e);
+		}
 	}
 
 }

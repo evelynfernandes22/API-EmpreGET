@@ -24,10 +24,12 @@ public class CatalogoPrestadorFotoService {
 		
 		Long prestadorId = foto.getPrestador().getId();
 		String novoNomeArquivo = fotoStorageService.gerarNomeArquivo(foto.getNomeArquivo());
+		String nomeArquivoExistente = null;
 		
 		Optional<FotoPrestador> fotoExistente = prestadorRepository.findFotoById(prestadorId);
 		
 		if(fotoExistente.isPresent()) {
+			nomeArquivoExistente = fotoExistente.get().getNomeArquivo();
 			prestadorRepository.excluir(fotoExistente.get());
 		}
 		
@@ -39,7 +41,8 @@ public class CatalogoPrestadorFotoService {
 				.nomeArquivo(foto.getNomeArquivo())
 				.inputStream(dadosArquivo)
 				.build();
-		fotoStorageService.armazenar(novaFoto);
+		
+		fotoStorageService.substituir(nomeArquivoExistente, novaFoto);
 		
 		return foto;
 	}
