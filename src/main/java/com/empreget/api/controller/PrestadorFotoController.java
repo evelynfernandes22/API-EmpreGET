@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,36 +54,10 @@ public class PrestadorFotoController {
 		return fotoPrestadorDtoAssembler.toModel(fotoSalva);	
 	}
 	
-//	@PreAuthorize("@acessoService.verificarAcessoProprioPrestador(#prestadorId)")
-//	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//	public FotoPrestadorResponse atualizarFoto(@PathVariable Long prestadorId,
-//			@Valid FotoPrestadorInput fotoPrestadorInput) {
-//		
-//		var nomeArquivo = fotoPrestadorInput.getArquivo().getOriginalFilename();
-//		var pathFoto = Path.of("\\Users\\evely\\OneDrive\\Imagens\\foto_prestador", nomeArquivo);
-//		
-//		System.out.println(pathFoto);
-//		System.out.println(fotoPrestadorInput.getArquivo().getContentType());
-//		
-//		
-//		Prestador prestador = catalogoPrestadorService.buscarOuFalhar(prestadorId);
-//		
-//		try {
-//			fotoPrestadorInput.getArquivo().transferTo(pathFoto);
-//			FotoPrestador fotoPrestador = new FotoPrestador();
-//			fotoPrestador.setNomeArquivo(fotoPrestadorInput.getArquivo().getOriginalFilename());
-//			fotoPrestador.setContentType(fotoPrestadorInput.getArquivo().getContentType());
-//			fotoPrestador.setTamanho(fotoPrestadorInput.getArquivo().getSize());
-//			fotoPrestador.setPrestador(prestador);
-//			
-//			prestador.setImgUrl(pathFoto.toString());
-//			
-//			FotoPrestador fotoSalva = catalogoPrestadorFotoService.salvar(fotoPrestador);
-//			
-//			return fotoPrestadorDtoAssembler.toModel(fotoSalva);
-//		}catch(Exception ex) {
-//			throw new RuntimeException(ex);
-//		}
-//	}
-	
+	@PreAuthorize("@acessoService.verificarAcessoProprioPrestador(#prestadorId) or hasAnyRole('ADMIN', 'CLIENTE')")
+	@GetMapping
+	public FotoPrestadorResponse buscar(@PathVariable Long prestadorId) {
+		return fotoPrestadorDtoAssembler.toModel(catalogoPrestadorFotoService
+				.buscarOuFalhar(prestadorId));
+	}
 }

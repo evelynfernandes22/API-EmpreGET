@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.empreget.domain.exception.FotoNaoEncontradaException;
 import com.empreget.domain.model.FotoPrestador;
 import com.empreget.domain.repository.PrestadorRepository;
 import com.empreget.domain.service.FotoStorageService.NovaFoto;
@@ -45,5 +46,10 @@ public class CatalogoPrestadorFotoService {
 		fotoStorageService.substituir(nomeArquivoExistente, novaFoto);
 		
 		return foto;
+	}
+	
+	public FotoPrestador buscarOuFalhar(Long prestadorId) {
+	    return prestadorRepository.findFotoById(prestadorId)
+	            .orElseThrow(() -> new FotoNaoEncontradaException(prestadorId));
 	}
 }

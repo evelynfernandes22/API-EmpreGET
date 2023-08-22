@@ -1445,6 +1445,115 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Foto Prestador",
+			"item": [
+				{
+					"name": "Atualizar Foto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkyNjcxMzYwfQ.oMpIsoeusFwLwGmttPl-CrmEz-UtSQkEzwcoqr6BRKg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "arquivo",
+									"type": "file",
+									"src": "/C:/Users/evely/OneDrive/Imagens/Sueli.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/prestadores/1/foto",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prestadores",
+								"1",
+								"foto"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkyNzU0Mjg3fQ.GawfCGKTV-a4LerJZPGL3fnySG2St78KUoZC_3xh_HI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/prestadores/1/foto",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prestadores",
+								"1",
+								"foto"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
