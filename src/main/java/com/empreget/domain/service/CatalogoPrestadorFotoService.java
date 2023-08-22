@@ -1,5 +1,6 @@
 package com.empreget.domain.service;
 
+import java.io.InputStream;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -7,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.empreget.domain.model.FotoPrestador;
 import com.empreget.domain.repository.PrestadorRepository;
+import com.empreget.domain.service.FotoStorageService.NovaFoto;
 
 import lombok.AllArgsConstructor;
 
@@ -15,17 +17,30 @@ import lombok.AllArgsConstructor;
 public class CatalogoPrestadorFotoService {
 
 	private PrestadorRepository prestadorRepository;
+	private FotoStorageService fotoStorageService;
 	
 	@Transactional
-	public FotoPrestador salvar(FotoPrestador foto) {
+	public FotoPrestador salvar(FotoPrestador foto, InputStream dadosArquivo) {
 		
 		Long prestadorId = foto.getPrestador().getId();
+		String novoNomeArquivo = fotoStorageService.gerarNomeArquivo(foto.getNomeArquivo());
+		
 		Optional<FotoPrestador> fotoExistente = prestadorRepository.findFotoById(prestadorId);
 		
 		if(fotoExistente.isPresent()) {
 			prestadorRepository.excluir(fotoExistente.get());
 		}
 		
-		return prestadorRepository.save(foto);
+		foto.setNomeArquivo(novoNomeArquivo);
+		foto = prestadorRepository.save(foto);
+		prestadorRepository.flush();
+		
+		NovaFoto novaFoto = NovaFoto.builder()
+				.nomeArquivo(foto.getNomeArquivo())
+				.inputStream(dadosArquivo)
+				.build();
+		fotoStorageService.armazenar(novaFoto);
+		
+		return foto;
 	}
 }
