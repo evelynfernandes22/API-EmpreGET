@@ -1457,7 +1457,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkyNjcxMzYwfQ.oMpIsoeusFwLwGmttPl-CrmEz-UtSQkEzwcoqr6BRKg",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkyODM1NzU0fQ.Xlp4Q5IOY4Mkz_YmzVyq_Mpok0yy-Zb9RRTgBcvMuVY",
 									"type": "string"
 								}
 							]
@@ -1476,7 +1476,7 @@
 								{
 									"key": "arquivo",
 									"type": "file",
-									"src": "/C:/Users/evely/OneDrive/Imagens/Sueli.jpeg"
+									"src": "/C:/Users/evely/OneDrive/Imagens/icon-cliente.png"
 								}
 							]
 						},
@@ -1503,7 +1503,48 @@
 					"response": []
 				},
 				{
-					"name": "Buscar",
+					"name": "Excluir Foto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkyODM1NzU0fQ.Xlp4Q5IOY4Mkz_YmzVyq_Mpok0yy-Zb9RRTgBcvMuVY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "localhost:8080/prestadores/1/foto",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prestadores",
+								"1",
+								"foto"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Foto",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -1513,7 +1554,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkyNzU0Mjg3fQ.GawfCGKTV-a4LerJZPGL3fnySG2St78KUoZC_3xh_HI",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkyODM1NzU0fQ.Xlp4Q5IOY4Mkz_YmzVyq_Mpok0yy-Zb9RRTgBcvMuVY",
 									"type": "string"
 								}
 							]
@@ -1521,10 +1562,15 @@
 						"method": "GET",
 						"header": [
 							{
-								"key": "Content-Type",
+								"key": "Accept",
 								"value": "application/json",
 								"type": "text",
 								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "image/jpeg, image/png",
+								"type": "text"
 							}
 						],
 						"body": {
