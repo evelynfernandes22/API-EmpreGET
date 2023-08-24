@@ -33,7 +33,6 @@ import com.empreget.domain.exception.ClienteNaoEncontradoException;
 import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.model.Avaliacao;
 import com.empreget.domain.model.Cliente;
-import com.empreget.domain.model.OrdemServico;
 import com.empreget.domain.model.Prestador;
 import com.empreget.domain.repository.AvaliacaoRepository;
 import com.empreget.domain.repository.ClienteRepository;
