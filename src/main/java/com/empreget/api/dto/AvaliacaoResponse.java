@@ -1,5 +1,7 @@
 package com.empreget.api.dto;
 
+import java.time.OffsetDateTime;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,4 +13,6 @@ public class AvaliacaoResponse {
 	private String nomePrestador;
 	private String nomeCliente;
 	private Integer estrelas;
+	private String comentario;
+	private OffsetDateTime dataDoCadastro;
 }

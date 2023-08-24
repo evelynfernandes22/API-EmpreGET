@@ -1313,7 +1313,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MjE0OTkyNX0.125ZegcF2W43cKK3bsxY0oCt1Dlnyb-z8hWMmNmC4LQ",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkyOTI3OTA5fQ.LrRXOAd0Sl_x_aWLVZgDZ9qurZEa-NKaHVvvlOa_-60",
 									"type": "string"
 								}
 							]
@@ -1328,7 +1328,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"prestador\": {\r\n        \"id\": 2\r\n    },\r\n    \"estrelas\": 5\r\n}",
+							"raw": "{\r\n    \"prestador\": {\r\n        \"id\": 2\r\n    },\r\n    \"estrelas\": 5,\r\n    \"comentario\": \"Muito simpática\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1349,7 +1349,7 @@
 					"response": []
 				},
 				{
-					"name": "Avaliação - Média",
+					"name": "Avaliação - ListarPorPrestador",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -1359,7 +1359,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MjE1Mjc2Nn0.maTaaC9sNS_YuXiJsoMVIpsSPfuLYWyV5VTgv48M_So",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkyOTI3OTA5fQ.LrRXOAd0Sl_x_aWLVZgDZ9qurZEa-NKaHVvvlOa_-60",
 									"type": "string"
 								}
 							]
@@ -1382,7 +1382,54 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/avaliacoes/media/3",
+							"raw": "localhost:8080/avaliacoes/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"avaliacoes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Avaliação - Média",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkyOTI3OTA5fQ.LrRXOAd0Sl_x_aWLVZgDZ9qurZEa-NKaHVvvlOa_-60",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/avaliacoes/media/2",
 							"host": [
 								"localhost"
 							],
@@ -1390,7 +1437,7 @@
 							"path": [
 								"avaliacoes",
 								"media",
-								"3"
+								"2"
 							]
 						}
 					},
@@ -1457,7 +1504,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkyODM1NzU0fQ.Xlp4Q5IOY4Mkz_YmzVyq_Mpok0yy-Zb9RRTgBcvMuVY",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkyODQzOTg0fQ.U1AUXA9vgDR4QwMT7tqGuu_j7sJ6a_m-8jWbUoHZi5E",
 									"type": "string"
 								}
 							]

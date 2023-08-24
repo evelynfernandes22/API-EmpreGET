@@ -24,5 +24,5 @@ public class PrestadorResponse {
 	private String disponibilidade;
 	private String observacao;
 	private OffsetDateTime dataDoCadastro;
-	private OffsetDateTime dataDaAtualizacao;
+	private OffsetDateTime dataDoAtualizacao;
 }

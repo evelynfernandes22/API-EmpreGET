@@ -41,12 +41,12 @@ insert into ordem_servico(id, cliente_id, prestador_id, data_servico, periodo, s
 insert into ordem_servico(id, cliente_id, prestador_id, data_servico, periodo, status_agenda, tipo_de_diaria, data_da_solicitacao, data_da_finalizacao, status_ordem_servico) values
 (2, 3, 2, '2023-05-25T08:00:00', 'COMERCIAL', 'PRE_RESERVADO','DIARIA_CHEIA', utc_timestamp, null, 'AGUARDANDO_ACEITE');
 
-insert into avaliacao(id,cliente_id, prestador_id, estrelas) values
-(1, 2, 1, 5);
-insert into avaliacao(id,cliente_id, prestador_id, estrelas) values
-(2, 3, 2, 5);
-insert into avaliacao(id,cliente_id, prestador_id, estrelas) values
-(3, 2, 2, 5);
-insert into avaliacao(id,cliente_id, prestador_id, estrelas) values
-(4, 3, 1, 4);
+insert into avaliacao(id,cliente_id, prestador_id, estrelas, comentario, data_do_cadastro) values
+(1, 2, 1, 5, 'Caprichosa e pontual', utc_timestamp);
+insert into avaliacao(id,cliente_id, prestador_id, estrelas, comentario, data_do_cadastro) values
+(2, 3, 2, 5, null, utc_timestamp);
+insert into avaliacao(id,cliente_id, prestador_id, estrelas, comentario, data_do_cadastro) values
+(3, 2, 2, 5, null, utc_timestamp);
+insert into avaliacao(id,cliente_id, prestador_id, estrelas, comentario, data_do_cadastro) values
+(4, 3, 1, 4, null, utc_timestamp);
 

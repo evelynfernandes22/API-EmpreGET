@@ -3,6 +3,8 @@ create table avaliacao(
        prestador_id bigint not null,
        cliente_id bigint not null,
        estrelas bigint null,
+       comentario varchar(255) null,
+       data_do_cadastro datetime not null,
                                                                 
        primary key (id),
               

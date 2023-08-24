@@ -16,4 +16,6 @@ public class AvaliacaoInput {
 	
 	@NotNull
 	private Integer estrelas;
+	
+	private String comentario;
 }
