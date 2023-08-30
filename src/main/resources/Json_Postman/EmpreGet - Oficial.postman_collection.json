@@ -345,7 +345,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhZG1pbkBlbWFpbC5jb207QURNSU4iLCJleHAiOjE2OTE5MDUzMzd9.LodqxkgNduhcZY436-jbCyMl9ci9NRZB9fFTcD_mxGw",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MzA3NjUxMn0.9H7dJuejSjg9WCQC_bqV07AH-kv1pfCjWzOY7ol4WYk",
 									"type": "string"
 								}
 							]
@@ -368,7 +368,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/prestadores/filtro",
+							"raw": "localhost:8080/prestadores/filtro?page=0",
 							"host": [
 								"localhost"
 							],
@@ -376,6 +376,12 @@
 							"path": [
 								"prestadores",
 								"filtro"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								}
 							]
 						}
 					},
@@ -913,6 +919,16 @@
 				{
 					"name": "OS - Finalizar",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJtYXJpbkBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkzMzczNzYwfQ.r3cf05zA_ywbCNLjXP9mSn4YSI6cX4AmD6jeu-aEiU4",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [
 							{
@@ -931,14 +947,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/os/1/finalizacao",
+							"raw": "localhost:8080/os/3/finalizacao",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"os",
-								"1",
+								"3",
 								"finalizacao"
 							]
 						}
@@ -997,7 +1013,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MDg0NDg4NH0.h73WWyxPZhql3TmlyFD0okZdF1rMEIojvRog8HsEoY0",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJtYXJpbkBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkzMzczNzYwfQ.r3cf05zA_ywbCNLjXP9mSn4YSI6cX4AmD6jeu-aEiU4",
 									"type": "string"
 								}
 							]
@@ -1020,14 +1036,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/os/1/aceite",
+							"raw": "localhost:8080/os/3/aceite",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"os",
-								"1",
+								"3",
 								"aceite"
 							]
 						}
@@ -1275,6 +1291,16 @@
 				{
 					"name": "Login",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MjE0OTkyNX0.125ZegcF2W43cKK3bsxY0oCt1Dlnyb-z8hWMmNmC4LQ",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -1313,12 +1339,59 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkyOTI3OTA5fQ.LrRXOAd0Sl_x_aWLVZgDZ9qurZEa-NKaHVvvlOa_-60",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MzM3NTgyN30.jKCit1yrymL0cFgdAi4pZgltZyVReBtA7HsAErBCMu4",
 									"type": "string"
 								}
 							]
 						},
 						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"estrelas\": 4,\r\n    \"comentario\": \"Muito simpática\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/avaliacoes/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"avaliacoes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Avaliação - ListarPorOS",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkzNDM1MjI5fQ.oxZKuiOcT_NEF6tTLaNIdx1au6JghBIwOpkSNSrn8NM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -1336,13 +1409,15 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/avaliacoes",
+							"raw": "localhost:8080/avaliacoes/os/3",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"avaliacoes"
+								"avaliacoes",
+								"os",
+								"3"
 							]
 						}
 					},
@@ -1359,7 +1434,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJzdWVsaUBlbWFpbC5jb207UFJFU1RBRE9SIiwiZXhwIjoxNjkyOTI3OTA5fQ.LrRXOAd0Sl_x_aWLVZgDZ9qurZEa-NKaHVvvlOa_-60",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbXByZWdldC1hcGkiLCJzdWIiOiJhbmEucEBlbWFpbC5jb207Q0xJRU5URSIsImV4cCI6MTY5MzM3NDM3Mn0.cN_wGLAJp4rmm7BP0x_0lS-ji9qTl_YXlUSDDrxzLEI",
 									"type": "string"
 								}
 							]

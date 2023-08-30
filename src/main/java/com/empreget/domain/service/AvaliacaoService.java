@@ -46,25 +46,7 @@ public class AvaliacaoService {
 		
 		return avaliacaoRepository.save(avaliacao);
 	}
-	
-//	public Avaliacao avaliar(Avaliacao avaliacao) {
-//		
-//		Long prestadorId = avaliacao.getPrestador().getId();
-//		
-//		Cliente cliente = catalogoClienteService.buscarOuFalhar(avaliacao.getCliente().getId());
-//		Prestador prestador = catalogoPrestadorService.buscarOuFalhar(prestadorId);
-//		
-//		if(avaliacao.getEstrelas() > 5 || avaliacao.getEstrelas() < 0) {
-//			throw new NegocioException(String.format("A quantidade '%d' está fora da escala. Tente avaliar "
-//					+ "utilizando números inteiros de 1 a 5.", avaliacao.getEstrelas()));
-//		}
-//		
-//		avaliacao.setPrestador(prestador);
-//		avaliacao.setCliente(cliente);
-//		avaliacao.setDataDoCadastro(OffsetDateTime.now());
-//		
-//		return avaliacaoRepository.save(avaliacao);
-//	}
+
 
 	public double calcularMediaAvaliacoes(Long prestadorId) {
 		Prestador prestador = catalogoPrestadorService.buscarOuFalhar(prestadorId);

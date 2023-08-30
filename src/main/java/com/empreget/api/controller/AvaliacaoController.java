@@ -40,7 +40,6 @@ import com.empreget.domain.repository.ClienteRepository;
 import com.empreget.domain.repository.PrestadorRepository;
 import com.empreget.domain.service.AvaliacaoService;
 import com.empreget.domain.service.BuscaOSService;
-import com.empreget.domain.service.CatalogoClienteService;
 
 import lombok.AllArgsConstructor;
 
@@ -59,7 +58,7 @@ public class AvaliacaoController {
 	
 	
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
-	@PostMapping("/{ordemServicoId}")
+	@PostMapping("/os/{ordemServicoId}")
 	@ResponseStatus(HttpStatus.CREATED)
 	public AvaliacaoResponse avaliarPrestador(@Valid @RequestBody AvaliacaoInput avaliacaoinput, @PathVariable @Valid Long ordemServicoId) {
 		
@@ -82,25 +81,8 @@ public class AvaliacaoController {
 		return  avaliacaoDtoAssembler.toModel(avaliacaoService.avaliar(avaliacao));
 	}
 	
-//	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
-//	@PostMapping
-//	@ResponseStatus(HttpStatus.CREATED)
-//	public AvaliacaoResponse avaliarPrestador(@Valid @RequestBody AvaliacaoInput avaliacaoinput) {
-//		
-//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//		String emailCliente = authentication.getName();
-//		
-//		Cliente cliente = clienteRepository.findByUsuarioEmail(emailCliente)
-//				.orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado registrado com o email " + emailCliente));
-//		
-//		Avaliacao avaliacao = avaliacaoInputDisassembler.toDomainObject(avaliacaoinput);
-//		avaliacao.setCliente(cliente);
-//		
-//		return  avaliacaoDtoAssembler.toModel(avaliacaoService.avaliar(avaliacao));
-//	}
-	
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
-	@GetMapping("/{prestadorId}")
+	@GetMapping("/prestador/{prestadorId}")
 	public Page<AvaliacaoResponse> ListarAvaliacoesPorPrestador(@PathVariable Long prestadorId, @PageableDefault(size = 10) Pageable pageable){
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -138,6 +120,51 @@ public class AvaliacaoController {
 			
 			Page<Avaliacao> prestadorPage = avaliacaoRepository.findByPrestadorId(prestador.getId(), pageable);
 			return prestadorPage.map(avaliacao -> avaliacaoDtoAssembler.toModel(avaliacao));
+		}
+		return new PageImpl<>(Collections.emptyList());
+	}
+	
+	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
+	@GetMapping("/os/{ordemServicoId}")
+	public Page<AvaliacaoResponse> ListarAvaliacoesPorOS(@PathVariable Long ordemServicoId, @PageableDefault(size = 10) Pageable pageable){
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		List<String> roles = authentication.getAuthorities()
+				.stream()
+				.map(GrantedAuthority::getAuthority)
+				.collect(Collectors.toList());
+		
+		if(roles.contains("ROLE_ADMIN")) {
+			Page<Avaliacao> osPage = avaliacaoRepository.findByOrdemServicoId(ordemServicoId, pageable);
+			return osPage.map(os -> avaliacaoDtoAssembler.toModel(os));
+			
+		}else if (roles.contains("ROLE_CLIENTE")) {
+			String emailUser = authentication.getName();
+			Cliente cliente = clienteRepository.findByUsuarioEmail(emailUser)
+					.orElseThrow(() -> new NegocioException("Cliente não encontrado."));
+			
+			Page<Avaliacao> clientePage = avaliacaoRepository.findByOrdemServicoIdAndClienteId(ordemServicoId, 
+					cliente.getId(), pageable);
+			
+			if (!clientePage.isEmpty()) {
+				return clientePage.map(avaliacaoDtoAssembler::toModel);
+			} else {
+				throw new NegocioException("Não há avaliações realizadas por você nesta Ordem de Serviço.");
+			}
+		}else if(roles.contains("ROLE_PRESTADOR")) {
+			String emailUser = authentication.getName();
+			Prestador prestador = prestadorRepository.findByUsuarioEmail(emailUser)
+					.orElseThrow(() -> new NegocioException("Prestador não encontrado."));
+			
+			OrdemServico os = buscaOS.buscarOuFalhar(ordemServicoId);
+			
+			if(!prestador.getId().equals(os.getPrestador().getId())) {
+				throw new AccessDeniedException("Acesso negado: Você não tem permissão para visualizar "
+						+ "avaliações de outros prestadores.");
+			}
+			
+			Page<Avaliacao> osPage = avaliacaoRepository.findByOrdemServicoId(os.getId(), pageable);
+			return osPage.map(avaliacao -> avaliacaoDtoAssembler.toModel(avaliacao));
 		}
 		return new PageImpl<>(Collections.emptyList());
 	}
