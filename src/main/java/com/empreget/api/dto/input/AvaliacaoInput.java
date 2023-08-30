@@ -1,6 +1,5 @@
 package com.empreget.api.dto.input;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
@@ -10,10 +9,6 @@ import lombok.Setter;
 @Setter
 public class AvaliacaoInput {
 
-	@Valid
-	@NotNull
-	private PrestadorIdInput prestador;
-	
 	@NotNull
 	private Integer estrelas;
 	

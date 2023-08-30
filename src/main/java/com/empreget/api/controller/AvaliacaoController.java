@@ -29,15 +29,18 @@ import com.empreget.api.assembler.AvaliacaoDtoAssembler;
 import com.empreget.api.assembler.AvaliacaoInputDisassembler;
 import com.empreget.api.dto.AvaliacaoResponse;
 import com.empreget.api.dto.input.AvaliacaoInput;
-import com.empreget.domain.exception.ClienteNaoEncontradoException;
+import com.empreget.domain.exception.AcessoNegadoException;
 import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.model.Avaliacao;
 import com.empreget.domain.model.Cliente;
+import com.empreget.domain.model.OrdemServico;
 import com.empreget.domain.model.Prestador;
 import com.empreget.domain.repository.AvaliacaoRepository;
 import com.empreget.domain.repository.ClienteRepository;
 import com.empreget.domain.repository.PrestadorRepository;
 import com.empreget.domain.service.AvaliacaoService;
+import com.empreget.domain.service.BuscaOSService;
+import com.empreget.domain.service.CatalogoClienteService;
 
 import lombok.AllArgsConstructor;
 
@@ -50,26 +53,51 @@ public class AvaliacaoController {
 	private AvaliacaoRepository avaliacaoRepository;
 	private AvaliacaoInputDisassembler avaliacaoInputDisassembler;
 	private ClienteRepository clienteRepository;
+	private BuscaOSService buscaOS;
 	private AvaliacaoDtoAssembler avaliacaoDtoAssembler;
 	private PrestadorRepository prestadorRepository;
 	
 	
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
-	@PostMapping
+	@PostMapping("/{ordemServicoId}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public AvaliacaoResponse avaliarPrestador(@Valid @RequestBody AvaliacaoInput avaliacaoinput) {
+	public AvaliacaoResponse avaliarPrestador(@Valid @RequestBody AvaliacaoInput avaliacaoinput, @PathVariable @Valid Long ordemServicoId) {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String emailCliente = authentication.getName();
 		
-		Cliente cliente = clienteRepository.findByUsuarioEmail(emailCliente)
-				.orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado registrado com o email " + emailCliente));
+		OrdemServico os = buscaOS.buscarOuFalhar(ordemServicoId);  
+		Cliente cliente = os.getCliente();
+		Prestador prestador = os.getPrestador();
+		
+		if (!cliente.getUsuario().getEmail().equals(emailCliente)) {
+	        throw new AcessoNegadoException("Cliente não autorizado para avaliar esta ordem de serviço.");
+	    }
 		
 		Avaliacao avaliacao = avaliacaoInputDisassembler.toDomainObject(avaliacaoinput);
 		avaliacao.setCliente(cliente);
+		avaliacao.setPrestador(prestador);
+		avaliacao.setOrdemServico(os);
 		
 		return  avaliacaoDtoAssembler.toModel(avaliacaoService.avaliar(avaliacao));
 	}
+	
+//	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
+//	@PostMapping
+//	@ResponseStatus(HttpStatus.CREATED)
+//	public AvaliacaoResponse avaliarPrestador(@Valid @RequestBody AvaliacaoInput avaliacaoinput) {
+//		
+//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//		String emailCliente = authentication.getName();
+//		
+//		Cliente cliente = clienteRepository.findByUsuarioEmail(emailCliente)
+//				.orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado registrado com o email " + emailCliente));
+//		
+//		Avaliacao avaliacao = avaliacaoInputDisassembler.toDomainObject(avaliacaoinput);
+//		avaliacao.setCliente(cliente);
+//		
+//		return  avaliacaoDtoAssembler.toModel(avaliacaoService.avaliar(avaliacao));
+//	}
 	
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
 	@GetMapping("/{prestadorId}")

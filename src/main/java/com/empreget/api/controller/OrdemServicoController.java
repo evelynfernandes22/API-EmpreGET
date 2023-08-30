@@ -80,7 +80,7 @@ public class OrdemServicoController {
 
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
 	@GetMapping
-	public Page<OrdemServicoResponse> listar(@PageableDefault(size = 10) @SortDefault(sort = "id") Pageable pageable) {
+	public Page<OrdemServicoResponse> listar(@PageableDefault(size = 5) @SortDefault(sort = "id") Pageable pageable) {
 
 	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    List<String> roles = authentication.getAuthorities()

@@ -108,7 +108,7 @@ public class PrestadorController {
 //TELA HOME - listar perfis resumidos no filtro ao catalogar todos
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
 	@GetMapping("/filtro")
-	public Page<PrestadorFiltroRegiaoResponse> listarTodosNoFiltro(@PageableDefault(size = 5) @SortDefault(sort = "nome") Pageable pageable){
+	public Page<PrestadorFiltroRegiaoResponse> listarTodosNoFiltro(@PageableDefault(size = 1) @SortDefault(sort = "nome") Pageable pageable){
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		List<String> roles = authentication.getAuthorities()

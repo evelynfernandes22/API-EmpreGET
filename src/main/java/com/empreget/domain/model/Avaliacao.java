@@ -4,11 +4,14 @@ import java.time.OffsetDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
@@ -50,6 +53,12 @@ public class Avaliacao {
 	@ManyToOne
 	@JoinColumn(name="prestador_id", nullable=false)
 	private Prestador prestador;
+	
+	@Valid
+	@NotNull
+	@OneToOne
+	@JoinColumn(name="ordem_servico_id", nullable=false)
+	private OrdemServico ordemServico;
 	
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
