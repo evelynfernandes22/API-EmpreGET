@@ -10,6 +10,7 @@ public class EnderecoResponse {
 	private String logradouro;
 	private int numero;
 	private String complemento;
+	private String cep;
 	private String bairro;
 	private String cidade;
 	private String estado;
