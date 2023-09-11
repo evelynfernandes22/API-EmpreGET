@@ -10,6 +10,7 @@ import com.empreget.domain.model.enums.TipoDiaria;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,9 +18,12 @@ import lombok.Setter;
 @Setter
 public class OrdemServicoResponse {
 	
+	@ApiModelProperty(example = "1")
 	private Long id;
+	@ApiModelProperty(example = "Ana Pereira")
 	private String nomeCliente;
 	private EnderecoResponse LocalDoServico;
+	@ApiModelProperty(example = "Sueli Cavalcanti")
 	private String nomePrestador;
 	
 	@JsonFormat(pattern = "dd/MM/yyyy")

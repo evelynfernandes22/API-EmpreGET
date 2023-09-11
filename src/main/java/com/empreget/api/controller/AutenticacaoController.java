@@ -18,6 +18,10 @@ import com.empreget.api.dto.input.UsuarioEmailSenhaInput;
 import com.empreget.core.config.security.TokenService;
 import com.empreget.domain.model.Usuario;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+@Api(tags = "Acesso")
 @RestController
 @RequestMapping("/auth")
 public class AutenticacaoController {
@@ -29,7 +33,7 @@ public class AutenticacaoController {
 	@Autowired
 	private TokenService tokenService;
 	
-	
+	@ApiOperation("Efetua login na aplicação")
 	@PostMapping("/login")
 	public ResponseEntity login(@RequestBody @Valid UsuarioEmailSenhaInput input) {
 		try {

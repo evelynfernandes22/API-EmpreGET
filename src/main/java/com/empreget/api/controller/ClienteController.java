@@ -34,8 +34,12 @@ import com.empreget.domain.repository.ClienteRepository;
 import com.empreget.domain.service.CadastroUsuarioService;
 import com.empreget.domain.service.CatalogoClienteService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 
+@Api(tags = "Clientes")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/clientes")
@@ -47,6 +51,7 @@ public class ClienteController {
 	private ClienteInputDisassembler clienteInputDisassembler;
 	private CadastroUsuarioService cadastroUsuarioService;
 
+	@ApiOperation("Lista clientes")
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
 	@GetMapping
 	public List<ClienteResponse> listar() {
@@ -73,13 +78,14 @@ public class ClienteController {
 	    return Collections.emptyList();
 	}
 	
+	@ApiOperation("Busca cliente por Id")
 	@PreAuthorize("@acessoService.verificarAcessoProprioCliente(#clienteId) or hasRole('ADMIN')")
 	@GetMapping("/{clienteId}")
-	public ClienteResponse buscarPorId(@PathVariable Long clienteId) {
+	public ClienteResponse buscarPorId(@ApiParam(value = "Id de um cliente") @PathVariable Long clienteId) {
 	    return clienteAssembler.toModel(catalogoClienteService.buscarOuFalhar(clienteId));
 	}
 
-
+	@ApiOperation("Efetua cadastro de cliente")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ClienteResponse adicionar(@Valid @RequestBody ClienteInput clienteInput) {
@@ -99,9 +105,11 @@ public class ClienteController {
 		return clienteAssembler.toModel(catalogoClienteService.salvar(cliente));
 	}
 	
+	@ApiOperation("Edita cadastro de cliente")
 	@PreAuthorize("@acessoService.verificarAcessoProprioCliente(#clienteId) or hasRole('ADMIN')")
 	@PutMapping("/{clienteId}")
-	public ClienteResponse editar(@PathVariable Long clienteId, @Valid @RequestBody ClienteInput clienteinput) {
+	public ClienteResponse editar(@ApiParam(value = "Id de um cliente") @PathVariable Long clienteId, 
+			@Valid @RequestBody ClienteInput clienteinput) {
 		
 		Cliente cliente = clienteInputDisassembler.toDomainObject(clienteinput);
 		Cliente clienteAtual = catalogoClienteService.buscarOuFalhar(clienteId);
@@ -109,7 +117,6 @@ public class ClienteController {
 		BeanUtils.copyProperties(cliente, clienteAtual, 
 				"id", "dataDoCadastro", "dataDaAtualizacao", "usuario");
 		
-		//Atualizando o nome na tabela usuário, caso seja alterado no editar
 		String nomeAtual = clienteAtual.getNome();
 		clienteAtual.getUsuario().setNome(nomeAtual);
 
@@ -117,10 +124,11 @@ public class ClienteController {
 
 	}
 
+	@ApiOperation("Exclui cadastro de cliente")
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{clienteId}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void excluir(@PathVariable Long clienteId) {
+	public void excluir(@ApiParam(value = "Id de um cliente") @PathVariable Long clienteId) {
 		catalogoClienteService.excluir(clienteId);			
 	}
 }

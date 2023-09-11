@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import com.empreget.domain.model.enums.Periodo;
 import com.empreget.domain.model.enums.TipoDiaria;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,11 +16,7 @@ import lombok.Setter;
 @Setter
 public class OrdemServicoInput {
 
-	//está sendo setado pelo cliente autenticado
-//	@Valid
-//	@NotNull
-//	private ClienteIdInput cliente;
-	
+	@ApiModelProperty(example = "1")
 	@Valid
 	@NotNull
 	private PrestadorIdInput prestador;

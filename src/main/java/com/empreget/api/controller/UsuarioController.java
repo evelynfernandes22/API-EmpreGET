@@ -36,93 +36,99 @@ import com.empreget.domain.model.Usuario;
 import com.empreget.domain.repository.UsuarioRepository;
 import com.empreget.domain.service.CadastroUsuarioService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 
+@Api(tags = "Usuario")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
-	
-	//private static final Logger log = LoggerFactory.getLogger(UsuarioController.class);
-	
+
+	// private static final Logger log =
+	// LoggerFactory.getLogger(UsuarioController.class);
+
 	private UsuarioRepository usuarioRepository;
 	private CadastroUsuarioService cadastroUsuarioService;
 	private UsuarioInputDisassembler usuarioInputDisassembler;
 	private UsuarioDtoAssembler usuarioDtoAssembler;
-	
-	
+
+	@ApiOperation("Lista usuários")
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
 	@GetMapping
-    public Page<UsuarioResponse> listar(@PageableDefault(size = 10) @SortDefault(sort = "id" ) Pageable pageable) {
-		
+	public Page<UsuarioResponse> listar(@PageableDefault(size = 10) @SortDefault(sort = "id") Pageable pageable) {
+
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		List<String> roles = authentication.getAuthorities()
-				.stream()
-				.map(GrantedAuthority::getAuthority)
+		List<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
 				.collect(Collectors.toList());
-				
-		if(roles.contains("ROLE_ADMIN")) {
+
+		if (roles.contains("ROLE_ADMIN")) {
 			Page<Usuario> todosUsuariosPage = usuarioRepository.findAll(pageable);
 			return todosUsuariosPage.map(usuario -> usuarioDtoAssembler.toModel(usuario));
-			
-		}else if (roles.contains("ROLE_CLIENTE") || roles.contains("ROLE_PRESTADOR")) {
-	        String username = authentication.getName();
-	        Usuario usuario = usuarioRepository.findUserByEmail(username)
-	                .orElseThrow(() -> new NegocioException("Usuário não encontrado."));
-	        return new PageImpl<>(Collections.singletonList(usuarioDtoAssembler.toModel(usuario)));
-	    } 
-		 
-        return new PageImpl<>(Collections.emptyList());
-    }
-	
-	
+
+		} else if (roles.contains("ROLE_CLIENTE") || roles.contains("ROLE_PRESTADOR")) {
+			String username = authentication.getName();
+			Usuario usuario = usuarioRepository.findUserByEmail(username)
+					.orElseThrow(() -> new NegocioException("Usuário não encontrado."));
+			return new PageImpl<>(Collections.singletonList(usuarioDtoAssembler.toModel(usuario)));
+		}
+
+		return new PageImpl<>(Collections.emptyList());
+	}
+
+	@ApiOperation("Busca usuário por Id")
 	@PreAuthorize("@acessoService.verificarAcessoProprioUsuario(#usuarioId) or hasRole('ADMIN')")
-    @GetMapping("/{usuarioId}")
-    public UsuarioResponse buscar(@PathVariable Long usuarioId) {
-        Usuario usuario = cadastroUsuarioService.buscarOuFalhar(usuarioId);
-        
-        return usuarioDtoAssembler.toModel(usuario);
-    }
-    
-    //Endpoint a pedido do Fernando
-	
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/email")
-    public UsuarioResponse buscarUsuarioPorEmail(@RequestParam("email") String email) {
-    	Optional<Usuario> usuario = usuarioRepository.findUserByEmail(email);
-    	
-    	if(usuario.isPresent()) {
-    		return usuarioDtoAssembler.toModel(usuario.get());
-    	}else {
-    		throw new NegocioException(String.format("O e-mail '%s' não está cadastrado no sistema.", email));
-    	}
-    }
-    
-    @PreAuthorize("@acessoService.verificarAcessoProprioUsuario(#usuarioId) and isAuthenticated()")
-    @PutMapping("/{usuarioId}")
-    public UsuarioResponse atualizarEmail(@PathVariable Long usuarioId,
-            @RequestBody @Valid UsuarioEmailInput usuarioInput) {
-    	
-        Usuario usuarioAtual = cadastroUsuarioService.buscarOuFalhar(usuarioId);
-        usuarioInputDisassembler.copyToDomainObjectMail(usuarioInput, usuarioAtual);
-        
-    	boolean emailEmUso = usuarioRepository.findByEmail(usuarioAtual.getEmail()).stream()
+	@GetMapping("/{usuarioId}")
+	public UsuarioResponse buscar(@ApiParam(value = "Id de um usuário") @PathVariable Long usuarioId) {
+		Usuario usuario = cadastroUsuarioService.buscarOuFalhar(usuarioId);
+
+		return usuarioDtoAssembler.toModel(usuario);
+	}
+
+	@ApiOperation("Busca usuário por email")
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/email")
+	public UsuarioResponse buscarUsuarioPorEmail(
+			@ApiParam(value = "E-mail de um usuário") @RequestParam("email") String email) {
+		Optional<Usuario> usuario = usuarioRepository.findUserByEmail(email);
+
+		if (usuario.isPresent()) {
+			return usuarioDtoAssembler.toModel(usuario.get());
+		} else {
+			throw new NegocioException(String.format("O e-mail '%s' não está cadastrado no sistema.", email));
+		}
+	}
+
+	@ApiOperation("Atualiza email do usuário")
+	@PreAuthorize("@acessoService.verificarAcessoProprioUsuario(#usuarioId) and isAuthenticated()")
+	@PutMapping("/{usuarioId}")
+	public UsuarioResponse atualizarEmail(@ApiParam(value = "Id de um usuário") @PathVariable Long usuarioId,
+			@RequestBody @Valid UsuarioEmailInput usuarioInput) {
+
+		Usuario usuarioAtual = cadastroUsuarioService.buscarOuFalhar(usuarioId);
+		usuarioInputDisassembler.copyToDomainObjectMail(usuarioInput, usuarioAtual);
+
+		boolean emailEmUso = usuarioRepository.findByEmail(usuarioAtual.getEmail()).stream()
 				.anyMatch(usuarioExistente -> !usuarioExistente.equals(usuarioAtual));
 
 		if (emailEmUso) {
-			throw new NegocioException(String.format("O email %d está em uso por outro usuário. Tente novamente com outro e-mail.",
-					usuarioAtual.getEmail()));
+			throw new NegocioException(
+					String.format("O email %d está em uso por outro usuário. Tente novamente com outro e-mail.",
+							usuarioAtual.getEmail()));
 		}
-               
-        return usuarioDtoAssembler.toModel(cadastroUsuarioService.salvarEdicao(usuarioAtual));
-    }
-    
-    @PreAuthorize("@acessoService.verificarAcessoProprioUsuario(#usuarioId) or hasRole('ADMIN')")
-    @PutMapping("/{usuarioId}/senha")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void alterarSenha(@PathVariable Long usuarioId, @RequestBody @Valid SenhaInput senhaInput) {
-    	cadastroUsuarioService.alterarSenha(usuarioId, senhaInput.getSenhaAtual(), senhaInput.getNovaSenha());
-    }  
-    
-}
 
+		return usuarioDtoAssembler.toModel(cadastroUsuarioService.salvarEdicao(usuarioAtual));
+	}
+
+	@ApiOperation("Altera a senha do usuário")
+	@PreAuthorize("@acessoService.verificarAcessoProprioUsuario(#usuarioId) or hasRole('ADMIN')")
+	@PutMapping("/{usuarioId}/senha")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void alterarSenha(@ApiParam(value = "Id de um usuário") @PathVariable Long usuarioId,
+			@RequestBody @Valid SenhaInput senhaInput) {
+		cadastroUsuarioService.alterarSenha(usuarioId, senhaInput.getSenhaAtual(), senhaInput.getNovaSenha());
+	}
+
+}
