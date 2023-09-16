@@ -32,6 +32,7 @@ import springfox.documentation.builders.RepresentationBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseBuilder;
 import springfox.documentation.schema.AlternateTypeRules;
+import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.service.Response;
@@ -73,6 +74,18 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				new ResponseBuilder()
 					.code(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
 					.description("Erro interno do Servidor")
+					.representation( MediaType.APPLICATION_JSON )
+                    .apply(getProblemaModelReference())	
+					.build(),
+				new ResponseBuilder()
+					.code(String.valueOf(HttpStatus.FORBIDDEN.value()))
+					.description("Acesso negado")
+					.representation( MediaType.APPLICATION_JSON )
+                    .apply(getProblemaModelReference())	
+					.build(),
+				new ResponseBuilder()
+					.code(String.valueOf(HttpStatus.UNAUTHORIZED.value()))
+					.description("Acesso não autorizado")
 					.representation( MediaType.APPLICATION_JSON )
                     .apply(getProblemaModelReference())	
 					.build(),
