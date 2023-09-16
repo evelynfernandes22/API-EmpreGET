@@ -3,6 +3,7 @@ package com.empreget.api.dto.input;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,8 @@ public class EnderecoInput {
 
 	@NotBlank
 	private String logradouro;
+	
+	@ApiModelProperty(example = "100", required = true)
 	@NotNull
 	private int numero;
 	

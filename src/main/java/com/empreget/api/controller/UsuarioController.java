@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,6 +32,7 @@ import com.empreget.api.assembler.UsuarioInputDisassembler;
 import com.empreget.api.dto.UsuarioResponse;
 import com.empreget.api.dto.input.SenhaInput;
 import com.empreget.api.dto.input.UsuarioEmailInput;
+import com.empreget.api.openApi.controller.UsuarioControllerOpenApi;
 import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.model.Usuario;
 import com.empreget.domain.repository.UsuarioRepository;
@@ -41,11 +43,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 
-@Api(tags = "Usuario")
 @AllArgsConstructor
 @RestController
-@RequestMapping("/usuarios")
-public class UsuarioController {
+@RequestMapping(path = "/usuarios", produces = MediaType.APPLICATION_JSON_VALUE)
+public class UsuarioController implements UsuarioControllerOpenApi{
 
 	// private static final Logger log =
 	// LoggerFactory.getLogger(UsuarioController.class);
@@ -55,7 +56,6 @@ public class UsuarioController {
 	private UsuarioInputDisassembler usuarioInputDisassembler;
 	private UsuarioDtoAssembler usuarioDtoAssembler;
 
-	@ApiOperation("Lista usuários")
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
 	@GetMapping
 	public Page<UsuarioResponse> listar(@PageableDefault(size = 10) @SortDefault(sort = "id") Pageable pageable) {
@@ -78,20 +78,17 @@ public class UsuarioController {
 		return new PageImpl<>(Collections.emptyList());
 	}
 
-	@ApiOperation("Busca usuário por Id")
 	@PreAuthorize("@acessoService.verificarAcessoProprioUsuario(#usuarioId) or hasRole('ADMIN')")
 	@GetMapping("/{usuarioId}")
-	public UsuarioResponse buscar(@ApiParam(value = "Id de um usuário") @PathVariable Long usuarioId) {
+	public UsuarioResponse buscar(@PathVariable Long usuarioId) {
 		Usuario usuario = cadastroUsuarioService.buscarOuFalhar(usuarioId);
 
 		return usuarioDtoAssembler.toModel(usuario);
 	}
 
-	@ApiOperation("Busca usuário por email")
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/email")
-	public UsuarioResponse buscarUsuarioPorEmail(
-			@ApiParam(value = "E-mail de um usuário") @RequestParam("email") String email) {
+	public UsuarioResponse buscarUsuarioPorEmail(@RequestParam("email") String email) {
 		Optional<Usuario> usuario = usuarioRepository.findUserByEmail(email);
 
 		if (usuario.isPresent()) {
@@ -101,10 +98,9 @@ public class UsuarioController {
 		}
 	}
 
-	@ApiOperation("Atualiza email do usuário")
 	@PreAuthorize("@acessoService.verificarAcessoProprioUsuario(#usuarioId) and isAuthenticated()")
 	@PutMapping("/{usuarioId}")
-	public UsuarioResponse atualizarEmail(@ApiParam(value = "Id de um usuário") @PathVariable Long usuarioId,
+	public UsuarioResponse atualizarEmail(@PathVariable Long usuarioId,
 			@RequestBody @Valid UsuarioEmailInput usuarioInput) {
 
 		Usuario usuarioAtual = cadastroUsuarioService.buscarOuFalhar(usuarioId);
@@ -122,11 +118,10 @@ public class UsuarioController {
 		return usuarioDtoAssembler.toModel(cadastroUsuarioService.salvarEdicao(usuarioAtual));
 	}
 
-	@ApiOperation("Altera a senha do usuário")
 	@PreAuthorize("@acessoService.verificarAcessoProprioUsuario(#usuarioId) or hasRole('ADMIN')")
 	@PutMapping("/{usuarioId}/senha")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void alterarSenha(@ApiParam(value = "Id de um usuário") @PathVariable Long usuarioId,
+	public void alterarSenha(@PathVariable Long usuarioId,
 			@RequestBody @Valid SenhaInput senhaInput) {
 		cadastroUsuarioService.alterarSenha(usuarioId, senhaInput.getSenhaAtual(), senhaInput.getNovaSenha());
 	}

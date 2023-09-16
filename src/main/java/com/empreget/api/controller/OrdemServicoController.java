@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -33,6 +34,7 @@ import com.empreget.api.dto.EnderecoResponse;
 import com.empreget.api.dto.OrdemServicoResponse;
 import com.empreget.api.dto.ServicoResponse;
 import com.empreget.api.dto.input.OrdemServicoInput;
+import com.empreget.api.openApi.controller.OSControllerOpenApi;
 import com.empreget.domain.exception.ClienteNaoEncontradoException;
 import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.model.Cliente;
@@ -42,16 +44,12 @@ import com.empreget.domain.repository.OrdemServicoRepository;
 import com.empreget.domain.service.CancelamentoOSService;
 import com.empreget.domain.service.SolicitacaoOSService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 
-@Api(tags = "Ordens de Serviço")
 @AllArgsConstructor
 @RestController
-@RequestMapping("/os")
-public class OrdemServicoController {
+@RequestMapping(path = "/os", produces = MediaType.APPLICATION_JSON_VALUE)
+public class OrdemServicoController implements OSControllerOpenApi{
 
 	private OrdemServicoRepository ordemServicoRepository;
 	private SolicitacaoOSService solicitacaoOSService;
@@ -61,7 +59,6 @@ public class OrdemServicoController {
 	private ClienteRepository clienteRepository;
 
 
-	@ApiOperation("Solicita/Agenda serviço com o prestador")
 	@PreAuthorize("hasAnyRole('CLIENTE', 'ADMIN')")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -82,7 +79,6 @@ public class OrdemServicoController {
 		return ordemServicoResponse;
 	}
 
-	@ApiOperation("Lista Ordens de Serviço")
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
 	@GetMapping
 	public Page<OrdemServicoResponse> listar(@PageableDefault(size = 5) @SortDefault(sort = "id") Pageable pageable) {
@@ -122,10 +118,9 @@ public class OrdemServicoController {
 	    return new PageImpl<>(Collections.emptyList());
 	}
 
-	@ApiOperation("Busca Ordem de Serviço por Id")
 	@PreAuthorize("@acessoService.verificarAcessoProprioOrdemServico(#id) or hasAnyRole('ADMIN')")
 	@GetMapping("/{id}")
-	public ResponseEntity<OrdemServicoResponse> buscar(@ApiParam(value = "Id de uma Ordem de Serviço") @PathVariable Long id) {
+	public ResponseEntity<OrdemServicoResponse> buscar(@PathVariable Long id) {
 		Optional<OrdemServico> ordemServicoOptional = ordemServicoRepository.findById(id);
 	    
 	    if (ordemServicoOptional.isPresent()) {
@@ -139,36 +134,32 @@ public class OrdemServicoController {
 	    }
 	}	
 	
-	@ApiOperation("Cancela Ordem de Serviço")
 	@PreAuthorize("@acessoService.verificarAcessoProprioOrdemServico(#ordemServicoId) and hasAnyRole('ADMIN', 'CLIENTE')")
 	@PutMapping("/{ordemServicoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void cancelar (@ApiParam(value = "Id de uma Ordem de Serviço") @PathVariable Long ordemServicoId){	
+	public void cancelar (@PathVariable Long ordemServicoId){	
 		cancelamentoOSService.cancelar(ordemServicoId);
 		
 	}
 	
-	@ApiOperation("Aceita solicitação de Ordem de Serviço")
 	@PreAuthorize("@acessoService.verificarAcessoProprioOrdemServico(#id) and hasRole('PRESTADOR')")
 	@PutMapping("/{id}/aceite")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void aceitar (@ApiParam(value = "Id de uma Ordem de Serviço") @PathVariable Long id) {
+	public void aceitar (@PathVariable Long id) {
 		solicitacaoOSService.aceitar(id);
 	}
 	
-	@ApiOperation("Recusa solicitação de Ordem de Serviço")
 	@PreAuthorize("@acessoService.verificarAcessoProprioOrdemServico(#id) and hasRole('PRESTADOR')")
 	@PutMapping("/{id}/recusa")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void recusar (@ApiParam(value = "Id de uma Ordem de Serviço") @PathVariable Long id) {
+	public void recusar (@PathVariable Long id) {
 		solicitacaoOSService.recusar(id);
 	}
 	
-	@ApiOperation("Finaliza Ordem de Serviço já realizada")
 	@PreAuthorize("hasRole('PRESTADOR')")
 	@PutMapping("/{id}/finalizacao")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void finalizar (@ApiParam(value = "Id de uma Ordem de Serviço") @PathVariable Long id) {
+	public void finalizar (@PathVariable Long id) {
 		solicitacaoOSService.finalizar(id);
 	}
 

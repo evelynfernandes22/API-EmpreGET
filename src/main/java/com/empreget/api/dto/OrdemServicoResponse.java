@@ -20,9 +20,12 @@ public class OrdemServicoResponse {
 	
 	@ApiModelProperty(example = "1")
 	private Long id;
+	
 	@ApiModelProperty(example = "Ana Pereira")
 	private String nomeCliente;
+	
 	private EnderecoResponse LocalDoServico;
+	
 	@ApiModelProperty(example = "Sueli Cavalcanti")
 	private String nomePrestador;
 	

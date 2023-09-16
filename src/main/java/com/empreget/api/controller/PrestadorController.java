@@ -15,6 +15,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -38,6 +39,7 @@ import com.empreget.api.dto.PrestadorFiltroRegiaoResponse;
 import com.empreget.api.dto.PrestadorMinResponse;
 import com.empreget.api.dto.PrestadorResponse;
 import com.empreget.api.dto.input.PrestadorInput;
+import com.empreget.api.openApi.controller.PrestadorControllerOpenApi;
 import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.model.Prestador;
 import com.empreget.domain.model.Usuario;
@@ -52,11 +54,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 
-@Api(tags = "Prestadores")
 @AllArgsConstructor
 @RestController
-@RequestMapping("/prestadores")
-public class PrestadorController {
+@RequestMapping(path = "/prestadores", produces = MediaType.APPLICATION_JSON_VALUE)
+public class PrestadorController implements PrestadorControllerOpenApi {
 
 	private PrestadorRepository prestadorRepository;
 	private CatalogoPrestadorService catalogoPrestadorService;
@@ -65,7 +66,6 @@ public class PrestadorController {
 	private CadastroUsuarioService cadastroUsuarioService;
 	private OrdemServicoDtoAssembler ordemServicoDtoAssembler;
 
-	@ApiOperation("Lista prestadores")
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
 	@GetMapping
 	public Page<PrestadorResponse> listar(@PageableDefault(size = 5) @SortDefault(sort = "nome") Pageable pageable) {
@@ -87,10 +87,9 @@ public class PrestadorController {
 		return new PageImpl<>(Collections.emptyList());
 	}
 
-	@ApiOperation("Lista prestadores por região")
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
 	@GetMapping("/regiao/{regiao}")
-	public Page<PrestadorFiltroRegiaoResponse> listarPorRegiao(@ApiParam(value = "Região que o prestador atende") @PathVariable String regiao,
+	public Page<PrestadorFiltroRegiaoResponse> listarPorRegiao(@PathVariable String regiao,
 			@PageableDefault(size = 5) @SortDefault(sort = "nome") Pageable pageable) {
 
 		Regiao regiaoEnum = Regiao.valueOf(regiao.toUpperCase());
@@ -98,16 +97,14 @@ public class PrestadorController {
 		return prestadorPage.map(prestador -> prestadorDtoAssembler.toModelMinFilter(prestador));
 	}
 
-	@ApiOperation("Lista prestadores por nome")
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
 	@GetMapping("/nome-contem/{nome}")
-	public Page<PrestadorFiltroRegiaoResponse> ListarPorNomeContem(@ApiParam(value = "Nome do prestador") @PathVariable String nome,
+	public Page<PrestadorFiltroRegiaoResponse> ListarPorNomeContem(@PathVariable String nome,
 			@PageableDefault(size = 5) @SortDefault(sort = "nome") Pageable pageable) {
 		Page<Prestador> prestadorPage = catalogoPrestadorService.buscarPorNomeContem(nome, pageable);
 		return prestadorPage.map(prestador -> prestadorDtoAssembler.toModelMinFilter(prestador));
 	}
 
-	@ApiOperation("Lista todos os prestadores com informações essenciais para filtro")
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
 	@GetMapping("/filtro")
 	public Page<PrestadorFiltroRegiaoResponse> listarTodosNoFiltro(
@@ -130,10 +127,15 @@ public class PrestadorController {
 		return new PageImpl<>(Collections.emptyList());
 	}
 
-	@ApiOperation("Busca prestador por Id com informações essenciais")
 	@PreAuthorize("@acessoService.verificarAcessoProprioPrestador(#prestadorId) or hasAnyRole('ADMIN', 'CLIENTE')")
 	@GetMapping("/perfis/{prestadorId}")
-	public PrestadorMinResponse buscarPerfilPorId(@ApiParam(value = "Id de um prestador") @PathVariable Long prestadorId) {
+	public PrestadorMinResponse buscarPerfilPorId(@PathVariable Long prestadorId) {
+		return prestadorDtoAssembler.toModelMin(catalogoPrestadorService.buscarOuFalhar(prestadorId));
+	}
+	
+	@PreAuthorize("@acessoService.verificarAcessoProprioPrestador(#prestadorId) or hasAnyRole('ADMIN', 'CLIENTE')")
+	@GetMapping("/perfil/{prestadorId}")
+	public PrestadorMinResponse buscarPorIdPerfil(@PathVariable Long prestadorId) {
 		return prestadorDtoAssembler.toModelMin(catalogoPrestadorService.buscarOuFalhar(prestadorId));
 	}
 
@@ -147,30 +149,21 @@ public class PrestadorController {
 //				.collect(Collectors.toList());
 //	}
 
-	@ApiOperation("Busca Ordem de Serviço por data do serviço")
 	@PreAuthorize("hasAnyRole('ADMIN', 'PRESTADOR')")
 	@GetMapping("/{prestadorId}/ordens-servico")
-	public List<OrdemServicoDataResponse> buscarPorDataServico(@ApiParam(value = "Id de um prestador") @PathVariable Long prestadorId,
-			@ApiParam(value = "Data do serviço solicitado") @RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataServico) {
+	public List<OrdemServicoDataResponse> buscarPorDataServico(@PathVariable Long prestadorId,
+			@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataServico) {
 		return ordemServicoDtoAssembler.toCollectionOSDataModel(
 				catalogoPrestadorService.buscarOrdensServicoPorDataServico(prestadorId, dataServico));
 	}
 
-	@ApiOperation("Busca prestador por Id")
 	@PreAuthorize("@acessoService.verificarAcessoProprioPrestador(#prestadorId) or hasAnyRole('ADMIN', 'CLIENTE')")
 	@GetMapping("/{prestadorId}")
-	public PrestadorResponse buscarPorId(@ApiParam(value = "Id de um prestador") @PathVariable Long prestadorId) {
+	public PrestadorResponse buscarPorId(@PathVariable Long prestadorId) {
 		return prestadorDtoAssembler.toModel(catalogoPrestadorService.buscarOuFalhar(prestadorId));
 	}
 
-	@ApiOperation("Busca prestador por Id com informações essenciais")
-	@PreAuthorize("@acessoService.verificarAcessoProprioPrestador(#prestadorId) or hasAnyRole('ADMIN', 'CLIENTE')")
-	@GetMapping("/perfil/{prestadorId}")
-	public PrestadorMinResponse buscarPorIdPerfil(@ApiParam(value = "Id de um prestador") @PathVariable Long prestadorId) {
-		return prestadorDtoAssembler.toModelMin(catalogoPrestadorService.buscarOuFalhar(prestadorId));
-	}
-
-	@ApiOperation("Cadastra prestador")
+	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public PrestadorResponse adicionar(@Valid @RequestBody PrestadorInput prestadorInput) {
@@ -191,10 +184,9 @@ public class PrestadorController {
 
 	}
 
-	@ApiOperation("Edita prestador")
 	@PreAuthorize("@acessoService.verificarAcessoProprioPrestador(#prestadorId) or hasRole('ADMIN')")
 	@PutMapping("/{prestadorId}")
-	public PrestadorResponse editar(@ApiParam(value = "Id de um prestador") @PathVariable Long prestadorId, @RequestBody @Valid PrestadorInput prestadorInput) {
+	public PrestadorResponse editar(@PathVariable Long prestadorId, @RequestBody @Valid PrestadorInput prestadorInput) {
 
 		Prestador prestador = prestadorInputDisassembler.toDomainObject(prestadorInput);
 		Prestador prestadorAtual = catalogoPrestadorService.buscarOuFalhar(prestadorId);
@@ -208,11 +200,10 @@ public class PrestadorController {
 
 	}
 
-	@ApiOperation("Exclui prestador")
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{prestadorId}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void excluir(@ApiParam(value = "Id de um prestador") @PathVariable Long prestadorId) {
+	public void excluir(@PathVariable Long prestadorId) {
 		catalogoPrestadorService.excluir(prestadorId);
 
 	}

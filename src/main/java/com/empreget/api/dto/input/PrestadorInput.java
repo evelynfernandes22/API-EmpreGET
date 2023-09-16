@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import com.empreget.domain.model.enums.Regiao;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
@@ -19,6 +20,7 @@ public class PrestadorInput {
 	private UsuarioComSenhaInput usuario;
 	@Valid
 	private EnderecoInput endereco;
+	@ApiModelProperty(required = true)
 	@NotNull
 	private Regiao regiao; 
 	@NotBlank

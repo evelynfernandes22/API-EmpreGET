@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,6 +27,7 @@ import com.empreget.api.assembler.ClienteDtoAssembler;
 import com.empreget.api.assembler.ClienteInputDisassembler;
 import com.empreget.api.dto.ClienteResponse;
 import com.empreget.api.dto.input.ClienteInput;
+import com.empreget.api.openApi.controller.ClienteControllerOpenApi;
 import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.model.Cliente;
 import com.empreget.domain.model.Usuario;
@@ -39,11 +41,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 
-@Api(tags = "Clientes")
 @AllArgsConstructor
 @RestController
-@RequestMapping("/clientes")
-public class ClienteController {
+@RequestMapping(path = "/clientes", produces = MediaType.APPLICATION_JSON_VALUE)
+public class ClienteController implements ClienteControllerOpenApi {
 
 	private ClienteRepository clienteRepository;
 	private CatalogoClienteService catalogoClienteService;
@@ -51,11 +52,9 @@ public class ClienteController {
 	private ClienteInputDisassembler clienteInputDisassembler;
 	private CadastroUsuarioService cadastroUsuarioService;
 
-	@ApiOperation("Lista clientes")
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
 	@GetMapping
 	public List<ClienteResponse> listar() {
-		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		List<String> roles = authentication.getAuthorities()
 				.stream()
@@ -78,18 +77,15 @@ public class ClienteController {
 	    return Collections.emptyList();
 	}
 	
-	@ApiOperation("Busca cliente por Id")
 	@PreAuthorize("@acessoService.verificarAcessoProprioCliente(#clienteId) or hasRole('ADMIN')")
 	@GetMapping("/{clienteId}")
-	public ClienteResponse buscarPorId(@ApiParam(value = "Id de um cliente") @PathVariable Long clienteId) {
+	public ClienteResponse buscarPorId(@PathVariable Long clienteId) {
 	    return clienteAssembler.toModel(catalogoClienteService.buscarOuFalhar(clienteId));
 	}
 
-	@ApiOperation("Efetua cadastro de cliente")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ClienteResponse adicionar(@Valid @RequestBody ClienteInput clienteInput) {
-		
 		Cliente cliente = clienteInputDisassembler.toDomainObject(clienteInput);
 		
 		Usuario usuario = new Usuario();
@@ -105,12 +101,9 @@ public class ClienteController {
 		return clienteAssembler.toModel(catalogoClienteService.salvar(cliente));
 	}
 	
-	@ApiOperation("Edita cadastro de cliente")
 	@PreAuthorize("@acessoService.verificarAcessoProprioCliente(#clienteId) or hasRole('ADMIN')")
 	@PutMapping("/{clienteId}")
-	public ClienteResponse editar(@ApiParam(value = "Id de um cliente") @PathVariable Long clienteId, 
-			@Valid @RequestBody ClienteInput clienteinput) {
-		
+	public ClienteResponse editar(@PathVariable Long clienteId, @Valid @RequestBody ClienteInput clienteinput) {
 		Cliente cliente = clienteInputDisassembler.toDomainObject(clienteinput);
 		Cliente clienteAtual = catalogoClienteService.buscarOuFalhar(clienteId);
 
@@ -121,14 +114,12 @@ public class ClienteController {
 		clienteAtual.getUsuario().setNome(nomeAtual);
 
 		return clienteAssembler.toModel(catalogoClienteService.salvar(clienteAtual));
-
 	}
 
-	@ApiOperation("Exclui cadastro de cliente")
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{clienteId}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void excluir(@ApiParam(value = "Id de um cliente") @PathVariable Long clienteId) {
+	public void excluir (@PathVariable Long clienteId) {
 		catalogoClienteService.excluir(clienteId);			
 	}
 }

@@ -16,17 +16,20 @@ import lombok.Setter;
 @Setter
 public class OrdemServicoInput {
 
-	@ApiModelProperty(example = "1")
+	@ApiModelProperty(example = "1", required = true)
 	@Valid
 	@NotNull
 	private PrestadorIdInput prestador;
 	
+	@ApiModelProperty(example = "2023-09-20", required = true)
 	@NotNull
 	private LocalDate dataServico;
 	
+	@ApiModelProperty(example = "COMERCIAL", required = true)
 	@NotNull
 	private Periodo periodo;
 	
+	@ApiModelProperty(example = "DIARIA_CHEIA", required = true)
 	@NotNull
 	private TipoDiaria tipoDeDiaria;
 }

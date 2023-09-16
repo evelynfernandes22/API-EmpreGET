@@ -29,6 +29,7 @@ import com.empreget.api.assembler.AvaliacaoDtoAssembler;
 import com.empreget.api.assembler.AvaliacaoInputDisassembler;
 import com.empreget.api.dto.AvaliacaoResponse;
 import com.empreget.api.dto.input.AvaliacaoInput;
+import com.empreget.api.openApi.controller.AvaliacaoControllerOpenApi;
 import com.empreget.domain.exception.AcessoNegadoException;
 import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.model.Avaliacao;
@@ -46,11 +47,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 
-@Api(tags = "Avaliacao")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/avaliacoes")
-public class AvaliacaoController {
+public class AvaliacaoController implements AvaliacaoControllerOpenApi {
 
 	private AvaliacaoService avaliacaoService;
 	private AvaliacaoRepository avaliacaoRepository;
@@ -60,12 +60,11 @@ public class AvaliacaoController {
 	private AvaliacaoDtoAssembler avaliacaoDtoAssembler;
 	private PrestadorRepository prestadorRepository;
 	
-	@ApiOperation("Avalia a qualidade do serviço prestado em determinada Ordem de Serviço e respectivo prestador")
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
 	@PostMapping("/os/{ordemServicoId}")
 	@ResponseStatus(HttpStatus.CREATED)
 	public AvaliacaoResponse avaliarPrestador(@Valid @RequestBody AvaliacaoInput avaliacaoinput, 
-			@ApiParam(value = "Id de uma Ordem de Serviço", example="1") @PathVariable @Valid Long ordemServicoId) {
+			@PathVariable @Valid Long ordemServicoId) {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String emailCliente = authentication.getName();
@@ -86,10 +85,9 @@ public class AvaliacaoController {
 		return  avaliacaoDtoAssembler.toModel(avaliacaoService.avaliar(avaliacao));
 	}
 	
-	@ApiOperation("Lista avaliações por prestador")
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
 	@GetMapping("/prestador/{prestadorId}")
-	public Page<AvaliacaoResponse> ListarAvaliacoesPorPrestador(@ApiParam(value = "Id de um prestador") @PathVariable Long prestadorId, 
+	public Page<AvaliacaoResponse> ListarAvaliacoesPorPrestador(@PathVariable Long prestadorId, 
 			@PageableDefault(size = 10) Pageable pageable){
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -131,11 +129,9 @@ public class AvaliacaoController {
 		return new PageImpl<>(Collections.emptyList());
 	}
 	
-	@ApiOperation("Lista avaliações por Ordem de Serviço")
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
 	@GetMapping("/os/{ordemServicoId}")
-	public Page<AvaliacaoResponse> ListarAvaliacoesPorOS(@ApiParam(value = "Id de uma Ordem de Serviço") 
-					@PathVariable Long ordemServicoId, @PageableDefault(size = 10) Pageable pageable){
+	public Page<AvaliacaoResponse> ListarAvaliacoesPorOS(@PathVariable Long ordemServicoId, @PageableDefault(size = 10) Pageable pageable){
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		List<String> roles = authentication.getAuthorities()
@@ -178,15 +174,13 @@ public class AvaliacaoController {
 		return new PageImpl<>(Collections.emptyList());
 	}
 	
-	@ApiOperation("Efetua o cálculo da média das avaliações por prestador")
 	@GetMapping("/media/{prestadorId}")
-	public ResponseEntity<Double> calcularMediaAvaliacoesPrestador(@ApiParam(value = "Id de um prestador") @PathVariable Long prestadorId){
+	public ResponseEntity<Double> calcularMediaAvaliacoesPrestador(@PathVariable Long prestadorId){
 		
 		double mediaAvaliacoes = avaliacaoService.calcularMediaAvaliacoes(prestadorId);
 		return ResponseEntity.ok(mediaAvaliacoes); 
 	}
 		
-	@ApiOperation("Efetua o cálculo da quantidade de avaliações recebidas por prestador")
 	@GetMapping("/quantidade/{prestadorId}")
 	public ResponseEntity<Long> calcularQuantidadeAvaliacoesPrestador(@PathVariable Long prestadorId) {
 		

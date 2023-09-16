@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.empreget.api.assembler.FotoPrestadorDtoAssembler;
 import com.empreget.api.dto.FotoPrestadorResponse;
 import com.empreget.api.dto.input.FotoPrestadorInput;
+import com.empreget.api.openApi.controller.PrestadorFotoControllerOpenApi;
 import com.empreget.domain.exception.EntidadeNaoEncontradaException;
 import com.empreget.domain.model.FotoPrestador;
 import com.empreget.domain.model.Prestador;
@@ -32,31 +33,24 @@ import com.empreget.domain.service.CatalogoPrestadorFotoService;
 import com.empreget.domain.service.CatalogoPrestadorService;
 import com.empreget.domain.service.FotoStorageService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 
-@Api(tags = "Foto")
 @AllArgsConstructor
 @RestController
-@RequestMapping("/prestadores/{prestadorId}/foto")
-public class PrestadorFotoController {
+@RequestMapping(path = "/prestadores/{prestadorId}/foto")
+public class PrestadorFotoController implements PrestadorFotoControllerOpenApi {
 
 	private CatalogoPrestadorService catalogoPrestadorService;
 	private CatalogoPrestadorFotoService catalogoPrestadorFotoService;
 	private FotoPrestadorDtoAssembler fotoPrestadorDtoAssembler;
 	private FotoStorageService fotoStorageService;
 		
-	@ApiOperation("Atualiza foto do prestador")
 	@PreAuthorize("@acessoService.verificarAcessoProprioPrestador(#prestadorId)")
-	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public FotoPrestadorResponse atualizarFoto(@ApiParam(value = "Id de um prestador") @PathVariable Long prestadorId,
-			@Valid FotoPrestadorInput fotoPrestadorInput) throws IOException {
+	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public FotoPrestadorResponse atualizarFoto (@PathVariable Long prestadorId, @Valid FotoPrestadorInput fotoPrestadorInput) throws IOException {
 
 		Prestador prestador = catalogoPrestadorService.buscarOuFalhar(prestadorId);
 		MultipartFile arquivo = fotoPrestadorInput.getArquivo();
-		
 		
 		FotoPrestador fotoPrestador = new FotoPrestador();
 		fotoPrestador.setNomeArquivo(arquivo.getOriginalFilename());
@@ -71,18 +65,16 @@ public class PrestadorFotoController {
 		return fotoPrestadorDtoAssembler.toModel(fotoSalva);	
 	}
 	
-	@ApiOperation("Busca foto por prestador")
 	@PreAuthorize("@acessoService.verificarAcessoProprioPrestador(#prestadorId) or hasAnyRole('ADMIN', 'CLIENTE')")
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public FotoPrestadorResponse buscar(@ApiParam(value = "Id de um prestador") @PathVariable Long prestadorId) {
+	public FotoPrestadorResponse buscar(@PathVariable Long prestadorId) {
 		return fotoPrestadorDtoAssembler.toModel(catalogoPrestadorFotoService
 				.buscarOuFalhar(prestadorId));
 	}
 	
-	@ApiOperation("Mostra a foto do prestador registrada no sistema")
 	@PreAuthorize("@acessoService.verificarAcessoProprioPrestador(#prestadorId) or hasAnyRole('ADMIN', 'CLIENTE')")
 	@GetMapping
-	public ResponseEntity<InputStreamResource> mostrarFoto(@ApiParam(value = "Id de um prestador") @PathVariable Long prestadorId, 
+	public ResponseEntity<InputStreamResource> mostrarFoto(@PathVariable Long prestadorId, 
 			@RequestHeader(name = "accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException {
 		
 		try {
@@ -115,10 +107,9 @@ public class PrestadorFotoController {
 		}
 	}
 	
-	@ApiOperation("Exclui foto do prestador")
 	@DeleteMapping
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void excluir(@ApiParam(value = "Id de um prestador") @PathVariable Long prestadorId) {
+	public void excluir(@PathVariable Long prestadorId) {
 		
 		catalogoPrestadorFotoService.remover(prestadorId);
 	}
