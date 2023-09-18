@@ -46,7 +46,7 @@ public class PrestadorFotoController implements PrestadorFotoControllerOpenApi {
 	private FotoStorageService fotoStorageService;
 		
 	@PreAuthorize("@acessoService.verificarAcessoProprioPrestador(#prestadorId)")
-	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public FotoPrestadorResponse atualizarFoto (@PathVariable Long prestadorId, @Valid FotoPrestadorInput fotoPrestadorInput) throws IOException {
 
 		Prestador prestador = catalogoPrestadorService.buscarOuFalhar(prestadorId);
