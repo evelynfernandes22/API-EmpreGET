@@ -41,6 +41,7 @@ import com.empreget.domain.repository.ClienteRepository;
 import com.empreget.domain.repository.PrestadorRepository;
 import com.empreget.domain.service.AvaliacaoService;
 import com.empreget.domain.service.BuscaOSService;
+import com.empreget.domain.service.CatalogoPrestadorService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -59,6 +60,7 @@ public class AvaliacaoController implements AvaliacaoControllerOpenApi {
 	private BuscaOSService buscaOS;
 	private AvaliacaoDtoAssembler avaliacaoDtoAssembler;
 	private PrestadorRepository prestadorRepository;
+	private CatalogoPrestadorService catalogoPrestadorService;
 	
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE')")
 	@PostMapping("/os/{ordemServicoId}")
@@ -90,6 +92,9 @@ public class AvaliacaoController implements AvaliacaoControllerOpenApi {
 	public Page<AvaliacaoResponse> ListarAvaliacoesPorPrestador(@PathVariable Long prestadorId, 
 			@PageableDefault(size = 10) Pageable pageable){
 		
+		Prestador prestador = catalogoPrestadorService.buscarOuFalhar(prestadorId); 
+		Long prestadorIdValido = prestador.getId();
+		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		List<String> roles = authentication.getAuthorities()
 				.stream()
@@ -97,15 +102,15 @@ public class AvaliacaoController implements AvaliacaoControllerOpenApi {
 				.collect(Collectors.toList());
 		
 		if(roles.contains("ROLE_ADMIN")) {
-			Page<Avaliacao> prestadorPage = avaliacaoRepository.findByPrestadorId(prestadorId, pageable);
-			return prestadorPage.map(prestador -> avaliacaoDtoAssembler.toModel(prestador));
+			Page<Avaliacao> prestadorPage = avaliacaoRepository.findByPrestadorId(prestadorIdValido, pageable);
+			return prestadorPage.map(p -> avaliacaoDtoAssembler.toModel(p));
 			
 		}else if (roles.contains("ROLE_CLIENTE")) {
 			String emailUser = authentication.getName();
 	        Cliente cliente = clienteRepository.findByUsuarioEmail(emailUser)
 	                .orElseThrow(() -> new NegocioException("Cliente não encontrado."));
 			    
-	        Page<Avaliacao> clientePage = avaliacaoRepository.findByPrestadorIdAndClienteId(prestadorId, 
+	        Page<Avaliacao> clientePage = avaliacaoRepository.findByPrestadorIdAndClienteId(prestadorIdValido, 
 	        		cliente.getId(), pageable);
 	       
 	        if (!clientePage.isEmpty()) {
@@ -115,15 +120,15 @@ public class AvaliacaoController implements AvaliacaoControllerOpenApi {
 	        }
 	    }else if(roles.contains("ROLE_PRESTADOR")) {
 			String emailUser = authentication.getName();
-			Prestador prestador = prestadorRepository.findByUsuarioEmail(emailUser)
+			Prestador prest = prestadorRepository.findByUsuarioEmail(emailUser)
 					.orElseThrow(() -> new NegocioException("Prestador não encontrado."));
 			
-			if(!prestador.getId().equals(prestadorId)) {
+			if(!prest.getId().equals(prestadorId)) {
 				throw new AccessDeniedException("Acesso negado: Você não tem permissão para visualizar "
 						+ "avaliações de outros prestadores.");
 			}
 			
-			Page<Avaliacao> prestadorPage = avaliacaoRepository.findByPrestadorId(prestador.getId(), pageable);
+			Page<Avaliacao> prestadorPage = avaliacaoRepository.findByPrestadorId(prest.getId(), pageable);
 			return prestadorPage.map(avaliacao -> avaliacaoDtoAssembler.toModel(avaliacao));
 		}
 		return new PageImpl<>(Collections.emptyList());

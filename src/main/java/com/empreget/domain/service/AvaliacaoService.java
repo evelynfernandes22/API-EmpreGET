@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.empreget.domain.exception.AvaliacaoNaoEncontradoException;
 import com.empreget.domain.exception.NegocioException;
+import com.empreget.domain.exception.OrdemServicoNaoEncontradoException;
 import com.empreget.domain.model.Avaliacao;
 import com.empreget.domain.model.Cliente;
 import com.empreget.domain.model.OrdemServico;
@@ -68,6 +69,11 @@ public class AvaliacaoService {
 		long quantidadeAvaliacoes = avaliacaoRepository.countByPrestadorId(prestadorId);
 		
 		return quantidadeAvaliacoes;
+	}
+	
+	public Avaliacao buscarOuFalhar (Long avaliacaoId) {
+		return avaliacaoRepository.findById(avaliacaoId)
+				.orElseThrow(() -> new AvaliacaoNaoEncontradoException(avaliacaoId));
 	}
 	
 }
