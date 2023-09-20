@@ -37,10 +37,12 @@ import com.empreget.api.dto.input.OrdemServicoInput;
 import com.empreget.api.openApi.controller.OSControllerOpenApi;
 import com.empreget.domain.exception.ClienteNaoEncontradoException;
 import com.empreget.domain.exception.NegocioException;
+import com.empreget.domain.exception.OrdemServicoNaoEncontradoException;
 import com.empreget.domain.model.Cliente;
 import com.empreget.domain.model.OrdemServico;
 import com.empreget.domain.repository.ClienteRepository;
 import com.empreget.domain.repository.OrdemServicoRepository;
+import com.empreget.domain.service.BuscaOSService;
 import com.empreget.domain.service.CancelamentoOSService;
 import com.empreget.domain.service.SolicitacaoOSService;
 
@@ -57,6 +59,7 @@ public class OrdemServicoController implements OSControllerOpenApi{
 	private OrdemServicoInputDisassembler ordemServicoInputDisassembler;
 	private CancelamentoOSService cancelamentoOSService;
 	private ClienteRepository clienteRepository;
+	private BuscaOSService buscaOSService;
 
 
 	@PreAuthorize("hasAnyRole('CLIENTE', 'ADMIN')")
@@ -120,18 +123,12 @@ public class OrdemServicoController implements OSControllerOpenApi{
 
 	@PreAuthorize("@acessoService.verificarAcessoProprioOrdemServico(#id) or hasAnyRole('ADMIN')")
 	@GetMapping("/{id}")
-	public ResponseEntity<OrdemServicoResponse> buscar(@PathVariable Long id) {
-		Optional<OrdemServico> ordemServicoOptional = ordemServicoRepository.findById(id);
-	    
-	    if (ordemServicoOptional.isPresent()) {
-	        OrdemServico ordemServico = ordemServicoOptional.get();
-	       
-	        OrdemServicoResponse ordemServicoResponse = ordemServicoAssembler.toModel(ordemServico);
-	        puxarEnderecoEServico(ordemServico, ordemServicoResponse);
-	        return ResponseEntity.ok(ordemServicoResponse);
-	   } else {
-	        return ResponseEntity.notFound().build();
-	    }
+	public OrdemServicoResponse buscar(@PathVariable Long id) {
+		
+		OrdemServico ordemServico = buscaOSService.buscarOuFalhar(id);
+	    OrdemServicoResponse ordemServicoResponse = ordemServicoAssembler.toModel(ordemServico);
+	    puxarEnderecoEServico(ordemServico, ordemServicoResponse);
+	    return ordemServicoResponse;
 	}	
 	
 	@PreAuthorize("@acessoService.verificarAcessoProprioOrdemServico(#ordemServicoId) and hasAnyRole('ADMIN', 'CLIENTE')")

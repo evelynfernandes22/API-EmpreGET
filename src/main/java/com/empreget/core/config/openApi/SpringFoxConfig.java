@@ -1,5 +1,6 @@
 package com.empreget.core.config.openApi;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
@@ -32,12 +33,15 @@ import springfox.documentation.builders.RepresentationBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseBuilder;
 import springfox.documentation.schema.AlternateTypeRules;
-import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Contact;
 import springfox.documentation.service.Response;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
@@ -48,9 +52,12 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 	public Docket apiDocket() {
 		TypeResolver typeResolver = new TypeResolver();
 		
-		return new Docket(DocumentationType.OAS_30).select()
-				.apis(RequestHandlerSelectors.basePackage("com.empreget.api")).paths(PathSelectors.any())
-				.build()
+		return new Docket(DocumentationType.OAS_30)
+				.select()
+				.apis(RequestHandlerSelectors
+						.basePackage("com.empreget.api"))
+				.paths(PathSelectors.any())
+				.build()				
 				.useDefaultResponseMessages(false)
 				.globalResponses(HttpMethod.GET, globalGetResponseMessages())
 				.globalResponses(HttpMethod.POST, globalPostPutResponseMessages())
@@ -66,9 +73,13 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 						new Tag("Ordens de Serviço", "Administra as Ordens de Serviço"),
 						new Tag("Foto", "Gerencia o upload e download de foto do prestador"),
 						new Tag("Usuario", "Gerencia usuários"),
-						new Tag("Avaliacao", "Gerencia as avaliações de prestadores"), new Tag("Acesso", "Login"));
+						new Tag("Avaliacao", "Gerencia as avaliações de prestadores"), new Tag("Acesso", "Login"))
+				.securityContexts(Arrays.asList(securityContext()))
+                .securitySchemes(Arrays.asList(apiKey()));
+				
 	}
-
+	
+	
 	private List<Response> globalGetResponseMessages() {
 		return Arrays.asList(
 				new ResponseBuilder()
@@ -138,23 +149,51 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 	}
 
 	public ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("EmpreGET Api").description(
+		return new ApiInfoBuilder()
+				.title("EmpreGET Api")
+				.description(
 				"Api aberta para comunidade. Objetiva a busca e contratação facilitada de prestadores de serviços domésticos na cidade de Londrina/Pr. "
 						+ "A aplicação refere-se ao projeto de extensão do curso de Análise e Desenvolvimento de Sistemas da Unifil, "
 						+ "desenvolvido pelos alunos: Evelyn Fernandes, Fernando Tunouti e Gedson Souza.")
-				.version("1").contact(new Contact("Unifil", "https://unifil.br/", "unifil@unifil.edu.br")).build();
+				.version("1")
+				.contact(new Contact("Unifil", "https://unifil.br/", "unifil@unifil.edu.br"))
+				.build();
 	}
 
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
-
-		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-	}
 
 	private Consumer<RepresentationBuilder> getProblemaModelReference() {
 	    return r -> r.model(m -> m.name("Problema")
 	            .referenceModel(ref -> ref.key(k -> k.qualifiedModelName(
 	                    q -> q.name("Problema").namespace("com.empreget.api.exceptionHandler")))));
 	}
+	
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+
+		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+	}	
+	
+	//Autenticação e autorização 
+	public ApiKey apiKey() {
+	        return new ApiKey("JWT", "Authorization", "header");
+	}
+
+	    private SecurityContext securityContext(){
+	        return SecurityContext.builder()
+	                .securityReferences(defaultAuth())
+	                .forPaths(PathSelectors.any())
+	                .build();
+	    }
+
+	    private List<SecurityReference> defaultAuth() {
+	        AuthorizationScope authorizationScope = new AuthorizationScope(
+	                "global", "accessEverything");
+	        AuthorizationScope[] scopes = new AuthorizationScope[1];
+	        scopes[0] = authorizationScope;
+	        SecurityReference reference = new SecurityReference("JWT", scopes);
+	        List<SecurityReference> auths = new ArrayList<>();
+	        auths.add(reference);
+	        return auths;
+	    }
 }

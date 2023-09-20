@@ -32,7 +32,7 @@ public interface OSControllerOpenApi {
 		@ApiResponse(code=400, message="Ordem de serviço inválida", response= Problem.class),
 		@ApiResponse(code=404, message="Ordem de serviço não encontrada", response= Problem.class)
 	})
-	public ResponseEntity<OrdemServicoResponse> buscar(@ApiParam(value = "Id de uma Ordem de Serviço") Long id);
+	public OrdemServicoResponse buscar(@ApiParam(value = "Id de uma Ordem de Serviço") Long id);
 	
 	@ApiOperation("Cancela Ordem de Serviço")
 	@ApiResponses({

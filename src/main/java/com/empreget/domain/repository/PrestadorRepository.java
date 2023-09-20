@@ -27,6 +27,10 @@ public interface PrestadorRepository extends JpaRepository<Prestador, Long>, Pre
 	@Query("from Prestador p where p.regiao = :regiao")
 	Page<Prestador> findAllByRegiao(@Param("regiao") Regiao regiao, Pageable pageable);
 	
-	@Query("from FotoPrestador f where f.prestador.id= :prestadorId")
-	Optional<FotoPrestador> findFotoById(Long prestadorId);
+//	@Query("from FotoPrestador f where f.prestador.id= :prestadorId")
+	@Query("select f from FotoPrestador f " +
+	           "join fetch f.prestador p " +
+	           "join fetch p.usuario u " +
+	           "where p.id = :prestadorId")
+	Optional<FotoPrestador> findFotoById(@Param("prestadorId") Long prestadorId);
 }

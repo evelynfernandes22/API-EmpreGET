@@ -65,7 +65,7 @@ public class SolicitacaoOSService {
 
 			return ordemServicoRepositoy.save(ordemServico);
 		 } finally {
-	            lock.unlock(); //trava liberada para outra thread processar
+	            lock.unlock(); 
 	     }
 	}
 		
