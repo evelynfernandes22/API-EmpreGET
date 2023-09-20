@@ -31,6 +31,7 @@ import com.empreget.api.dto.AvaliacaoResponse;
 import com.empreget.api.dto.input.AvaliacaoInput;
 import com.empreget.api.openApi.controller.AvaliacaoControllerOpenApi;
 import com.empreget.domain.exception.AcessoNegadoException;
+import com.empreget.domain.exception.AvaliacaoNaoEncontradoException;
 import com.empreget.domain.exception.NegocioException;
 import com.empreget.domain.model.Avaliacao;
 import com.empreget.domain.model.Cliente;
@@ -57,7 +58,7 @@ public class AvaliacaoController implements AvaliacaoControllerOpenApi {
 	private AvaliacaoRepository avaliacaoRepository;
 	private AvaliacaoInputDisassembler avaliacaoInputDisassembler;
 	private ClienteRepository clienteRepository;
-	private BuscaOSService buscaOS;
+	private BuscaOSService buscaOSService;
 	private AvaliacaoDtoAssembler avaliacaoDtoAssembler;
 	private PrestadorRepository prestadorRepository;
 	private CatalogoPrestadorService catalogoPrestadorService;
@@ -71,7 +72,7 @@ public class AvaliacaoController implements AvaliacaoControllerOpenApi {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String emailCliente = authentication.getName();
 		
-		OrdemServico os = buscaOS.buscarOuFalhar(ordemServicoId);  
+		OrdemServico os = buscaOSService.buscarOuFalhar(ordemServicoId);  
 		Cliente cliente = os.getCliente();
 		Prestador prestador = os.getPrestador();
 		
@@ -138,6 +139,9 @@ public class AvaliacaoController implements AvaliacaoControllerOpenApi {
 	@GetMapping("/os/{ordemServicoId}")
 	public Page<AvaliacaoResponse> ListarAvaliacoesPorOS(@PathVariable Long ordemServicoId, @PageableDefault(size = 10) Pageable pageable){
 		
+		OrdemServico ordemServico = buscaOSService.buscarOuFalhar(ordemServicoId); 
+		Long osIdValida = ordemServico.getId();
+		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		List<String> roles = authentication.getAuthorities()
 				.stream()
@@ -145,7 +149,7 @@ public class AvaliacaoController implements AvaliacaoControllerOpenApi {
 				.collect(Collectors.toList());
 		
 		if(roles.contains("ROLE_ADMIN")) {
-			Page<Avaliacao> osPage = avaliacaoRepository.findByOrdemServicoId(ordemServicoId, pageable);
+			Page<Avaliacao> osPage = avaliacaoRepository.findByOrdemServicoId(osIdValida, pageable);
 			return osPage.map(os -> avaliacaoDtoAssembler.toModel(os));
 			
 		}else if (roles.contains("ROLE_CLIENTE")) {
@@ -153,27 +157,27 @@ public class AvaliacaoController implements AvaliacaoControllerOpenApi {
 			Cliente cliente = clienteRepository.findByUsuarioEmail(emailUser)
 					.orElseThrow(() -> new NegocioException("Cliente não encontrado."));
 			
-			Page<Avaliacao> clientePage = avaliacaoRepository.findByOrdemServicoIdAndClienteId(ordemServicoId, 
+			Page<Avaliacao> clientePage = avaliacaoRepository.findByOrdemServicoIdAndClienteId(osIdValida, 
 					cliente.getId(), pageable);
 			
 			if (!clientePage.isEmpty()) {
 				return clientePage.map(avaliacaoDtoAssembler::toModel);
 			} else {
-				throw new NegocioException("Não há avaliações realizadas por você nesta Ordem de Serviço.");
+				throw new AvaliacaoNaoEncontradoException("Não há avaliações realizadas por você nesta Ordem de Serviço.");
 			}
 		}else if(roles.contains("ROLE_PRESTADOR")) {
 			String emailUser = authentication.getName();
 			Prestador prestador = prestadorRepository.findByUsuarioEmail(emailUser)
 					.orElseThrow(() -> new NegocioException("Prestador não encontrado."));
 			
-			OrdemServico os = buscaOS.buscarOuFalhar(ordemServicoId);
+//			OrdemServico os = buscaOSService.buscarOuFalhar(ordemServicoId);
 			
-			if(!prestador.getId().equals(os.getPrestador().getId())) {
+			if(!prestador.getId().equals(ordemServico.getPrestador().getId())) {
 				throw new AccessDeniedException("Acesso negado: Você não tem permissão para visualizar "
 						+ "avaliações de outros prestadores.");
 			}
 			
-			Page<Avaliacao> osPage = avaliacaoRepository.findByOrdemServicoId(os.getId(), pageable);
+			Page<Avaliacao> osPage = avaliacaoRepository.findByOrdemServicoId(ordemServico.getId(), pageable);
 			return osPage.map(avaliacao -> avaliacaoDtoAssembler.toModel(avaliacao));
 		}
 		return new PageImpl<>(Collections.emptyList());
