@@ -180,7 +180,12 @@ public class AvaliacaoController implements AvaliacaoControllerOpenApi {
 			}
 			
 			Page<Avaliacao> osPage = avaliacaoRepository.findByOrdemServicoId(ordemServico.getId(), pageable);
-			return osPage.map(avaliacao -> avaliacaoDtoAssembler.toModel(avaliacao));
+			
+			if(!osPage.isEmpty()) {
+				return osPage.map(avaliacao -> avaliacaoDtoAssembler.toModel(avaliacao));
+			} else {
+				throw new AvaliacaoNaoEncontradoException("Não há avaliações realizadas pelo cliente nesta Ordem de Serviço, até o momento.");
+			}
 		}
 		return new PageImpl<>(Collections.emptyList());
 	}
