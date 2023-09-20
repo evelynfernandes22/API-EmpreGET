@@ -157,6 +157,10 @@ public class AvaliacaoController implements AvaliacaoControllerOpenApi {
 			Cliente cliente = clienteRepository.findByUsuarioEmail(emailUser)
 					.orElseThrow(() -> new NegocioException("Cliente não encontrado."));
 			
+			if (!ordemServico.getCliente().getId().equals(cliente.getId())) {
+		        throw new AccessDeniedException("Acesso negado: Você não tem permissão para acessar esta Ordem de Serviço.");
+		    }
+			
 			Page<Avaliacao> clientePage = avaliacaoRepository.findByOrdemServicoIdAndClienteId(osIdValida, 
 					cliente.getId(), pageable);
 			
@@ -169,8 +173,6 @@ public class AvaliacaoController implements AvaliacaoControllerOpenApi {
 			String emailUser = authentication.getName();
 			Prestador prestador = prestadorRepository.findByUsuarioEmail(emailUser)
 					.orElseThrow(() -> new NegocioException("Prestador não encontrado."));
-			
-//			OrdemServico os = buscaOSService.buscarOuFalhar(ordemServicoId);
 			
 			if(!prestador.getId().equals(ordemServico.getPrestador().getId())) {
 				throw new AccessDeniedException("Acesso negado: Você não tem permissão para visualizar "
