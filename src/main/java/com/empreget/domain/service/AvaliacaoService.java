@@ -71,9 +71,5 @@ public class AvaliacaoService {
 		return quantidadeAvaliacoes;
 	}
 	
-	public Avaliacao buscarOuFalhar (Long avaliacaoId) {
-		return avaliacaoRepository.findById(avaliacaoId)
-				.orElseThrow(() -> new AvaliacaoNaoEncontradoException(avaliacaoId));
-	}
 	
 }

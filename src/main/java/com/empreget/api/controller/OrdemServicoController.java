@@ -10,6 +10,8 @@ import javax.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
@@ -84,7 +86,7 @@ public class OrdemServicoController implements OSControllerOpenApi{
 
 	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE', 'PRESTADOR')")
 	@GetMapping
-	public Page<OrdemServicoResponse> listar(@PageableDefault(size = 5) @SortDefault(sort = "id") Pageable pageable) {
+	public Page<OrdemServicoResponse> listar(@PageableDefault(size = 5) @SortDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
 	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    List<String> roles = authentication.getAuthorities()

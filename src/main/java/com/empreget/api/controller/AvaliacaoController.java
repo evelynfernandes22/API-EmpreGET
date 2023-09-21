@@ -117,7 +117,7 @@ public class AvaliacaoController implements AvaliacaoControllerOpenApi {
 	        if (!clientePage.isEmpty()) {
 	            return clientePage.map(avaliacaoDtoAssembler::toModel);
 	        } else {
-	            throw new NegocioException("Não há avaliações realizadas por você a este prestador.");
+	            throw new AvaliacaoNaoEncontradoException("Não há avaliações realizadas por você a este prestador.");
 	        }
 	    }else if(roles.contains("ROLE_PRESTADOR")) {
 			String emailUser = authentication.getName();

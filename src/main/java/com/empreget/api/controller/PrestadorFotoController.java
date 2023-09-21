@@ -2,6 +2,7 @@ package com.empreget.api.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -58,12 +59,12 @@ public class PrestadorFotoController implements PrestadorFotoControllerOpenApi {
 		fotoPrestador.setTamanho(arquivo.getSize());
 		fotoPrestador.setPrestador(prestador);
 		
-		prestador.setImgUrl(arquivo.getOriginalFilename());
-		
 		FotoPrestador fotoSalva = catalogoPrestadorFotoService.salvar(fotoPrestador,arquivo.getInputStream());
+		prestador.setImgUrl(fotoSalva.getNomeArquivo());
 	
 		return fotoPrestadorDtoAssembler.toModel(fotoSalva);	
 	}
+	
 	
 	@PreAuthorize("@acessoService.verificarAcessoProprioPrestador(#prestadorId) or hasAnyRole('ADMIN', 'CLIENTE')")
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
