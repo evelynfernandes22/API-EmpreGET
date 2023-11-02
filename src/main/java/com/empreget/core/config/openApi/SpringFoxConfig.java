@@ -74,8 +74,8 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 						new Tag("Foto", "Gerencia o upload e download de foto do prestador"),
 						new Tag("Usuario", "Gerencia usuários"),
 						new Tag("Avaliacao", "Gerencia as avaliações de prestadores"), new Tag("Acesso", "Login"))
-				.securityContexts(Arrays.asList(securityContext()))
-                .securitySchemes(Arrays.asList(apiKey()));
+                .securitySchemes(Arrays.asList(apiKey()))
+				.securityContexts(Arrays.asList(securityContext()));
 				
 	}
 	

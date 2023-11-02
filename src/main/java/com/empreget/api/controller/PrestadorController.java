@@ -204,7 +204,10 @@ public class PrestadorController implements PrestadorControllerOpenApi {
 	@DeleteMapping("/{prestadorId}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void excluir(@PathVariable Long prestadorId) {
+		Prestador prestadorAtual = catalogoPrestadorService.buscarOuFalhar(prestadorId);
+		Long usuarioId = prestadorAtual.getUsuario().getId();
 		catalogoPrestadorService.excluir(prestadorId);
+		cadastroUsuarioService.excluir(usuarioId);
 
 	}
 

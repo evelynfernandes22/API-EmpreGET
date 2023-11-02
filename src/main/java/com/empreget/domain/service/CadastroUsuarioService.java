@@ -2,10 +2,14 @@ package com.empreget.domain.service;
 
 import javax.transaction.Transactional;
 
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.empreget.domain.exception.EntidadeEmUsoException;
 import com.empreget.domain.exception.NegocioException;
+import com.empreget.domain.exception.PrestadorNaoEncontradoException;
 import com.empreget.domain.exception.UsuarioNaoEncontradoException;
 import com.empreget.domain.model.Usuario;
 import com.empreget.domain.repository.UsuarioRepository;
@@ -60,5 +64,20 @@ public class CadastroUsuarioService {
 				.orElseThrow(() -> new UsuarioNaoEncontradoException(usuarioId));
 	}
 
+	@Transactional
+	public void excluir (Long usuarioId) {
+		try {
+			usuarioRepository.deleteById(usuarioId);
+			usuarioRepository.flush();
+		
+		}catch (EmptyResultDataAccessException e) {
+			throw new UsuarioNaoEncontradoException(usuarioId);
+			
+		} catch (DataIntegrityViolationException e) {
+			throw new EntidadeEmUsoException(
+					String.format("Usuário de código %d não pode ser removido, "
+							+ "pois está em uso", usuarioId));
+		}
+	}
 	
 }

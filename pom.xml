@@ -40,11 +40,6 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!--		<dependency>-->
-		<!--			<groupId>mysql</groupId>-->
-		<!--			<artifactId>mysql-connector-java</artifactId>-->
-		<!--		</dependency>-->
-
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>
@@ -89,8 +84,7 @@
 			<artifactId>flyway-mysql</artifactId>
 		</dependency>
 
-		<!--
-		https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-joda -->
+		<!--jackson.datatype/jackson-datatype-joda -->
 		<dependency>
 			<groupId>
 				com.fasterxml.jackson.datatype</groupId>
@@ -111,7 +105,7 @@
 				${modelmapper.version}</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+		<!-- commons-lang3 -->
 		<dependency>
 			<groupId>
 				org.apache.commons</groupId>
@@ -142,11 +136,10 @@
 		<dependency>
 			<groupId>com.auth0</groupId>
 			<artifactId>java-jwt</artifactId>
-			<version>
-				4.4.0</version>
+			<version>4.4.0</version>
 		</dependency>
-		
-<!--		Documentacao -->
+
+		<!--		Documentacao -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-boot-starter</artifactId>
